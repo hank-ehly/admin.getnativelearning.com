@@ -1,0 +1,21 @@
+machine:
+  environment:
+    NODE_ENV: circle_ci
+  node:
+    version: 6.10.3
+
+general:
+  branches:
+    only:
+      - master
+      - develop
+
+dependencies:
+  pre:
+    - npm rebuild node-sass
+  cache_directories:
+    - "node_modules"
+
+test:
+  override:
+    - ng test
