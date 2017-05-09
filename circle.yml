@@ -11,8 +11,6 @@ general:
       - develop
 
 dependencies:
-  pre:
-    - npm rebuild node-sass
   cache_directories:
     - "node_modules"
 
