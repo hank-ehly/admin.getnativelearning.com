@@ -4,4 +4,7 @@
     </div>
 </div>
 
-<input type="file" name="" id="">
+<input type="file" (change)="onFileChange($event)">
+<label>
+    <textarea>{{ transcriptionEmitted$ | async }}</textarea>
+</label>

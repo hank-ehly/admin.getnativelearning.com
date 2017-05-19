@@ -36,4 +36,9 @@ describe('VideosComponent', () => {
         const compiled = fixture.debugElement.nativeElement;
         expect(compiled.querySelectorAll('input[type=file]').length).toEqual(1);
     });
+
+    it('contains an empty textarea', () => {
+        const compiled = fixture.debugElement.nativeElement;
+        expect(compiled.querySelectorAll('textarea').length).toEqual(1);
+    });
 });
