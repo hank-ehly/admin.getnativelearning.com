@@ -31,4 +31,9 @@ describe('VideosComponent', () => {
         const compiled = fixture.debugElement.nativeElement;
         expect(compiled.querySelector('h1').textContent).toContain('Videos');
     });
+
+    it('contains a file input element', () => {
+        const compiled = fixture.debugElement.nativeElement;
+        expect(compiled.querySelectorAll('input[type=file]').length).toEqual(1);
+    });
 });
