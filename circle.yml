@@ -10,4 +10,6 @@ dependencies:
 
 test:
   override:
+    - npm run line
     - npm test -- --single-run
+    - npm run e2e
