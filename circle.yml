@@ -16,4 +16,4 @@ dependencies:
 
 test:
   override:
-    - ng test
+    - npm test -- --single-run

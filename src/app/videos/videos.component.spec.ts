@@ -22,4 +22,13 @@ describe('VideosComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it(`should have as title 'Videos'`, () => {
+        expect(component.title).toEqual('Videos');
+    });
+
+    it('should render title in a h1 tag', () => {
+        const compiled = fixture.debugElement.nativeElement;
+        expect(compiled.querySelector('h1').textContent).toContain('Videos');
+    });
 });
