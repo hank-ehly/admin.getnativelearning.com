@@ -1,14 +1,9 @@
-import { Admin.GetNative.ComPage } from './app.po';
+import { AdminGetNativeComPage } from './app.po';
 
-describe('admin.get-native.com App', () => {
-  let page: Admin.GetNative.ComPage;
+describe('admin.get-native.com/', () => {
+    let page: AdminGetNativeComPage;
 
-  beforeEach(() => {
-    page = new Admin.GetNative.ComPage();
-  });
-
-  it('should display message saying app works', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('gn works!');
-  });
+    beforeEach(() => {
+        page = new AdminGetNativeComPage();
+    });
 });
