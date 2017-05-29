@@ -9,8 +9,6 @@ dependencies:
     - "node_modules"
 
 test:
-  pre:
-    - node_modules/protractor/bin/webdriver-manager update
   override:
     - npm run lint
     - npm test -- --single-run
