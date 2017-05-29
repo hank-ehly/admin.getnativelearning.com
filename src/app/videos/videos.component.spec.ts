@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VideosComponent } from './videos.component';
 import { VideoTranscriptionService } from './video-transcription.service';
+import { HttpService } from '../core/http.service';
+import { HttpModule } from '@angular/http';
 
 describe('VideosComponent', () => {
     let component: VideosComponent;
@@ -9,8 +11,9 @@ describe('VideosComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [HttpModule],
             declarations: [VideosComponent],
-            providers: [VideoTranscriptionService]
+            providers: [VideoTranscriptionService, HttpService]
         })
             .compileComponents();
     }));

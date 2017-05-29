@@ -2,11 +2,14 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { VideoTranscriptionService } from './video-transcription.service';
 import { Observable } from 'rxjs/Observable';
+import { HttpService } from '../core/http.service';
+import { HttpModule } from '@angular/http';
 
 describe('VideoTranscriptionService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [VideoTranscriptionService]
+            imports: [HttpModule],
+            providers: [VideoTranscriptionService, HttpService]
         });
     });
 
