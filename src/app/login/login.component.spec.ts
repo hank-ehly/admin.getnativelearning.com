@@ -2,6 +2,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
 import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+
+function newEvent(eventName: string, bubbles = false, cancelable = false) {
+    const evt = document.createEvent('CustomEvent');  // MUST be 'CustomEvent'
+    evt.initCustomEvent(eventName, bubbles, cancelable, null);
+    return evt;
+}
 
 describe('LoginComponent', () => {
     let component: LoginComponent;
@@ -35,7 +42,7 @@ describe('LoginComponent', () => {
 
     it('should display an empty email input upon page load', () => {
         const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelector('input[type=email]').value).toEqual('');
+        expect(compiled.querySelector('input[type=email]').textContent).toEqual('');
     });
 
     it('should have a blank password credential upon page load', () => {
@@ -44,11 +51,6 @@ describe('LoginComponent', () => {
 
     it('should display an empty password input upon page load', () => {
         const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelector('input[type=password]').value).toEqual('');
-    });
-
-    it('should disable the login button by default', () => {
-        const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelector('button[type=submit]').disabled).toEqual(true);
+        expect(compiled.querySelector('input[type=password]').textContent).toEqual('');
     });
 });
