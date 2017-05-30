@@ -1,4 +1,4 @@
-import { RequestMethod } from '@angular/http';
+import { RequestMethod, URLSearchParams } from '@angular/http';
 import { Injectable } from '@angular/core';
 
 import { HttpService } from '../core/http.service';
@@ -11,13 +11,17 @@ export class VideosService {
     constructor(private http: HttpService) {
     }
 
-    transcribe(file: File): Observable<string> {
+    transcribe(file: File, languageCode: string): Observable<string> {
         const formData = new FormData();
         formData.append('file', file, file.name);
 
+        const search = new URLSearchParams();
+        search.set('language_code', languageCode);
+
         const options = {
             method: RequestMethod.Post,
-            body: formData
+            body: formData,
+            search: search
         };
 
         return this.http.request('/videos/transcribe', options).pluck('transcription');

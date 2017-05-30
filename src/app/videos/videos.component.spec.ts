@@ -7,6 +7,8 @@ import { HttpModule } from '@angular/http';
 import { AuthService } from '../core/auth.service';
 
 import * as _ from 'lodash';
+import { By } from '@angular/platform-browser';
+import { GoogleCloudSpeechLanguages } from './google-cloud-speech-languages';
 
 describe('VideosComponent', () => {
     let component: VideosComponent;
@@ -64,5 +66,20 @@ describe('VideosComponent', () => {
 
         expect(option).toBeTruthy();
         expect(option.textContent).toEqual('English (United States)');
+    });
+
+    it('should have a list of languages', () => {
+        expect(component.languages.length).toBeGreaterThan(0);
+    });
+
+    it('should change the language model after selecting a language from the dropdown', async () => {
+        component.selectedLanguage = _.find(GoogleCloudSpeechLanguages, {
+            code: 'af-ZA'
+        });
+
+        const option = _.find(fixture.debugElement.query(By.css('select')).nativeElement.options, {value: 'af-ZA'});
+        fixture.detectChanges();
+
+        expect(option.selected).toBeTruthy();
     });
 });

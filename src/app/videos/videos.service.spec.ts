@@ -8,6 +8,9 @@ import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../core/auth.service';
 
 describe('VideosService', () => {
+    const file = new File([], '');
+    const lang = 'en-US';
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpModule],
@@ -19,18 +22,19 @@ describe('VideosService', () => {
         expect(service).toBeTruthy();
     }));
 
-    it('should take a single argument of File type', inject([VideosService], (service: VideosService) => {
-        const file = new File([], '');
-        expect(() => service.transcribe(file)).not.toThrow();
+    it('should take a first argument of File type', inject([VideosService], (service: VideosService) => {
+        expect(() => service.transcribe(file, lang)).not.toThrow();
+    }));
+
+    it('should take an optional second language code argument of string type', inject([VideosService], (service: VideosService) => {
+        expect(() => service.transcribe(file, lang)).not.toThrow();
     }));
 
     it('should not return null', inject([VideosService], (service: VideosService) => {
-        const file = new File([], '');
-        expect(typeof service.transcribe(file)).not.toBeNull();
+        expect(typeof service.transcribe(file, lang)).not.toBeNull();
     }));
 
     it('should return an Observable', inject([VideosService], (service: VideosService) => {
-        const file = new File([], '');
-        expect(service.transcribe(file).constructor.name).toEqual('Observable');
+        expect(service.transcribe(file, lang).constructor.name).toEqual('Observable');
     }));
 });

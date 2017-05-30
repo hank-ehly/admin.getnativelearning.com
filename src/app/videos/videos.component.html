@@ -10,9 +10,7 @@
         <textarea>{{ transcriptionEmitted$ | async }}</textarea>
     </label>
 
-    <select>
-        <option *ngFor="let language of languages" [value]="language.code" [selected]="language.code === 'en-US'">
-            {{ language.englishName }}
-        </option>
+    <select (input)="onSelectLanguage($event)">
+        <option *ngFor="let language of languages" [value]="language.code" [selected]="language === selectedLanguage">{{ language.englishName }}</option>
     </select>
 </div>
