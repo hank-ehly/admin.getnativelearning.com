@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { VideosService } from './videos.service';
 import { GoogleCloudSpeechLanguages } from './google-cloud-speech-languages';
@@ -12,7 +12,7 @@ import * as _ from 'lodash';
     templateUrl: './videos.component.html',
     styleUrls: ['./videos.component.scss']
 })
-export class VideosComponent implements OnInit, OnDestroy {
+export class VideosComponent implements OnDestroy {
     title = 'Videos';
     languages = GoogleCloudSpeechLanguages;
 
@@ -22,9 +22,6 @@ export class VideosComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
 
     constructor(private videoService: VideosService) {
-    }
-
-    ngOnInit() {
     }
 
     ngOnDestroy(): void {
