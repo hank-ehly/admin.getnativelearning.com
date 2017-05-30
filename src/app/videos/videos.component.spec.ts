@@ -6,6 +6,8 @@ import { HttpService } from '../core/http.service';
 import { HttpModule } from '@angular/http';
 import { AuthService } from '../core/auth.service';
 
+import * as _ from 'lodash';
+
 describe('VideosComponent', () => {
     let component: VideosComponent;
     let fixture: ComponentFixture<VideosComponent>;
@@ -51,5 +53,16 @@ describe('VideosComponent', () => {
     it('should have a dropdown for video language selection', () => {
         const compiled = fixture.debugElement.nativeElement;
         expect(compiled.querySelectorAll('select').length).toEqual(1);
+    });
+
+    it('should have a dropdown with an option whose value is en-US and textContent is English (United States)', () => {
+        const compiled = fixture.debugElement.nativeElement;
+
+        const option = _.find(compiled.querySelector('select').options, {
+            value: 'en-US'
+        });
+
+        expect(option).toBeTruthy();
+        expect(option.textContent).toEqual('English (United States)');
     });
 });

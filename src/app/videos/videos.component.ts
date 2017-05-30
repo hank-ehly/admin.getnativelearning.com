@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { VideosService } from './videos.service';
+import { GoogleCloudSpeechLanguages } from './google-cloud-speech-languages';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
@@ -13,6 +14,7 @@ import * as _ from 'lodash';
 })
 export class VideosComponent implements OnInit, OnDestroy {
     title = 'Videos';
+    languages = GoogleCloudSpeechLanguages;
 
     emitTranscriptSource = new Subject<string>();
     transcriptionEmitted$ = this.emitTranscriptSource.asObservable();
