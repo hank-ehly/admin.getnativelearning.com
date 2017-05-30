@@ -1,8 +1,11 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { AuthService } from './core/auth.service';
+import { RouterStub } from './testing/router-stub';
 
 describe('AppComponent', () => {
     beforeEach(async(() => {
@@ -14,6 +17,10 @@ describe('AppComponent', () => {
             declarations: [
                 AppComponent
             ],
+            providers: [
+                AuthService,
+                {provide: Router, useClass: RouterStub}
+            ]
         }).compileComponents();
     }));
 

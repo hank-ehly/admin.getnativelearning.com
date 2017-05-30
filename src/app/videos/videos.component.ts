@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { VideoTranscriptionService } from './video-transcription.service';
+import { VideosService } from './videos.service';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
@@ -19,7 +19,7 @@ export class VideosComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription[] = [];
 
-    constructor(private transcriptionService: VideoTranscriptionService) {
+    constructor(private videoService: VideosService) {
     }
 
     ngOnInit() {
@@ -32,7 +32,7 @@ export class VideosComponent implements OnInit, OnDestroy {
     onFileChange(e: Event) {
         const fileObject = _.first((<HTMLInputElement>e.target).files);
 
-        const transcribeSubscription = this.transcriptionService.transcribeVideoFile(fileObject).subscribe((transcription: string) => {
+        const transcribeSubscription = this.videoService.transcribe(fileObject).subscribe((transcription: string) => {
             this.emitTranscriptSource.next(transcription);
         });
 

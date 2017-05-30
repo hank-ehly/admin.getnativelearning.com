@@ -1,9 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VideosComponent } from './videos.component';
-import { VideoTranscriptionService } from './video-transcription.service';
+import { VideosService } from './videos.service';
 import { HttpService } from '../core/http.service';
 import { HttpModule } from '@angular/http';
+import { AuthService } from '../core/auth.service';
 
 describe('VideosComponent', () => {
     let component: VideosComponent;
@@ -13,7 +14,7 @@ describe('VideosComponent', () => {
         TestBed.configureTestingModule({
             imports: [HttpModule],
             declarations: [VideosComponent],
-            providers: [VideoTranscriptionService, HttpService]
+            providers: [VideosService, HttpService, AuthService]
         })
             .compileComponents();
     }));
@@ -45,5 +46,10 @@ describe('VideosComponent', () => {
     it('contains an empty textarea', () => {
         const compiled = fixture.debugElement.nativeElement;
         expect(compiled.querySelectorAll('textarea').length).toEqual(1);
+    });
+
+    it('should have a dropdown for video language selection', () => {
+        const compiled = fixture.debugElement.nativeElement;
+        expect(compiled.querySelectorAll('select').length).toEqual(1);
     });
 });

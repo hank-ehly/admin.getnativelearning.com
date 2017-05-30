@@ -5,10 +5,11 @@ import { environment } from '../../environments/environment';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import { AuthService, kAuthToken, kAuthExpire } from './auth.service';
 
 @Injectable()
 export class HttpService {
-    constructor(private http: Http) {
+    constructor(private http: Http, private auth: AuthService) {
     }
 
     request(url: string, options: RequestOptionsArgs = {}): Observable<any> {
@@ -18,7 +19,15 @@ export class HttpService {
 
         options.headers.set('Accept', 'application/json');
 
+        if (url !== '/sessions') {
+            options.headers.set('Authorization', 'Bearer ' + localStorage.getItem(kAuthToken));
+        }
+
         return this.http.request(environment.apiUrl + url, options).map((response: Response) => {
+            const data = {};
+            data[kAuthToken] = response.headers.get(kAuthToken);
+            data[kAuthExpire] = response.headers.get(kAuthExpire);
+            this.auth.updateAuthToken(data);
             return response.json();
         });
     }

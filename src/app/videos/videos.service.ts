@@ -1,4 +1,4 @@
-import { RequestMethod, Headers, Response } from '@angular/http';
+import { RequestMethod } from '@angular/http';
 import { Injectable } from '@angular/core';
 
 import { HttpService } from '../core/http.service';
@@ -7,15 +7,13 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/pluck';
 
 @Injectable()
-export class VideoTranscriptionService {
+export class VideosService {
     constructor(private http: HttpService) {
     }
 
-    transcribeVideoFile(file: File): Observable<string> {
+    transcribe(file: File): Observable<string> {
         const formData = new FormData();
         formData.append('file', file, file.name);
-
-        const headers = new Headers({'Content-Type': 'multipart/form-data'});
 
         const options = {
             method: RequestMethod.Post,
@@ -24,5 +22,4 @@ export class VideoTranscriptionService {
 
         return this.http.request('/videos/transcribe', options).pluck('transcription');
     }
-
 }

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 
-import { VideoTranscriptionService } from './video-transcription.service';
+import { VideosService } from './videos.service';
 import { VideosComponent } from './videos.component';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { VideosComponent } from './videos.component';
         VideosComponent
     ],
     providers: [
-        VideoTranscriptionService
+        VideosService
     ]
 })
 export class VideosModule {

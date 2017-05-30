@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../../core/auth.service';
 
 @Component({
     selector: 'gn-navigation',
     templateUrl: './navigation.component.html',
     styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit {
-    constructor() {
+export class NavigationComponent {
+    constructor(private auth: AuthService, private router: Router) {
     }
 
-    ngOnInit() {
+    onClickLogout(): void {
+        this.auth.deleteAuthToken();
+        this.router.navigate(['/login']);
     }
 }

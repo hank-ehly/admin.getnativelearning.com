@@ -1,7 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
 import { NavigationComponent } from './navigation.component';
+import { RouterStub } from '../../testing/router-stub';
+import { AuthService } from '../../core/auth.service';
+import { RouterLinkStubDirective } from '../../testing/router-link-stub.directive';
 
 describe('NavigationComponent', () => {
     let component: NavigationComponent;
@@ -9,8 +12,11 @@ describe('NavigationComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
-            declarations: [NavigationComponent]
+            declarations: [NavigationComponent, RouterLinkStubDirective],
+            providers: [
+                {provide: Router, useClass: RouterStub},
+                AuthService
+            ]
         })
             .compileComponents();
     }));

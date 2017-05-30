@@ -6,27 +6,33 @@ import { VideosComponent } from './videos/videos.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { UsersComponent } from './users/users.component';
 import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './core/auth.guard';
 
 const routes: Routes = [
     {
-        path: '',
-        component: DashboardComponent
-    },
-    {
         path: 'videos',
-        component: VideosComponent
+        component: VideosComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'categories',
-        component: CategoriesComponent
+        component: CategoriesComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'users',
-        component: UsersComponent
+        component: UsersComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: '**',
+        component: DashboardComponent,
+        canActivate: [AuthGuard]
     }
 ];
 
