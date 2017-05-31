@@ -28,7 +28,7 @@ exports.config = {
         });
 
         mockAPI = require('./mock-api').listen(3000, () => {
-            console.log('Mock API is running')
+            console.log('Mock API is running');
         });
     },
     onPrepare() {
