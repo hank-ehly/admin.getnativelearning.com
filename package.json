@@ -8,7 +8,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "node mock-api.js & ng e2e"
+    "e2e": "/usr/bin/env bash bin/run-e2e.sh"
   },
   "private": true,
   "dependencies": {
