@@ -35,8 +35,6 @@ exports.config = {
         jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
     },
     afterLaunch: function() {
-        mockAPI.close(() => {
-            console.log('Mock API connection closed');
-        });
+        mockAPI.close();
     }
 };
