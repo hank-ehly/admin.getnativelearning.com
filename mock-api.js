@@ -38,5 +38,5 @@ app.post('/videos/transcribe', (req, res) => {
 });
 
 app.listen(3000, () => {
-    console.log('Moch API is running')
+    console.log('Mock API is running')
 });
