@@ -3,6 +3,8 @@
 
 const {SpecReporter} = require('jasmine-spec-reporter');
 
+const mockAPI = require('./mock-api');
+
 exports.config = {
     allScriptsTimeout: 11000,
     specs: [
@@ -24,8 +26,15 @@ exports.config = {
         require('ts-node').register({
             project: 'e2e/tsconfig.e2e.json'
         });
+
+        mockAPI.listen(3000, () => {
+            console.log('Mock API is running')
+        });
     },
     onPrepare() {
         jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
+    },
+    afterLaunch: function() {
+        mockAPI.close();
     }
 };
