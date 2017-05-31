@@ -8,8 +8,16 @@
 import { browser, element, by } from 'protractor';
 import * as path from 'path';
 
+import { LoginPage } from '../login/login.po';
+
 export class VideosPage {
+    private loginPage = new LoginPage();
+
     async navigateTo() {
+        await this.loginPage.navigateTo();
+        this.loginPage.emailInput.sendKeys('test@email.com');
+        this.loginPage.passwordInput.sendKeys('password');
+        this.loginPage.loginButton.click();
         return await browser.get('/videos');
     }
 

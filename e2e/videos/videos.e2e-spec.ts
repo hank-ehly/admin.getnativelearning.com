@@ -6,6 +6,7 @@
  */
 
 import { VideosPage } from './videos.po';
+import { browser } from 'protractor';
 
 describe('admin.get-native.com/videos', () => {
     let page: VideosPage;
@@ -15,9 +16,13 @@ describe('admin.get-native.com/videos', () => {
         await page.navigateTo();
     });
 
+    afterEach(() => {
+        browser.executeScript('window.localStorage.clear();');
+    });
+
     it('populates the result field with text after selecting a video file', async () => {
         await page.chooseVideo();
         const text = await page.getTranscriptionTextareaValue();
-        expect(text).toEqual('this is a video camera test this is a video camera test');
+        expect(text).toEqual('test 123');
     });
 });

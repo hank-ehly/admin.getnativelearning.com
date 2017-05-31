@@ -5,8 +5,9 @@
  * Created by henryehly on 2017/05/30.
  */
 
-import { LoginPage } from './login.po';
 import { browser } from 'protractor';
+
+import { LoginPage } from './login.po';
 
 describe('admin.get-native.com/login', () => {
     let page: LoginPage;
@@ -14,6 +15,10 @@ describe('admin.get-native.com/login', () => {
     beforeEach(async () => {
         page = new LoginPage();
         await page.navigateTo();
+    });
+
+    afterEach(async () => {
+        browser.executeScript('window.localStorage.clear();');
     });
 
     it('should disable the login button by default', () => {
@@ -26,7 +31,7 @@ describe('admin.get-native.com/login', () => {
         expect(page.loginButton.isEnabled()).toBe(true);
     });
 
-    it('should disable the login button after form submission', () => {
+    it('should disable the login button after form submission', async () => {
         page.emailInput.sendKeys('test@email.com');
         page.passwordInput.sendKeys('password');
         page.loginButton.click();
@@ -37,6 +42,6 @@ describe('admin.get-native.com/login', () => {
         page.emailInput.sendKeys('test@email.com');
         page.passwordInput.sendKeys('password');
         page.loginButton.click();
-        expect(await browser.getCurrentUrl()).toContain('dashboard');
+        expect(await browser.getCurrentUrl()).toMatch(/[0-9]*\/$/);
     });
 });

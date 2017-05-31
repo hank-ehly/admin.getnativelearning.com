@@ -8,7 +8,7 @@
 import { browser, by, element } from 'protractor';
 
 export class LoginPage {
-    loginButton = element(by.css('button[type=submit]'));
+    loginButton = element(by.css('button'));
     emailInput = element(by.css('input[type=email]'));
     passwordInput = element(by.css('input[type=password]'));
 

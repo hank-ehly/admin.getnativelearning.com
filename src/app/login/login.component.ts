@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 })
 export class LoginComponent implements OnDestroy {
     credentials = {email: '', password: ''};
+    requestInProgress = false;
 
     private subscriptions: Subscription[] = [];
 
@@ -25,11 +26,14 @@ export class LoginComponent implements OnDestroy {
     }
 
     onSubmit(): void {
+        this.requestInProgress = true;
         const loginSubscription = this.loginService.login(this.credentials).subscribe(() => {
             this.router.navigate(['']);
+            this.requestInProgress = false;
         }, (e: any) => {
             // on failure, display error message
             console.log('ERROR', e);
+            this.requestInProgress = false;
         });
         this.subscriptions.push(loginSubscription);
     }

@@ -14,7 +14,7 @@
                             <div class="form-group">
                                 <input class="form-control" placeholder="Password" name="password" type="password" [(ngModel)]="credentials.password" value="" minlength="8" tabindex="2" required>
                             </div>
-                            <button type="submit" class="btn btn-lg btn-success btn-block" tabindex="3" [disabled]="!form.valid">Login</button>
+                            <button type="submit" class="btn btn-lg btn-success btn-block" tabindex="3" [disabled]="!form.valid || requestInProgress">Login</button>
                         </fieldset>
                     </form>
                 </div>
