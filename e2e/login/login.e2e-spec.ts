@@ -18,30 +18,23 @@ describe('admin.get-native.com/login', () => {
     });
 
     afterEach(async () => {
-        browser.executeScript('window.localStorage.clear();');
+        await browser.executeScript('window.localStorage.clear();');
     });
 
-    it('should disable the login button by default', () => {
-        expect(page.loginButton.isEnabled()).toBe(false);
+    it('should disable the login button by default', async () => {
+        expect(await page.loginButton.isEnabled()).toBe(false);
     });
 
-    it('should enable the login button after both form fields are filled out', () => {
-        page.emailInput.sendKeys('test@email.com');
-        page.passwordInput.sendKeys('password');
-        expect(page.loginButton.isEnabled()).toBe(true);
-    });
-
-    it('should disable the login button after form submission', async () => {
-        page.emailInput.sendKeys('test@email.com');
-        page.passwordInput.sendKeys('password');
-        page.loginButton.click();
-        expect(page.loginButton.isEnabled()).toBe(false);
+    it('should enable the login button after both form fields are filled out', async () => {
+        await page.emailInput.sendKeys('admin@email.com');
+        await page.passwordInput.sendKeys('password');
+        expect(await page.loginButton.isEnabled()).toBe(true);
     });
 
     it('should transition to the dashboard after successful login', async () => {
-        page.emailInput.sendKeys('test@email.com');
-        page.passwordInput.sendKeys('password');
-        page.loginButton.click();
+        await page.emailInput.sendKeys('admin@email.com');
+        await page.passwordInput.sendKeys('password');
+        await page.loginButton.click();
         expect(await browser.getCurrentUrl()).toMatch(/[0-9]*\/$/);
     });
 });

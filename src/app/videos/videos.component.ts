@@ -1,9 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
 
-import { VideosService } from './videos.service';
 import { GoogleCloudSpeechLanguage, GoogleCloudSpeechLanguages } from './google-cloud-speech-languages';
+import { VideosService } from './videos.service';
 
 import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
 
@@ -16,13 +17,15 @@ export class VideosComponent implements OnDestroy {
     title = 'Videos';
     languages = GoogleCloudSpeechLanguages;
     selectedLanguage: GoogleCloudSpeechLanguage;
+    selectedVideoFile: File = null;
+    transcriptionEmitted$: Observable<string>;
 
-    emitTranscriptSource = new Subject<string>();
-    transcriptionEmitted$ = this.emitTranscriptSource.asObservable();
-
+    private emitTranscriptSource: Subject<string>;
     private subscriptions: Subscription[] = [];
 
     constructor(private videoService: VideosService) {
+        this.emitTranscriptSource = new Subject<string>();
+        this.transcriptionEmitted$ = this.emitTranscriptSource.asObservable();
         this.selectedLanguage = _.find(this.languages, {code: 'en-US'});
     }
 
@@ -36,15 +39,14 @@ export class VideosComponent implements OnDestroy {
     }
 
     onFileChange(e: Event) {
-        const fileObject = _.first((<HTMLInputElement>e.target).files);
+        this.selectedVideoFile = _.first((<HTMLInputElement>e.target).files);
+    }
 
-        console.log(this.selectedLanguage);
+    onClickTranscribe(): void {
+        const subscription = this.videoService.transcribe(this.selectedVideoFile, this.selectedLanguage.code).subscribe((t: string) => {
+            this.emitTranscriptSource.next(t);
+        });
 
-        const transcribeSubscription = this.videoService.transcribe(fileObject, this.selectedLanguage.code)
-            .subscribe((transcription: string) => {
-                this.emitTranscriptSource.next(transcription);
-            });
-
-        this.subscriptions.push(transcribeSubscription);
+        this.subscriptions.push(subscription);
     }
 }

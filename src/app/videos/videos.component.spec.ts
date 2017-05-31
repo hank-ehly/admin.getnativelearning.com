@@ -1,14 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { VideosComponent } from './videos.component';
-import { VideosService } from './videos.service';
-import { HttpService } from '../core/http.service';
+import { By } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+
+import { GoogleCloudSpeechLanguages } from './google-cloud-speech-languages';
+import { VideosComponent } from './videos.component';
+import { HttpService } from '../core/http.service';
 import { AuthService } from '../core/auth.service';
+import { VideosService } from './videos.service';
 
 import * as _ from 'lodash';
-import { By } from '@angular/platform-browser';
-import { GoogleCloudSpeechLanguages } from './google-cloud-speech-languages';
 
 describe('VideosComponent', () => {
     let component: VideosComponent;
@@ -16,7 +17,7 @@ describe('VideosComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [HttpModule],
+            imports: [HttpModule, FormsModule],
             declarations: [VideosComponent],
             providers: [VideosService, HttpService, AuthService]
         })
@@ -72,7 +73,7 @@ describe('VideosComponent', () => {
         expect(component.languages.length).toBeGreaterThan(0);
     });
 
-    it('should change the language model after selecting a language from the dropdown', async () => {
+    it('should change the selected option in the language dropdown when the selected language model changes', () => {
         component.selectedLanguage = _.find(GoogleCloudSpeechLanguages, {
             code: 'af-ZA'
         });
@@ -81,5 +82,25 @@ describe('VideosComponent', () => {
         fixture.detectChanges();
 
         expect(option.selected).toBeTruthy();
+    });
+
+    it('should change the selected language model when an option is selected in the language dropdown', async () => {
+        const select: HTMLSelectElement = fixture.debugElement.query(By.css('select')).nativeElement;
+        select.selectedIndex = _.findIndex(GoogleCloudSpeechLanguages, {code: 'af-ZA'});
+        select.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+        expect(component.selectedLanguage.code).toEqual('af-ZA');
+    });
+
+    it('should disable the transcribe button by default', () => {
+        const transcribeButton = fixture.debugElement.query(By.css('button')).nativeElement;
+        expect(transcribeButton.disabled).toBeTruthy();
+    });
+
+    it('should enable the transcribe button after the selectedVideoFile is populated', () => {
+        const transcribeButton = fixture.debugElement.query(By.css('button')).nativeElement;
+        component.selectedVideoFile = new File([], 'file');
+        fixture.detectChanges();
+        expect(transcribeButton.disabled).toBeFalsy();
     });
 });

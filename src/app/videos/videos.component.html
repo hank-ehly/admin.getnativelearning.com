@@ -5,12 +5,24 @@
         </div>
     </div>
 
-    <input type="file" (change)="onFileChange($event)">
-    <label>
-        <textarea>{{ transcriptionEmitted$ | async }}</textarea>
-    </label>
+    <div class="form-group">
+        <label for="video">Video File</label>
+        <input type="file" id="video" (change)="onFileChange($event)">
+        <p class="help-block">Select a video file.</p>
+    </div>
 
-    <select (input)="onSelectLanguage($event)">
-        <option *ngFor="let language of languages" [value]="language.code" [selected]="language === selectedLanguage">{{ language.englishName }}</option>
-    </select>
+    <div class="form-group">
+        <label for="transcription">Transcription:</label>
+        <textarea class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="language">Language</label>
+        <select class="form-control" id="language" (input)="onSelectLanguage($event)">
+            <option *ngFor="let language of languages" [value]="language.code"
+                    [selected]="language === selectedLanguage">{{ language.englishName }}</option>
+        </select>
+    </div>
+
+    <button id="transcribe-button" class="btn btn-default" [disabled]="!selectedVideoFile" (click)="onClickTranscribe()">Transcribe</button>
 </div>
