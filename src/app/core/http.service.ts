@@ -24,10 +24,12 @@ export class HttpService {
         }
 
         return this.http.request(environment.apiUrl + url, options).map((response: Response) => {
-            const data = {};
-            data[kAuthToken] = response.headers.get(kAuthToken);
-            data[kAuthExpire] = response.headers.get(kAuthExpire);
-            this.auth.updateAuthToken(data);
+            if (response.headers) {
+                const data = {};
+                data[kAuthToken] = response.headers.get(kAuthToken);
+                data[kAuthExpire] = response.headers.get(kAuthExpire);
+                this.auth.updateAuthToken(data);
+            }
             return response.json();
         });
     }

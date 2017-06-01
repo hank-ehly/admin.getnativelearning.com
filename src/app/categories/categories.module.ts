@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { CategoriesService } from './categories.service';
 import { CategoriesComponent } from './categories.component';
 import { EditCategoryComponent } from './edit-category/edit-category.component';
+import { CategoriesIndexComponent } from './categories-index/categories-index.component';
 
 @NgModule({
     imports: [
@@ -13,7 +14,8 @@ import { EditCategoryComponent } from './edit-category/edit-category.component';
     ],
     declarations: [
         CategoriesComponent,
-        EditCategoryComponent
+        EditCategoryComponent,
+        CategoriesIndexComponent
     ],
     providers: [
         CategoriesService

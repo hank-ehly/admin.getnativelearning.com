@@ -1,7 +1,19 @@
 <div class="form-group">
     <label for="name">Name:</label>
-    <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+    <input type="text" name="name" id="name" class="form-control category__name" placeholder="Name" [value]="(category$ | async)?.name">
 </div>
+
+<p class="category__created-at">{{ (category$ | async)?.created_at }}</p>
+<p class="category__updated-at">{{ (category$ | async)?.updated_at }}</p>
+
+<table class="table">
+    <tr class="subcategory" *ngFor="let subcategory of (category$ | async)?.subcategories?.records">
+        <td class="subcategory__id">{{ subcategory?.id }}</td>
+        <td class="subcategory__name">{{ subcategory?.name }}</td>
+        <td class="subcategory__created-at">{{ subcategory?.created_at }}</td>
+        <td class="subcategory__updated-at">{{ subcategory?.updated_at }}</td>
+    </tr>
+</table>
 
 <div class="form-group">
     <button type="submit" class="btn btn-primary">Submit</button>

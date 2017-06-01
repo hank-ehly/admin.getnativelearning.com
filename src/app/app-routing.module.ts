@@ -8,6 +8,7 @@ import { UsersComponent } from './users/users.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './core/auth.guard';
 import { EditCategoryComponent } from './categories/edit-category/edit-category.component';
+import { CategoriesIndexComponent } from './categories/categories-index/categories-index.component';
 
 const routes: Routes = [
     {
@@ -21,6 +22,10 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
+            {
+                path: '',
+                component: CategoriesIndexComponent
+            },
             {
                 path: ':id/edit',
                 component: EditCategoryComponent

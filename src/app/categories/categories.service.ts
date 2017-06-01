@@ -17,4 +17,10 @@ export class CategoriesService {
             method: RequestMethod.Get
         }).pluck('records');
     }
+
+    getCategory(id: number): Observable<any> {
+        return this.http.request('/categories/' + id, {
+            method: RequestMethod.Get
+        });
+    }
 }
