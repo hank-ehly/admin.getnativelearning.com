@@ -5,6 +5,8 @@ import { HttpService } from '../core/http.service';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/pluck';
+import 'rxjs/add/operator/map';
+import * as _ from 'lodash';
 
 @Injectable()
 export class CategoriesService {
@@ -22,5 +24,12 @@ export class CategoriesService {
         return this.http.request('/categories/' + id, {
             method: RequestMethod.Get
         });
+    }
+
+    updateCategory(id: number, changes: any): Observable<boolean> {
+        return this.http.request('/categories/' + id, {
+            method: RequestMethod.Patch,
+            body: changes
+        }).map(_.isNull);
     }
 }

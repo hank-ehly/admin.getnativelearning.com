@@ -48,20 +48,17 @@ app.get('/categories', (req, res) => {
                         {
                             id: 1,
                             name: 'Meeting Preparation'
-                        },
-                        {
+                        }, {
                             id: 2,
                             name: 'Business Cards'
-                        },
-                        {
+                        }, {
                             id: 3,
                             name: 'Greeting Co-Workers'
                         }
                     ],
                     count: 3
                 }
-            },
-            {
+            }, {
                 id: 2,
                 name: 'Holidays',
                 subcategories: {
@@ -69,16 +66,14 @@ app.get('/categories', (req, res) => {
                         {
                             id: 4,
                             name: 'Holding Hands'
-                        },
-                        {
+                        }, {
                             id: 5,
                             name: 'Meeting the Parents'
                         }
                     ],
                     count: 2
                 }
-            },
-            {
+            }, {
                 id: 3,
                 name: 'Travel',
                 subcategories: {
@@ -86,36 +81,30 @@ app.get('/categories', (req, res) => {
                         {
                             id: 6,
                             name: 'Subcategory 1'
-                        },
-                        {
+                        }, {
                             id: 7,
                             name: 'Subcategory 2'
-                        },
-                        {
+                        }, {
                             id: 8,
                             name: 'Subcategory 3'
-                        },
-                        {
+                        }, {
                             id: 9,
                             name: 'Subcategory 4'
-                        },
-                        {
+                        }, {
                             id: 10,
                             name: 'Subcategory 5'
                         }
                     ],
                     count: 5
                 }
-            },
-            {
+            }, {
                 id: 4,
                 name: 'School',
                 subcategories: {
                     records: [],
                     count: 0
                 }
-            },
-            {
+            }, {
                 id: 5,
                 name: 'Transportation',
                 subcategories: {
@@ -123,16 +112,13 @@ app.get('/categories', (req, res) => {
                         {
                             id: 13,
                             name: 'Taking the Train'
-                        },
-                        {
+                        }, {
                             id: 14,
                             name: 'Riding Horses'
-                        },
-                        {
+                        }, {
                             id: 15,
                             name: 'Bus Passes'
-                        },
-                        {
+                        }, {
                             id: 16,
                             name: 'Taking Long Road Trips'
                         }
@@ -143,6 +129,14 @@ app.get('/categories', (req, res) => {
         ],
         count: 5
     });
+});
+
+app.get('/categories/:id', (req, res) => {
+    res.sendStatus(404);
+});
+
+app.patch('/categories/:id', (req, res) => {
+    res.sendStatus(404);
 });
 
 if (process.env.LISTEN) {

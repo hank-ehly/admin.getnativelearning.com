@@ -53,9 +53,7 @@ describe('CategoriesService', () => {
                 })
             );
 
-            mockBackend.connections.subscribe(connection => {
-                connection.mockRespond(mockResponse);
-            });
+            mockBackend.connections.subscribe(connection => connection.mockRespond(mockResponse));
 
             service.getCategories().subscribe(res => {
                 expect(res).toEqual(mockCategories.records);
@@ -70,12 +68,46 @@ describe('CategoriesService', () => {
                 })
             );
 
-            mockBackend.connections.subscribe(connection => {
-                connection.mockRespond(mockResponse);
-            });
+            mockBackend.connections.subscribe(connection => connection.mockRespond(mockResponse));
 
             service.getCategory(_.first(mockCategories.records).id).subscribe(res => {
                 expect(res).toEqual(_.first(mockCategories.records));
+            });
+        }));
+
+    it('should return true after successfully updating a category', inject([CategoriesService, MockBackend],
+        (service: CategoriesService, mockBackend: MockBackend) => {
+            const mockResponse = new Response(
+                new ResponseOptions({
+                    body: JSON.stringify(null)
+                })
+            );
+
+            mockBackend.connections.subscribe(connection => connection.mockRespond(mockResponse));
+
+            service.updateCategory(_.first(mockCategories.records).id, {name: 'new name'}).subscribe(res => {
+                expect(res).toEqual(true);
+            });
+        }));
+
+    it('should return false if failed to update category', inject([CategoriesService, MockBackend],
+        (service: CategoriesService, mockBackend: MockBackend) => {
+            const mockResponse = new Response(
+                new ResponseOptions({
+                    status: 404,
+                    body: [
+                        {
+                            message: 'No resource was found for the given conditions',
+                            code: 'ResourceNotFound'
+                        }
+                    ]
+                })
+            );
+
+            mockBackend.connections.subscribe(connection => connection.mockRespond(mockResponse));
+
+            service.updateCategory(_.first(mockCategories.records).id, {name: 'new name'}).subscribe(res => {
+                expect(res).toEqual(false);
             });
         }));
 });
