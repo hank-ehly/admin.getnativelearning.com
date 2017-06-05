@@ -22,7 +22,7 @@ if [[ -d dist ]]; then
 fi
 
 ${NPM_BIN} uninstall -g @angular/cli
-${NPM_BIN} cache clean
+${NPM_BIN} cache verify
 ${NPM_BIN} install -g @angular/cli@latest
 
 if [[ -f package.json ]]; then
