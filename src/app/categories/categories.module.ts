@@ -8,14 +8,12 @@ import { EditSubcategoryComponent } from './edit-subcategory/edit-subcategory.co
 import { EditCategoryComponent } from './edit-category/edit-category.component';
 import { CategoriesComponent } from './categories.component';
 import { CategoriesService } from './categories.service';
-import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
         CommonModule,
         RouterModule,
-        FormsModule,
-        SharedModule
+        FormsModule
     ],
     declarations: [
         CategoriesComponent,

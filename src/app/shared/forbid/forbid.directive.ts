@@ -23,7 +23,6 @@ export class ForbidDirective implements Validator, OnChanges {
 function matchValidator(forbiddenValue: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
         const name = control.value;
-        console.log(control.value, forbiddenValue);
         return name === forbiddenValue ? {'match': {name}} : null;
     };
 }

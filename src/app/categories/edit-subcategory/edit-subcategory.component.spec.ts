@@ -6,7 +6,6 @@ import { HttpModule } from '@angular/http';
 
 import { EditSubcategoryComponent } from './edit-subcategory.component';
 import { CategoriesService } from '../categories.service';
-import { SharedModule } from '../../shared/shared.module';
 import { RouterStub } from '../../testing/router-stub';
 import { AuthService } from '../../core/auth.service';
 import { HttpService } from '../../core/http.service';
@@ -45,8 +44,7 @@ describe('EditSubcategoryComponent', () => {
         TestBed.configureTestingModule({
             imports: [
                 HttpModule,
-                FormsModule,
-                SharedModule
+                FormsModule
             ],
             declarations: [
                 EditSubcategoryComponent
@@ -110,5 +108,13 @@ describe('EditSubcategoryComponent', () => {
     it('should preselect the category with the id that corresponds to the current category id', () => {
         const selectEl: HTMLSelectElement = fixture.debugElement.query(By.css('select')).nativeElement;
         expect(selectEl.selectedIndex).toEqual(_.findIndex(mockCategories.records, {id: currentCategoryId}));
+    });
+
+    it('should recognize a newly selected category', () => {
+        const selectEl: HTMLSelectElement = fixture.debugElement.query(By.css('select')).nativeElement;
+        selectEl.selectedIndex = 0;
+        selectEl.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+        expect(component.selectedCategoryId).toEqual(_.first(mockCategories.records).id);
     });
 });

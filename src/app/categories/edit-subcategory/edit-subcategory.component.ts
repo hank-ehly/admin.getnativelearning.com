@@ -21,11 +21,12 @@ export class EditSubcategoryComponent implements OnInit, OnDestroy {
 
     categories$: Observable<any>;
     currentCategoryId: number;
+    selectedCategoryId: number;
 
     private subscriptions: Subscription[] = [];
 
     constructor(private categoriesService: CategoriesService, private route: ActivatedRoute) {
-        this.currentCategoryId = route.snapshot.params.category_id;
+        this.currentCategoryId = this.selectedCategoryId = +route.snapshot.params.category_id;
         this.subcategory$ = new BehaviorSubject<any>(null);
     }
 
@@ -50,5 +51,21 @@ export class EditSubcategoryComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         _.each(this.subscriptions, s => s.unsubscribe());
+    }
+
+    onSelectCategory(e: Event): void {
+        const target = <HTMLSelectElement>e.target;
+        const selectedOption = <HTMLOptionElement>target.options[target.selectedIndex];
+        this.selectedCategoryId = +selectedOption.value;
+    }
+
+    onSubmit(): void {
+        this.subscriptions.push(
+            this.categoriesService.updateSubcategory(
+                this.route.snapshot.params.category_id,
+                this.route.snapshot.params.subcategory_id,
+                {category_id: this.selectedCategoryId, name: this.subcategoryNameModel}
+            ).subscribe()
+        );
     }
 }

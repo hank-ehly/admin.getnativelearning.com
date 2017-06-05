@@ -1,8 +1,8 @@
-<form role="form" #form="ngForm">
+<form role="form" #form="ngForm" (submit)="onSubmit()">
     <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" name="name" id="name" class="form-control subcategory__name" [(ngModel)]="subcategoryNameModel"
-               [gnForbid]="subcategory$.getValue()?.name" min="0" max="50" tabindex="1" autofocus required>
+        <input type="text" name="name" id="name" class="form-control subcategory__name" [(ngModel)]="subcategoryNameModel" min="0" max="50"
+               tabindex="1" autofocus required>
     </div>
 
     <p class="subcategory__created-at">{{ subcategory$.getValue()?.created_at }}</p>
@@ -10,9 +10,10 @@
 
     <div class="form-group">
         <label for="categories">Category</label>
-        <select class="form-control" name="categories" id="categories" tabindex="2">
+        <select class="form-control" name="categories" id="categories" tabindex="2" required (input)="onSelectCategory($event)">
             <option *ngFor="let category of categories$ | async" [selected]="category?.id === currentCategoryId"
-                    [value]="category?.id">{{ category?.name }}</option>
+                    [value]="category?.id">{{ category?.name }}
+            </option>
         </select>
     </div>
 
