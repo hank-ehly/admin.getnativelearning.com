@@ -15,6 +15,7 @@ import * as _ from 'lodash';
 export class LoginComponent implements OnDestroy {
     credentials = {email: '', password: ''};
     requestInProgress = false;
+    emailRegex = '[a-z0-9!#$%&\'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*';
 
     private subscriptions: Subscription[] = [];
 

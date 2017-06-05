@@ -2,9 +2,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { Router } from '@angular/router';
 
 import { GoogleCloudSpeechLanguages } from './google-cloud-speech-languages';
 import { VideosComponent } from './videos.component';
+import { RouterStub } from '../testing/router-stub';
 import { HttpService } from '../core/http.service';
 import { AuthService } from '../core/auth.service';
 import { VideosService } from './videos.service';
@@ -17,11 +19,20 @@ describe('VideosComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [HttpModule, FormsModule],
-            declarations: [VideosComponent],
-            providers: [VideosService, HttpService, AuthService]
-        })
-            .compileComponents();
+            imports: [
+                HttpModule,
+                FormsModule
+            ],
+            declarations: [
+                VideosComponent
+            ],
+            providers: [
+                VideosService,
+                HttpService,
+                AuthService,
+                {provide: Router, useClass: RouterStub}
+            ]
+        }).compileComponents();
     }));
 
     beforeEach(() => {

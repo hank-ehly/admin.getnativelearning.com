@@ -26,8 +26,21 @@ export class CategoriesService {
         });
     }
 
+    getSubcategory(category_id: number, subcategory_id: number): Observable<any> {
+        return this.http.request('/categories/' + category_id + '/subcategories/' + subcategory_id, {
+            method: RequestMethod.Get
+        });
+    }
+
     updateCategory(id: number, changes: any): Observable<boolean> {
         return this.http.request('/categories/' + id, {
+            method: RequestMethod.Patch,
+            body: changes
+        }).map(_.isNull);
+    }
+
+    updateSubcategory(category_id: number, subcategory_id: number, changes: any): Observable<boolean> {
+        return this.http.request('/categories/' + category_id + '/subcategories/' + subcategory_id, {
             method: RequestMethod.Patch,
             body: changes
         }).map(_.isNull);

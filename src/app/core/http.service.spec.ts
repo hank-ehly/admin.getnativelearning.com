@@ -1,7 +1,9 @@
 import { BaseRequestOptions, Http, HttpModule, ResponseOptions, Response, RequestMethod } from '@angular/http';
 import { TestBed, inject } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
+import { Router } from '@angular/router';
 
+import { RouterStub } from '../testing/router-stub';
 import { HttpService } from './http.service';
 import { AuthService } from './auth.service';
 
@@ -20,7 +22,8 @@ describe('HttpService', () => {
                     provide: Http,
                     useFactory: (backend, options) => new Http(backend, options),
                     deps: [MockBackend, BaseRequestOptions]
-                }
+                },
+                {provide: Router, useClass: RouterStub}
             ]
         });
     });
@@ -60,4 +63,6 @@ describe('HttpService', () => {
                 expect(res).toEqual(mockErrBody);
             });
         }));
+
+    it('should redirect the client to the response location header path');
 });

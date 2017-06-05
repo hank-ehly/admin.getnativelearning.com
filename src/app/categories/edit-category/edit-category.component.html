@@ -41,7 +41,7 @@
             <td class="subcategory__created-at">{{ subcategory?.created_at }}</td>
             <td class="subcategory__updated-at">{{ subcategory?.updated_at }}</td>
             <td>
-                <a class="btn btn-xs btn-default">Edit</a>
+                <a class="btn btn-xs btn-default" [routerLink]="['/categories', categoryId, 'subcategories', subcategory?.id]">Edit</a>
                 <button class="btn btn-xs btn-danger">Delete</button>
             </td>
         </tr>

@@ -15,6 +15,7 @@ import * as _ from 'lodash';
 })
 export class EditCategoryComponent implements OnInit, OnDestroy {
     category$: Observable<any>;
+    categoryId: number;
     categoryName: string;
     subscriptions: Subscription[] = [];
     updateSuccess: boolean | null = null;
@@ -23,6 +24,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     private originalCategoryName: string;
 
     constructor(private categoryService: CategoriesService, private route: ActivatedRoute) {
+        this.categoryId = route.snapshot.params.id;
     }
 
     ngOnInit(): void {

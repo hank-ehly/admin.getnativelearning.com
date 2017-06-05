@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './core/auth.guard';
 import { EditCategoryComponent } from './categories/edit-category/edit-category.component';
 import { CategoriesIndexComponent } from './categories/categories-index/categories-index.component';
+import { EditSubcategoryComponent } from './categories/edit-subcategory/edit-subcategory.component';
 
 const routes: Routes = [
     {
@@ -29,6 +30,10 @@ const routes: Routes = [
             {
                 path: ':id/edit',
                 component: EditCategoryComponent
+            },
+            {
+                path: ':category_id/subcategories/:subcategory_id',
+                component: EditSubcategoryComponent
             }
         ]
     },

@@ -55,8 +55,7 @@ describe('EditCategoryComponent', () => {
                 HttpService,
                 AuthService
             ]
-        })
-            .compileComponents();
+        }).compileComponents();
     }));
 
     beforeEach(() => {

@@ -1,11 +1,13 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
+import { Router } from '@angular/router';
 
-import { VideosService } from './videos.service';
+import { RouterStub } from '../testing/router-stub';
 import { HttpService } from '../core/http.service';
+import { AuthService } from '../core/auth.service';
+import { VideosService } from './videos.service';
 
 import { Observable } from 'rxjs/Observable';
-import { AuthService } from '../core/auth.service';
 
 describe('VideosService', () => {
     const file = new File([], '');
@@ -13,8 +15,15 @@ describe('VideosService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpModule],
-            providers: [VideosService, HttpService, AuthService]
+            imports: [
+                HttpModule
+            ],
+            providers: [
+                VideosService,
+                HttpService,
+                AuthService,
+                {provide: Router, useClass: RouterStub}
+            ]
         });
     });
 
