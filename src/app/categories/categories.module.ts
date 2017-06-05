@@ -1,21 +1,25 @@
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
-import { CategoriesService } from './categories.service';
-import { CategoriesComponent } from './categories.component';
-import { EditCategoryComponent } from './edit-category/edit-category.component';
 import { CategoriesIndexComponent } from './categories-index/categories-index.component';
+import { EditCategoryComponent } from './edit-category/edit-category.component';
+import { CategoriesComponent } from './categories.component';
+import { CategoriesService } from './categories.service';
+import { EditSubcategoryComponent } from './edit-subcategory/edit-subcategory.component';
 
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule
+        RouterModule,
+        FormsModule
     ],
     declarations: [
         CategoriesComponent,
         EditCategoryComponent,
-        CategoriesIndexComponent
+        CategoriesIndexComponent,
+        EditSubcategoryComponent
     ],
     providers: [
         CategoriesService
