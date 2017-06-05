@@ -17,6 +17,10 @@ if [[ -d node_modules ]]; then
     rm -rf node_modules
 fi
 
+if [[ -f package-lock.json ]]; then
+    rm -f package-lock.json
+fi
+
 if [[ -d dist ]]; then
     rm -rf dist
 fi
