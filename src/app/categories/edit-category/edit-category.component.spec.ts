@@ -13,30 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 
 describe('EditCategoryComponent', () => {
-    const mockCategory = {
-        id: 123,
-        name: 'category 1',
-        created_at: 'Wed Jan 11 04:35:55 +0000 2017',
-        updated_at: 'Wed Jan 11 04:35:55 +0000 2017',
-        subcategories: {
-            records: [
-                {
-                    id: 456,
-                    name: 'subcategory 1',
-                    created_at: 'Wed Jan 11 04:35:55 +0000 2017',
-                    updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
-                },
-                {
-                    id: 789,
-                    name: 'subcategory 2',
-                    created_at: 'Wed Jan 11 04:35:55 +0000 2017',
-                    updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
-                }
-            ],
-            count: 2
-        }
-    };
-
+    let mockCategory: any;
     let component: EditCategoryComponent;
     let fixture: ComponentFixture<EditCategoryComponent>;
 
@@ -63,19 +40,173 @@ describe('EditCategoryComponent', () => {
         component = fixture.componentInstance;
         spyOn(fixture.debugElement.injector.get(CategoriesService), 'getCategory').and.returnValue(Observable.of(mockCategory));
         fixture.detectChanges();
+
+        mockCategory = {
+            id: 123,
+            categories_localized: {
+                records: [
+                    {
+                        language: {
+                            name: 'English',
+                            code: 'en'
+                        },
+                        name: 'Category 1'
+                    },
+                    {
+                        language: {
+                            name: '日本語',
+                            code: 'ja'
+                        },
+                        name: 'カテゴリー１'
+                    }
+                ],
+                count: 2
+            },
+            created_at: 'Wed Jan 11 04:35:55 +0000 2017',
+            updated_at: 'Wed Jan 11 04:35:55 +0000 2017',
+            subcategories: {
+                records: [
+                    {
+                        id: 456,
+                        name: 'Subcategory 1',
+                        created_at: 'Wed Jan 11 04:35:55 +0000 2017',
+                        updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
+                    }
+                ],
+                count: 1
+            }
+        };
     });
 
     it('should be created', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should display the category name in the input field', (done) => {
-        const inputField = fixture.debugElement.query(By.css('.category__name')).nativeElement;
+    it('should display a list of category name input fields', () => {
+        const textInputFields = fixture.debugElement.queryAll(By.css('.category__name'));
+        const numberOfLanguages = mockCategory.categories_localized.count;
+        expect(textInputFields.length).toEqual(numberOfLanguages);
+    });
+
+    it('should display category names in the appropriate text input field', (done) => {
+        const inputField = _.first(fixture.debugElement.queryAll(By.css('.category__name'))).nativeElement;
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            expect(inputField.value).toEqual(mockCategory.name);
+            expect(inputField.value).toEqual(_.first(mockCategory.categories_localized.records).name);
             done();
         });
+    });
+
+    it('should disable editing of category names by default', () => {
+        const inputField = _.first(fixture.debugElement.queryAll(By.css('.category__name'))).nativeElement;
+        expect(inputField.readOnly).toEqual(true);
+    });
+
+    it('should hide the commit/cancel buttons by default', () => {
+        expect(fixture.debugElement.query(By.css('.category__actions--commit'))).toBeFalsy();
+        expect(fixture.debugElement.query(By.css('.category__actions--cancel'))).toBeFalsy();
+    });
+
+    it('should display the commit/cancel buttons after pressing Edit', () => {
+        const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
+        editButton.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        const commitIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--commit'))).nativeElement;
+        const cancelIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--cancel'))).nativeElement;
+        expect(commitIcon).toBeTruthy();
+        expect(cancelIcon).toBeTruthy();
+    });
+
+    it('should enable editing on the input when the Edit button is pressed', () => {
+        const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
+        const inputField = _.first(fixture.debugElement.queryAll(By.css('.category__name'))).nativeElement;
+        editButton.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        expect(inputField.readOnly).toEqual(false);
+    });
+
+    it('should disable the input field after pressing the X icon', () => {
+        const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
+        editButton.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        const cancelIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--cancel'))).nativeElement;
+        cancelIcon.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        const inputField = _.first(fixture.debugElement.queryAll(By.css('.category__name'))).nativeElement;
+        expect(inputField.readOnly).toEqual(true);
+    });
+
+    it('should disable the input field after pressing the √ icon', () => {
+        const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
+        editButton.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        const commitIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--commit'))).nativeElement;
+        commitIcon.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        const inputField = _.first(fixture.debugElement.queryAll(By.css('.category__name'))).nativeElement;
+        expect(inputField.readOnly).toEqual(true);
+    });
+
+    it('should reset the category name to its original value after pressing the X icon', () => {
+        const originalValue = _.first(mockCategory.categories_localized.records).name;
+        const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
+        editButton.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        _.first(component.category.categories_localized.records).name = 'new value';
+        fixture.detectChanges();
+        const cancelIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--cancel'))).nativeElement;
+        cancelIcon.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        expect(_.first(component.category.categories_localized.records).name).toEqual(originalValue);
+    });
+
+    it('should set the updating index after clicking the check mark', () => {
+        const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
+        editButton.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        _.first(component.category.categories_localized.records).name = 'new value';
+        fixture.detectChanges();
+        const commitIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--commit'))).nativeElement;
+        commitIcon.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+        expect(component.updatingIndices).toContain(0);
+    });
+
+    it('should reset the category name to the original value if the update request fails', () => {
+        const originalValue = _.first(mockCategory.categories_localized.records).name;
+        spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategoryLocalized').and.returnValue(Observable.of(false));
+
+        const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
+        editButton.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+
+        _.first(component.category.categories_localized.records).name = 'new value';
+        fixture.detectChanges();
+
+        const commitIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--commit'))).nativeElement;
+        commitIcon.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+
+        expect(_.first(component.category.categories_localized.records).name).toEqual(originalValue);
+    });
+
+    it('should update the name of the persistedCategory after a successful update', () => {
+        const originalValue = _.first(mockCategory.categories_localized.records).name;
+        const newValue = 'new value';
+        spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategoryLocalized').and.returnValue(Observable.of(true));
+
+        const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
+        editButton.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+
+        _.first(component.category.categories_localized.records).name = newValue;
+        fixture.detectChanges();
+
+        const commitIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--commit'))).nativeElement;
+        commitIcon.dispatchEvent(new Event('click'));
+        fixture.detectChanges();
+
+        expect(_.first(component.persistedCategory.categories_localized.records).name).toEqual(newValue);
     });
 
     it('should display the category creation DateTime', () => {
@@ -115,38 +246,5 @@ describe('EditCategoryComponent', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__updated-at')).nativeElement;
         expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records).updated_at);
-    });
-
-    it('should show a success alert after successful category update', () => {
-        spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategory').and.returnValue(Observable.of(true));
-        fixture.debugElement.query(By.css('#name')).nativeElement.value = 'new name';
-        fixture.debugElement.query(By.css('form')).triggerEventHandler('submit', null);
-        fixture.detectChanges();
-        const alertEl = fixture.debugElement.query(By.css('div.alert.alert-success')).nativeElement;
-        expect(alertEl).toBeTruthy();
-    });
-
-    it('should show a danger alert after failed category update', () => {
-        spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategory').and.returnValue(Observable.of(false));
-        fixture.debugElement.query(By.css('#name')).nativeElement.value = 'new name';
-        fixture.debugElement.query(By.css('form')).triggerEventHandler('submit', null);
-        fixture.detectChanges();
-        const alertEl = fixture.debugElement.query(By.css('div.alert.alert-danger')).nativeElement;
-        expect(alertEl).toBeTruthy();
-    });
-
-    it('should disable the submit button if the value is unchanged', () => {
-        const originalCategoryName = component.categoryName;
-        fixture.debugElement.query(By.css('#name')).triggerEventHandler('input', {target: {value: '12345678'}});
-        fixture.detectChanges();
-        fixture.debugElement.query(By.css('#name')).triggerEventHandler('input', {target: {value: originalCategoryName}});
-        fixture.detectChanges();
-        expect(component.categoryNameSubmitDisabled).toBeTruthy();
-    });
-
-    it('should enable the submit button if the category name value has changed', () => {
-        fixture.debugElement.query(By.css('#name')).triggerEventHandler('input', {target: {value: '12345678'}});
-        fixture.detectChanges();
-        expect(component.categoryNameSubmitDisabled).toBeFalsy();
     });
 });

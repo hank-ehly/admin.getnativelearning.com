@@ -1,10 +1,9 @@
-import { AfterViewChecked, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CategoriesService } from '../categories.service';
 
 import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/pluck';
 import * as _ from 'lodash';
 
@@ -14,46 +13,74 @@ import * as _ from 'lodash';
     styleUrls: ['./edit-category.component.scss']
 })
 export class EditCategoryComponent implements OnInit, OnDestroy {
-    category$: Observable<any>;
+    category: any;
+    persistedCategory: any;
     categoryId: number;
-    categoryName: string;
+    editingIndices: number[] = [];
+    updatingIndices: number[] = [];
     subscriptions: Subscription[] = [];
-    updateSuccess: boolean | null = null;
-    categoryNameSubmitDisabled = true;
-
-    private originalCategoryName: string;
 
     constructor(private categoryService: CategoriesService, private route: ActivatedRoute) {
         this.categoryId = route.snapshot.params.id;
     }
 
     ngOnInit(): void {
-        this.category$ = this.categoryService.getCategory(this.route.snapshot.params.id);
-        this.subscriptions.push(this.category$.pluck('name').subscribe((name: string) => {
-            this.categoryName = name;
-            this.originalCategoryName = name;
-        }));
+        this.subscriptions.push(
+            this.categoryService.getCategory(this.route.snapshot.params.id).subscribe(c => {
+                this.category = c;
+                this.persistedCategory = _.cloneDeep(c);
+            })
+        );
     }
 
     ngOnDestroy(): void {
         _.each(this.subscriptions, s => s.unsubscribe());
     }
 
-    onInputCategoryName(e: Event): void {
-        this.categoryNameSubmitDisabled = (<HTMLInputElement>e.target).value === this.originalCategoryName;
+    isEditingIndex(i: number) {
+        return _.includes(this.editingIndices, i) && !_.includes(this.updatingIndices, i);
     }
 
-    onSubmit(): void {
-        this.categoryNameSubmitDisabled = true;
-        const updateSub = this.categoryService.updateCategory(this.route.snapshot.params.id, {
-            name: this.categoryName
-        }).subscribe((result: boolean) => {
-            this.updateSuccess = result;
-            if (result) {
-                this.originalCategoryName = this.categoryName;
-            }
-            this.categoryNameSubmitDisabled = true;
-        });
-        this.subscriptions.push(updateSub);
+    isUpdatingIndex(i: number) {
+        return _.includes(this.updatingIndices, i) && !_.includes(this.editingIndices, i);
+    }
+
+    editIndex(i: number) {
+        if (!this.isEditingIndex(i)) {
+            this.editingIndices.push(i);
+        }
+    }
+
+    cancelEditAtIndex(i: number) {
+        if (this.isEditingIndex(i)) {
+            this.editingIndices.splice(this.editingIndices.indexOf(i), 1);
+            this.category.categories_localized.records[i].name = this.persistedCategory.categories_localized.records[i].name;
+        }
+    }
+
+    updateNameAtIndex(i: number) {
+        if (this.isUpdatingIndex(i)) {
+            return;
+        }
+
+        if (this.isEditingIndex(i)) {
+            this.editingIndices.splice(this.editingIndices.indexOf(i), 1);
+        }
+
+        this.updatingIndices.push(i);
+
+        this.subscriptions.push(
+            this.categoryService.updateCategoryLocalized(this.categoryId, _.nth(this.category.categories_localized.records, i).id, {
+                name: _.nth(this.category.categories_localized.records, i).name
+            }).subscribe((updated: any) => {
+                if (updated) {
+                    this.persistedCategory.categories_localized.records[i].name = this.category.categories_localized.records[i].name;
+                } else {
+                    this.category.categories_localized.records[i].name = this.persistedCategory.categories_localized.records[i].name;
+                }
+            }, null, () => {
+                this.updatingIndices.splice(this.updatingIndices.indexOf(i), 1);
+            })
+        );
     }
 }

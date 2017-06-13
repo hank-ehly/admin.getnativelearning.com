@@ -8,6 +8,7 @@ import { CategoriesIndexComponent } from './categories-index.component';
 import { CategoriesService } from '../categories.service';
 import { HttpService } from '../../core/http.service';
 import { AuthService } from '../../core/auth.service';
+
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import * as _ from 'lodash';

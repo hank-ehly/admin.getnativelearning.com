@@ -15,7 +15,7 @@ export class CategoriesService {
     }
 
     getCategories(): Observable<any> {
-        return this.http.request('/categories', {
+        return this.http.request('/categories?lang=en', {
             method: RequestMethod.Get
         }).pluck('records');
     }
@@ -26,17 +26,17 @@ export class CategoriesService {
         });
     }
 
+    updateCategoryLocalized(categoryId: number, categoryLocalizedId: number, changes: any): Observable<boolean> {
+        return this.http.request(`/categories/${categoryId}/categories_localized/${categoryLocalizedId}`, {
+            method: RequestMethod.Patch,
+            body: changes
+        }).map(_.isNull);
+    }
+
     getSubcategory(category_id: number, subcategory_id: number): Observable<any> {
         return this.http.request('/categories/' + category_id + '/subcategories/' + subcategory_id, {
             method: RequestMethod.Get
         });
-    }
-
-    updateCategory(id: number, changes: any): Observable<boolean> {
-        return this.http.request('/categories/' + id, {
-            method: RequestMethod.Patch,
-            body: changes
-        }).map(_.isNull);
     }
 
     updateSubcategory(category_id: number, subcategory_id: number, changes: any): Observable<boolean> {

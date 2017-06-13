@@ -30,6 +30,42 @@ describe('CategoriesService', () => {
         count: 1
     };
 
+    const mockCategory = {
+        id: 123,
+        categories_localized: {
+            records: [
+                {
+                    language: {
+                        name: 'English',
+                        code: 'en'
+                    },
+                    name: 'Category 1'
+                },
+                {
+                    language: {
+                        name: '日本語',
+                        code: 'ja'
+                    },
+                    name: 'カテゴリー１'
+                }
+            ],
+            count: 2
+        },
+        created_at: 'Wed Jan 11 04:35:55 +0000 2017',
+        updated_at: 'Wed Jan 11 04:35:55 +0000 2017',
+        subcategories: {
+            records: [
+                {
+                    id: 456,
+                    name: 'Subcategory 1',
+                    created_at: 'Wed Jan 11 04:35:55 +0000 2017',
+                    updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
+                }
+            ],
+            count: 1
+        }
+    };
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
@@ -101,7 +137,7 @@ describe('CategoriesService', () => {
                 });
         }));
 
-    it('should return true after successfully updating a category', inject([CategoriesService, MockBackend],
+    it('should return true after successfully updating a category localized record', inject([CategoriesService, MockBackend],
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
@@ -111,12 +147,13 @@ describe('CategoriesService', () => {
 
             mockBackend.connections.subscribe(connection => connection.mockRespond(mockResponse));
 
-            service.updateCategory(_.first(mockCategories.records).id, {name: 'new name'}).subscribe(res => {
-                expect(res).toEqual(true);
-            });
+            service.updateCategoryLocalized(mockCategory.id, _.first(mockCategory.categories_localized.records).id, {name: 'new name'})
+                .subscribe(res => {
+                    expect(res).toEqual(true);
+                });
         }));
 
-    it('should return false if failed to update category', inject([CategoriesService, MockBackend],
+    it('should return false if failed to update category localized record', inject([CategoriesService, MockBackend],
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
@@ -132,9 +169,10 @@ describe('CategoriesService', () => {
 
             mockBackend.connections.subscribe(connection => connection.mockRespond(mockResponse));
 
-            service.updateCategory(_.first(mockCategories.records).id, {name: 'new name'}).subscribe(res => {
-                expect(res).toEqual(false);
-            });
+            service.updateCategoryLocalized(mockCategory.id, _.first(mockCategory.categories_localized.records).id, {name: 'new name'})
+                .subscribe(res => {
+                    expect(res).toEqual(false);
+                });
         }));
 
     it('should return true after successfully updating a subcategory', inject([CategoriesService, MockBackend],
