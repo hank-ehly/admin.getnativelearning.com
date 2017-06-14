@@ -209,16 +209,6 @@ describe('EditCategoryComponent', () => {
         expect(_.first(component.persistedCategory.categories_localized.records).name).toEqual(newValue);
     });
 
-    it('should display the category creation DateTime', () => {
-        const createdAtEl = fixture.debugElement.query(By.css('.category__created-at')).nativeElement;
-        expect(createdAtEl.textContent).toContain(mockCategory.created_at);
-    });
-
-    it('should display the category update DateTime', () => {
-        const updatedAtEl = fixture.debugElement.query(By.css('.category__updated-at')).nativeElement;
-        expect(updatedAtEl.textContent).toContain(mockCategory.updated_at);
-    });
-
     it('should display a list of subcategories', async () => {
         const subcategoriesEl = fixture.debugElement.queryAll(By.css('.subcategory'));
         expect(subcategoriesEl.length).toEqual(mockCategory.subcategories.count);

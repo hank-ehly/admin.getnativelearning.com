@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CategoriesService } from '../categories.service';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
@@ -16,35 +15,32 @@ import * as _ from 'lodash';
     styleUrls: ['./edit-subcategory.component.scss']
 })
 export class EditSubcategoryComponent implements OnInit, OnDestroy {
-    subcategory$: BehaviorSubject<any>;
-    subcategoryNameModel: string;
-
+    subcategory: any;
+    persistedSubcategory: any;
+    editingIndices: number[] = [];
+    updatingIndices: number[] = [];
     categories$: Observable<any>;
-    currentCategoryId: number;
     selectedCategoryId: number;
+    persistedCategoryId: number;
+    isUpdatingCategory = false;
 
     private subscriptions: Subscription[] = [];
 
-    constructor(private categoriesService: CategoriesService, private route: ActivatedRoute) {
-        this.currentCategoryId = this.selectedCategoryId = +route.snapshot.params.category_id;
-        this.subcategory$ = new BehaviorSubject<any>(null);
+    constructor(private service: CategoriesService, private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
-        this.categories$ = this.categoriesService.getCategories();
+        this.categories$ = this.service.getCategories();
 
         this.subscriptions.push(
-            this.categoriesService.getSubcategory(
+            this.service.getSubcategory(
                 this.route.snapshot.params.category_id,
                 this.route.snapshot.params.subcategory_id
-            ).subscribe(subcategory => {
-                this.subcategory$.next(subcategory);
-            })
-        );
-
-        this.subscriptions.push(
-            this.subcategory$.filter(_.isPlainObject).pluck('name').subscribe((name: string) => {
-                this.subcategoryNameModel = name;
+            ).subscribe(s => {
+                this.subcategory = s;
+                this.persistedSubcategory = _.cloneDeep(s);
+                this.selectedCategoryId = s.category.id;
+                this.persistedCategoryId = s.category.id;
             })
         );
     }
@@ -59,13 +55,69 @@ export class EditSubcategoryComponent implements OnInit, OnDestroy {
         this.selectedCategoryId = +selectedOption.value;
     }
 
-    onSubmit(): void {
-        this.subscriptions.push(
-            this.categoriesService.updateSubcategory(
-                this.route.snapshot.params.category_id,
-                this.route.snapshot.params.subcategory_id,
-                {category_id: this.selectedCategoryId, name: this.subcategoryNameModel}
-            ).subscribe()
-        );
+    isEditingIndex(i: number): boolean {
+        return _.includes(this.editingIndices, i) && !_.includes(this.updatingIndices, i);
+    }
+
+    isUpdatingIndex(i: number): boolean {
+        return _.includes(this.updatingIndices, i) && !_.includes(this.editingIndices, i);
+    }
+
+    editIndex(i: number): void {
+        if (!this.isEditingIndex(i)) {
+            this.editingIndices.push(i);
+        }
+    }
+
+    cancelEditAtIndex(i: number): void {
+        if (this.isEditingIndex(i)) {
+            this.editingIndices.splice(this.editingIndices.indexOf(i), 1);
+            this.subcategory.subcategories_localized.records[i].name = this.persistedSubcategory.subcategories_localized.records[i].name;
+        }
+    }
+
+    updateNameAtIndex(i: number): void {
+        if (this.isUpdatingIndex(i)) {
+            return;
+        }
+
+        if (this.isEditingIndex(i)) {
+            this.editingIndices.splice(this.editingIndices.indexOf(i), 1);
+        }
+
+        this.updatingIndices.push(i);
+
+        const subLocalizedId = _.nth(this.subcategory.subcategories_localized.records, i).id;
+        const changes = {name: _.nth(this.subcategory.subcategories_localized.records, i).name};
+
+        const s = this.service.updateSubcategoryLocalized(this.subcategory.id, subLocalizedId, changes).subscribe((updated: boolean) => {
+            if (updated) {
+                this.persistedSubcategory.subcategories_localized.records[i].name =
+                    this.subcategory.subcategories_localized.records[i].name;
+            } else {
+                this.subcategory.subcategories_localized.records[i].name =
+                    this.persistedSubcategory.subcategories_localized.records[i].name;
+            }
+        }, null, () => {
+            this.updatingIndices.splice(this.updatingIndices.indexOf(i), 1);
+        });
+
+        this.subscriptions.push(s);
+    }
+
+    onClickSubmitCategoryId(): void {
+        this.isUpdatingCategory = true;
+        const s = this.service.updateSubcategory(
+            this.persistedCategoryId,
+            this.persistedSubcategory.id,
+            {category_id: this.selectedCategoryId}
+        ).subscribe((updated: boolean) => {
+            if (updated) {
+                this.persistedCategoryId = this.selectedCategoryId;
+            } else {
+                this.selectedCategoryId = this.persistedCategoryId;
+            }
+        }, null, () => this.isUpdatingCategory = false);
+        this.subscriptions.push(s);
     }
 }

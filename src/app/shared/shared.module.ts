@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { NavigationComponent } from './navigation/navigation.component';
-import { ForbidDirective } from './forbid/forbid.directive';
 
 @NgModule({
     imports: [
@@ -11,12 +10,10 @@ import { ForbidDirective } from './forbid/forbid.directive';
         RouterModule
     ],
     declarations: [
-        NavigationComponent,
-        ForbidDirective
+        NavigationComponent
     ],
     exports: [
-        NavigationComponent,
-        ForbidDirective
+        NavigationComponent
     ]
 })
 export class SharedModule {

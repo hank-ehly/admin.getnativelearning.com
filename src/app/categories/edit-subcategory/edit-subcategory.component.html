@@ -1,21 +1,37 @@
-<form role="form" #form="ngForm" (submit)="onSubmit()">
-    <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" class="form-control subcategory__name" [(ngModel)]="subcategoryNameModel" min="0" max="50"
-               tabindex="1" autofocus required>
-    </div>
+<h4>Localized Names</h4>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Language</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="subcategory" *ngFor="let record of subcategory?.subcategories_localized?.records; let i = index">
+            <td>{{ record.language.name }}</td>
+            <td>
+                <input type="text" class="subcategory__name" [(ngModel)]="record.name" placeholder="{{ record.language.name }}" min="1" max="50" [readonly]="!isEditingIndex(i)">
+            </td>
+            <td class="subcategory__actions">
+                <button class="btn btn-default btn-xs btn-block subcategory__action--edit" (click)="editIndex(i)" *ngIf="!isEditingIndex(i) && !isUpdatingIndex(i)">Edit</button>
+                <i class="fa fa-check subcategory__action--commit" *ngIf="isEditingIndex(i)" (click)="updateNameAtIndex(i)"></i>
+                <i class="fa fa-times subcategory__action--cancel" *ngIf="isEditingIndex(i)" (click)="cancelEditAtIndex(i)"></i>
+                <i class="fa fa-circle-o-notch fa-spin" *ngIf="isUpdatingIndex(i)"></i>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
-    <p class="subcategory__created-at">{{ subcategory$.getValue()?.created_at }}</p>
-    <p class="subcategory__updated-at">{{ subcategory$.getValue()?.updated_at }}</p>
-
-    <div class="form-group">
-        <label for="categories">Category</label>
-        <select class="form-control" name="categories" id="categories" tabindex="2" required (input)="onSelectCategory($event)">
-            <option *ngFor="let category of categories$ | async" [selected]="category?.id === currentCategoryId"
-                    [value]="category?.id">{{ category?.name }}
-            </option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-default" tabindex="3" [disabled]="!subcategory$.getValue() || !form.valid">Submit</button>
-</form>
+<label for="categories">Parent Category</label>
+<select class="form-control categories" id="categories" (input)="onSelectCategory($event)">
+    <option *ngFor="let category of categories$ | async" [selected]="category?.id === selectedCategoryId" [value]="category?.id">{{ category?.name }}</option>
+</select>
+<div>
+    <button class="btn btn-default categories__submit-button" *ngIf="!isUpdatingCategory"
+            [disabled]="selectedCategoryId === persistedCategoryId" (click)="onClickSubmitCategoryId()">Apply
+    </button>
+    <i class="fa fa-circle-o-notch fa-spin categories__submit-loading-spinner" *ngIf="isUpdatingCategory"></i>
+</div>

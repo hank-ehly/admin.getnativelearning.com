@@ -1,0 +1,29 @@
+.subcategory__actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.subcategory__actions i {
+  font-size: 22px;
+}
+
+.subcategory__action--commit, .subcategory__action--cancel {
+  cursor: pointer;
+}
+
+.subcategory__action--commit {
+  color: green;
+}
+
+.subcategory__action--cancel {
+  color: red;
+}
+
+.subcategory:first-child > .subcategory__actions {
+  border: none;
+}
+
+.subcategory__actions {
+  border: none;
+  border-top: 1px solid #ddd;
+}

@@ -39,8 +39,15 @@ export class CategoriesService {
         });
     }
 
-    updateSubcategory(category_id: number, subcategory_id: number, changes: any): Observable<boolean> {
-        return this.http.request('/categories/' + category_id + '/subcategories/' + subcategory_id, {
+    updateSubcategoryLocalized(subcategory_id: number, subcategory_localized_id: number, changes: any): Observable<boolean> {
+        return this.http.request('/subcategories/' + subcategory_id + '/subcategories_localized/' + subcategory_localized_id, {
+            method: RequestMethod.Patch,
+            body: changes
+        }).map(_.isNull);
+    }
+
+    updateSubcategory(categoryId: number, subcategoryId: number, changes: any): Observable<boolean> {
+        return this.http.request(`/categories/${categoryId}/subcategories/${subcategoryId}`, {
             method: RequestMethod.Patch,
             body: changes
         }).map(_.isNull);

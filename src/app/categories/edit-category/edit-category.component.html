@@ -15,7 +15,9 @@
                        max="50" [readonly]="!isEditingIndex(i)">
             </td>
             <td class="category__actions">
-                <button class="btn btn-default btn-xs btn-block category__actions--edit" (click)="editIndex(i)" *ngIf="!isEditingIndex(i) && !isUpdatingIndex(i)">Edit</button>
+                <button class="btn btn-default btn-xs btn-block category__actions--edit" (click)="editIndex(i)"
+                        *ngIf="!isEditingIndex(i) && !isUpdatingIndex(i)">Edit
+                </button>
                 <i class="fa fa-check category__actions--commit" *ngIf="isEditingIndex(i)" (click)="updateNameAtIndex(i)"></i>
                 <i class="fa fa-times category__actions--cancel" *ngIf="isEditingIndex(i)" (click)="cancelEditAtIndex(i)"></i>
                 <i class="fa fa-circle-o-notch fa-spin" *ngIf="isUpdatingIndex(i)"></i>
@@ -24,9 +26,6 @@
         </tbody>
     </table>
 </div>
-
-<p class="category__created-at">Created: {{ category?.created_at }}</p>
-<p class="category__updated-at">Updated: {{ category?.updated_at }}</p>
 
 <hr>
 <h3>Subcategories</h3>
