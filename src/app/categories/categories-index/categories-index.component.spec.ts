@@ -1,18 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { Router } from '@angular/router';
 
+import { MockApiResponse_CategoriesIndex } from '../../testing/mock-api-responses/categories-index';
+import { RouterLinkStubDirective } from '../../testing/router-link-stub.directive';
 import { CategoriesIndexComponent } from './categories-index.component';
 import { CategoriesService } from '../categories.service';
+import { RouterStub } from '../../testing/router-stub';
 import { HttpService } from '../../core/http.service';
 import { AuthService } from '../../core/auth.service';
+import { click } from '../../testing/index';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
-import { MockApiResponse_CategoriesIndex } from '../../testing/mock-api-responses/categories-index';
 
 let comp: CategoriesIndexComponent;
 let fixture: ComponentFixture<CategoriesIndexComponent>;
@@ -22,16 +24,20 @@ describe('CategoriesIndexComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                CategoriesIndexComponent
+                CategoriesIndexComponent,
+                RouterLinkStubDirective
             ],
             imports: [
-                HttpModule,
-                RouterTestingModule
+                HttpModule
             ],
             providers: [
                 CategoriesService,
                 HttpService,
-                AuthService
+                AuthService,
+                {
+                    provide: Router,
+                    useClass: RouterStub
+                }
             ]
         }).compileComponents().then(createComponent);
     }));
@@ -67,35 +73,46 @@ describe('CategoriesIndexComponent', () => {
     it('should enable the delete button if the category has no subcategories', () => {
         expect(_.nth(page.deleteButtons, 3).disabled).toBe(false);
     });
+
+    it('should display a button for creating a new category', () => {
+        expect(page.createNewCategoryButton).toBeTruthy();
+    });
+
+    it('should call the createCategory method of the category service after pressing the Create New Category button', () => {
+        click(page.createNewCategoryButton);
+        fixture.detectChanges();
+        expect(page.createCategorySpy.calls.count()).toEqual(1);
+    });
 });
 
 function createComponent() {
     fixture = TestBed.createComponent(CategoriesIndexComponent);
     comp = fixture.componentInstance;
-
-    const categoriesService = fixture.debugElement.injector.get(CategoriesService);
-    spyOn(categoriesService, 'getCategories').and.returnValue(Observable.of(MockApiResponse_CategoriesIndex.records));
-
-    fixture.detectChanges();
-
     page = new Page();
+    fixture.detectChanges();
     page.refreshPageElements();
-
     return fixture.whenStable();
 }
 
 class Page {
-    firstCategoryDebugEl: DebugElement;
-
     categoryIds: HTMLTableDataCellElement[];
     categoryNames: HTMLTableDataCellElement[];
     subcategoryCounts: HTMLTableDataCellElement[];
     deleteButtons: HTMLButtonElement[];
+    createNewCategoryButton: HTMLButtonElement;
+    createCategorySpy: jasmine.Spy;
+
+    constructor() {
+        const categoriesService = fixture.debugElement.injector.get(CategoriesService);
+        spyOn(categoriesService, 'getCategories').and.returnValue(Observable.of(MockApiResponse_CategoriesIndex.records));
+        this.createCategorySpy = spyOn(categoriesService, 'createCategory').and.returnValue(Observable.of(true));
+    }
 
     refreshPageElements() {
         this.categoryIds = fixture.debugElement.queryAll(By.css('.category__id')).map(e => e.nativeElement);
         this.categoryNames = fixture.debugElement.queryAll(By.css('.category__name')).map(e => e.nativeElement);
         this.subcategoryCounts = fixture.debugElement.queryAll(By.css('.category__subcategories-count')).map(e => e.nativeElement);
         this.deleteButtons = fixture.debugElement.queryAll(By.css('.category__action--delete')).map(e => e.nativeElement);
+        this.createNewCategoryButton = fixture.debugElement.query(By.css('.category__create-button')).nativeElement;
     }
 }

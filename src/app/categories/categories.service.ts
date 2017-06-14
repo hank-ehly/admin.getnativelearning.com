@@ -33,14 +33,14 @@ export class CategoriesService {
         }).map(_.isNull);
     }
 
-    getSubcategory(category_id: number, subcategory_id: number): Observable<any> {
-        return this.http.request('/categories/' + category_id + '/subcategories/' + subcategory_id, {
+    getSubcategory(categoryId: number, subcategoryId: number): Observable<any> {
+        return this.http.request('/categories/' + categoryId + '/subcategories/' + subcategoryId, {
             method: RequestMethod.Get
         });
     }
 
-    updateSubcategoryLocalized(subcategory_id: number, subcategory_localized_id: number, changes: any): Observable<boolean> {
-        return this.http.request('/subcategories/' + subcategory_id + '/subcategories_localized/' + subcategory_localized_id, {
+    updateSubcategoryLocalized(subcategoryId: number, subcategoryLocalizedId: number, changes: any): Observable<boolean> {
+        return this.http.request('/subcategories/' + subcategoryId + '/subcategories_localized/' + subcategoryLocalizedId, {
             method: RequestMethod.Patch,
             body: changes
         }).map(_.isNull);
@@ -51,5 +51,9 @@ export class CategoriesService {
             method: RequestMethod.Patch,
             body: changes
         }).map(_.isNull);
+    }
+
+    createCategory(): Observable<boolean> {
+        return this.http.request('/categories', {method: RequestMethod.Post}).map((r: any) => _.isNumber(r.id) ? r.id : false);
     }
 }

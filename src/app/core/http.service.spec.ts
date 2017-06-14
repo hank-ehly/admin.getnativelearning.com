@@ -22,8 +22,7 @@ describe('HttpService', () => {
                     provide: Http,
                     useFactory: (backend, options) => new Http(backend, options),
                     deps: [MockBackend, BaseRequestOptions]
-                },
-                {provide: Router, useClass: RouterStub}
+                }
             ]
         });
     });
@@ -63,6 +62,4 @@ describe('HttpService', () => {
                 expect(res).toEqual(mockErrBody);
             });
         }));
-
-    it('should redirect the client to the response location header path');
 });
