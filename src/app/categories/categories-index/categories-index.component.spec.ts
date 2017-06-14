@@ -12,31 +12,13 @@ import { AuthService } from '../../core/auth.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
+import { MockApiResponse_CategoriesIndex } from '../../testing/mock-api-responses/categories-index';
+
+let comp: CategoriesIndexComponent;
+let fixture: ComponentFixture<CategoriesIndexComponent>;
+let page: Page;
 
 describe('CategoriesIndexComponent', () => {
-    const mockCategories = {
-        records: [{
-            id: 123,
-            name: 'category 1',
-            subcategories: {
-                records: [{name: 'subcategory 2'}],
-                count: 1
-            }
-        }, {
-            id: 456,
-            name: 'category 2',
-            subcategories: {
-                records: [],
-                count: 0
-            }
-        }],
-        count: 2
-    };
-
-    let component: CategoriesIndexComponent;
-    let fixture: ComponentFixture<CategoriesIndexComponent>;
-    let firstCategoryDebugEl: DebugElement;
-
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
@@ -51,54 +33,69 @@ describe('CategoriesIndexComponent', () => {
                 HttpService,
                 AuthService
             ]
-        }).compileComponents();
+        }).compileComponents().then(createComponent);
     }));
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(CategoriesIndexComponent);
-        component = fixture.componentInstance;
-        const categoriesService = fixture.debugElement.injector.get(CategoriesService);
-        const spy = spyOn(categoriesService, 'getCategories').and.returnValue(Observable.of(mockCategories.records));
-        fixture.detectChanges();
-        firstCategoryDebugEl = _.first(fixture.debugElement.queryAll(By.css('.category')));
-    });
-
     it('should be created', () => {
-        expect(component).toBeTruthy();
+        expect(comp).toBeTruthy();
     });
 
     it('should display a list of categories', () => {
-        expect(fixture.debugElement.queryAll(By.css('.category')).length).toEqual(mockCategories.count);
+        expect(page.categoryIds.length).toEqual(MockApiResponse_CategoriesIndex.count);
     });
 
     it('should display the id of the category', () => {
-        const categoryIdEl = firstCategoryDebugEl.query(By.css('.category__id')).nativeElement;
-        expect(categoryIdEl.textContent).toEqual(_.first(mockCategories.records).id.toString());
+        expect(_.first(page.categoryIds).textContent).toEqual(_.first(MockApiResponse_CategoriesIndex.records).id.toString());
     });
 
     it('should display the name of the category', () => {
-        const categoryNameEl = firstCategoryDebugEl.query(By.css('.category__name')).nativeElement;
-        expect(categoryNameEl.textContent).toEqual(_.first(mockCategories.records).name.toString());
+        expect(_.first(page.categoryNames).textContent).toEqual(_.first(MockApiResponse_CategoriesIndex.records).name.toString());
     });
 
     it('should display the number of subcategories', () => {
-        const subcategoriesCountEl = firstCategoryDebugEl.query(By.css('.category__subcategories-count')).nativeElement;
-        expect(subcategoriesCountEl.textContent).toEqual(_.first(mockCategories.records).subcategories.count.toString());
+        expect(+_.first(page.subcategoryCounts).textContent).toEqual(_.first(MockApiResponse_CategoriesIndex.records).subcategories.count);
     });
 
     it('should set the title of the delete button', () => {
-        const deleteButton = firstCategoryDebugEl.query(By.css('.category__action--delete')).nativeElement;
-        expect(deleteButton.getAttribute('title')).toEqual(component.deleteButtonTitle);
+        expect(_.first(page.deleteButtons).getAttribute('title')).toEqual(comp.deleteButtonTitle);
     });
 
     it('should disable the delete button if the category has subcategories', () => {
-        const deleteButton = firstCategoryDebugEl.query(By.css('.category__action--delete')).nativeElement;
-        expect(deleteButton.disabled).toBe(true);
+        expect(_.first(page.deleteButtons).disabled).toBe(true);
     });
 
     it('should enable the delete button if the category has no subcategories', () => {
-        const deleteButton = _.nth(fixture.debugElement.queryAll(By.css('.category')), 1)
-            .query(By.css('.category__action--delete')).nativeElement;
-        expect(deleteButton.disabled).toBe(false);
+        expect(_.nth(page.deleteButtons, 3).disabled).toBe(false);
     });
 });
+
+function createComponent() {
+    fixture = TestBed.createComponent(CategoriesIndexComponent);
+    comp = fixture.componentInstance;
+
+    const categoriesService = fixture.debugElement.injector.get(CategoriesService);
+    spyOn(categoriesService, 'getCategories').and.returnValue(Observable.of(MockApiResponse_CategoriesIndex.records));
+
+    fixture.detectChanges();
+
+    page = new Page();
+    page.refreshPageElements();
+
+    return fixture.whenStable();
+}
+
+class Page {
+    firstCategoryDebugEl: DebugElement;
+
+    categoryIds: HTMLTableDataCellElement[];
+    categoryNames: HTMLTableDataCellElement[];
+    subcategoryCounts: HTMLTableDataCellElement[];
+    deleteButtons: HTMLButtonElement[];
+
+    refreshPageElements() {
+        this.categoryIds = fixture.debugElement.queryAll(By.css('.category__id')).map(e => e.nativeElement);
+        this.categoryNames = fixture.debugElement.queryAll(By.css('.category__name')).map(e => e.nativeElement);
+        this.subcategoryCounts = fixture.debugElement.queryAll(By.css('.category__subcategories-count')).map(e => e.nativeElement);
+        this.deleteButtons = fixture.debugElement.queryAll(By.css('.category__action--delete')).map(e => e.nativeElement);
+    }
+}

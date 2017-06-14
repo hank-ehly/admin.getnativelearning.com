@@ -78,17 +78,8 @@ export const MockApiResponse_CategoriesIndex = {
             id: 4,
             name: 'School',
             subcategories: {
-                records: [
-                    {
-                        id: 11,
-                        name: 'First Day'
-                    },
-                    {
-                        id: 12,
-                        name: 'Making Friends'
-                    }
-                ],
-                count: 2
+                records: [],
+                count: 0
             }
         },
         {
