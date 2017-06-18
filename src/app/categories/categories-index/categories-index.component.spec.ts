@@ -83,6 +83,12 @@ describe('CategoriesIndexComponent', () => {
         fixture.detectChanges();
         expect(page.createCategorySpy.calls.count()).toEqual(1);
     });
+
+    it('should display a confirm dialog after pressing the delete button', () => {
+        click(_.nth(page.deleteButtons, 3));
+        fixture.detectChanges();
+        expect(page.windowConfirmSpy).toHaveBeenCalledWith(comp.deleteConfirmMessage);
+    });
 });
 
 function createComponent() {
@@ -101,11 +107,13 @@ class Page {
     deleteButtons: HTMLButtonElement[];
     createNewCategoryButton: HTMLButtonElement;
     createCategorySpy: jasmine.Spy;
+    windowConfirmSpy: jasmine.Spy;
 
     constructor() {
         const categoriesService = fixture.debugElement.injector.get(CategoriesService);
         spyOn(categoriesService, 'getCategories').and.returnValue(Observable.of(MockApiResponse_CategoriesIndex.records));
         this.createCategorySpy = spyOn(categoriesService, 'createCategory').and.returnValue(Observable.of(true));
+        this.windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(false);
     }
 
     refreshPageElements() {
