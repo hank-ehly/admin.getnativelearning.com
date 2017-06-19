@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 
 import { MockApiResponse_CategoriesIndex } from '../testing/mock-api-responses/categories-index';
 import { MockApiResponse_CategoriesShow } from '../testing/mock-api-responses/categories-show';
+import { MockApiResponse_CategoriesCreate } from '../testing/mock-api-responses/categories-create';
+import { MockApiResponse_SubcategoriesCreate } from '../testing/mock-api-responses/subcategories-create';
 import { MockApiResponse_404 } from '../testing/mock-api-responses/404';
 import { CategoriesService } from './categories.service';
 import { RouterStub } from '../testing/router-stub';
@@ -12,7 +14,6 @@ import { HttpService } from '../core/http.service';
 import { AuthService } from '../core/auth.service';
 
 import * as _ from 'lodash';
-import { MockApiResponse_CategoriesCreate } from '../testing/mock-api-responses/categories-create';
 
 describe('CategoriesService', () => {
     const mockErrorResponse = new Response(
@@ -54,7 +55,8 @@ describe('CategoriesService', () => {
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
-                    body: JSON.stringify(MockApiResponse_CategoriesIndex)
+                    body: JSON.stringify(MockApiResponse_CategoriesIndex),
+                    status: 200
                 })
             );
 
@@ -69,7 +71,8 @@ describe('CategoriesService', () => {
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
-                    body: JSON.stringify(_.first(MockApiResponse_CategoriesIndex.records))
+                    body: JSON.stringify(_.first(MockApiResponse_CategoriesIndex.records)),
+                    status: 200
                 })
             );
 
@@ -84,7 +87,8 @@ describe('CategoriesService', () => {
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
-                    body: JSON.stringify(_.first(_.first(MockApiResponse_CategoriesIndex.records).subcategories.records))
+                    body: JSON.stringify(_.first(_.first(MockApiResponse_CategoriesIndex.records).subcategories.records)),
+                    status: 200
                 })
             );
 
@@ -102,7 +106,8 @@ describe('CategoriesService', () => {
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
-                    body: JSON.stringify(null)
+                    body: JSON.stringify(null),
+                    status: 204
                 })
             );
 
@@ -134,7 +139,8 @@ describe('CategoriesService', () => {
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
-                    body: JSON.stringify(null)
+                    body: JSON.stringify(null),
+                    status: 204
                 })
             );
 
@@ -158,7 +164,8 @@ describe('CategoriesService', () => {
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
-                    body: JSON.stringify(null)
+                    body: JSON.stringify(null),
+                    status: 204
                 })
             );
 
@@ -182,7 +189,8 @@ describe('CategoriesService', () => {
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
-                    body: JSON.stringify(MockApiResponse_CategoriesCreate)
+                    body: JSON.stringify(MockApiResponse_CategoriesCreate),
+                    status: 201
                 })
             );
 
@@ -206,7 +214,8 @@ describe('CategoriesService', () => {
         (service: CategoriesService, mockBackend: MockBackend) => {
             const mockResponse = new Response(
                 new ResponseOptions({
-                    body: JSON.stringify(null)
+                    body: JSON.stringify(null),
+                    status: 204
                 })
             );
 
@@ -222,6 +231,34 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
 
             service.deleteCategory(1).subscribe(res => {
+                expect(res).toEqual(false);
+            });
+        }));
+
+    it('should return the categoryId and subcategoryId after successfully creating a Subcategory', inject([CategoriesService, MockBackend],
+        (service: CategoriesService, mockBackend: MockBackend) => {
+            const mockResponse = new Response(
+                new ResponseOptions({
+                    body: JSON.stringify(MockApiResponse_SubcategoriesCreate),
+                    status: 201
+                })
+            );
+
+            mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
+
+            service.createSubcategory(1).subscribe(res => {
+                expect(res).toEqual({
+                    subcategoryId: MockApiResponse_SubcategoriesCreate.id,
+                    categoryId: MockApiResponse_SubcategoriesCreate.category_id
+                });
+            });
+        }));
+
+    it('should return false after failing to create a Subcategory', inject([CategoriesService, MockBackend],
+        (service: CategoriesService, mockBackend: MockBackend) => {
+            mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
+
+            service.createSubcategory(1).subscribe(res => {
                 expect(res).toEqual(false);
             });
         }));

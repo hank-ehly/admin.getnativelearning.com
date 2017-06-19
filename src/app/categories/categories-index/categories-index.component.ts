@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 
 import { CategoriesService } from '../categories.service';
 
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/filter';
 import * as _ from 'lodash';
 
 @Component({
@@ -35,10 +35,8 @@ export class CategoriesIndexComponent implements OnInit, OnDestroy {
 
     onClickCreateNewCategory(): void {
         this.subscriptions.push(
-            this.categoryService.createCategory().subscribe((res: any) => {
-                if (res && _.isNumber(res)) {
-                    this.router.navigate(['categories', res, 'edit']);
-                }
+            this.categoryService.createCategory().filter(_.isNumber).subscribe((res: any) => {
+                this.router.navigate(['categories', res, 'edit']);
             })
         );
     }

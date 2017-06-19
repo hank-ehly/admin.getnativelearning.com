@@ -57,6 +57,20 @@ export class CategoriesService {
         return this.http.request('/categories', {method: RequestMethod.Post}).map((r: any) => _.isNumber(r.id) ? r.id : false);
     }
 
+    createSubcategory(categoryId: number): Observable<any | boolean> {
+        return this.http.request(`/categories/${categoryId}/subcategories`, {
+            method: RequestMethod.Post
+        }).map((r: any) => {
+            if (_.isNumber(r['id']) && _.isNumber(r['category_id'])) {
+                return {
+                    subcategoryId: r['id'],
+                    categoryId: r['category_id']
+                };
+            }
+            return false;
+        });
+    }
+
     deleteCategory(id: number): Observable<boolean> {
         return this.http.request(`/categories/${id}`, {method: RequestMethod.Delete}).map(_.isNull);
     }
