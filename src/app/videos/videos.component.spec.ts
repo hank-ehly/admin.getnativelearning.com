@@ -72,9 +72,7 @@ describe('VideosComponent', () => {
     it('should have a dropdown with an option whose value is en-US and textContent is English (United States)', () => {
         const compiled = fixture.debugElement.nativeElement;
 
-        const option = _.find(compiled.querySelector('select').options, {
-            value: 'en-US'
-        });
+        const option = _.find(compiled.querySelector('select').options, {value: 'en-US'}) as HTMLOptionElement;
 
         expect(option).toBeTruthy();
         expect(option.textContent).toEqual('English (United States)');
@@ -89,7 +87,7 @@ describe('VideosComponent', () => {
             code: 'af-ZA'
         });
 
-        const option = _.find(fixture.debugElement.query(By.css('select')).nativeElement.options, {value: 'af-ZA'});
+        const option = _.find(fixture.debugElement.query(By.css('select')).nativeElement.options, {value: 'af-ZA'}) as HTMLOptionElement;
         fixture.detectChanges();
 
         expect(option.selected).toBeTruthy();

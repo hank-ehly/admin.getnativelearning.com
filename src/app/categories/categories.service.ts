@@ -15,7 +15,7 @@ export class CategoriesService {
     }
 
     getCategories(): Observable<any> {
-        return this.http.request('/categories?lang=en', {
+        return this.http.request('/categories?lang=en&require_subcategories=false', {
             method: RequestMethod.Get
         }).pluck('records');
     }

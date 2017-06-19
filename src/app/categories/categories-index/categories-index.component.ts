@@ -13,9 +13,10 @@ import * as _ from 'lodash';
     styleUrls: ['./categories-index.component.scss']
 })
 export class CategoriesIndexComponent implements OnInit, OnDestroy {
-    categories$: Observable<any>;
+    categories: any[];
     deleteButtonTitle = 'To delete a category, first delete all subcategories';
     deleteConfirmMessage = 'Are you sure?';
+    deletingCategoryIds: number[] = [];
 
     subscriptions: Subscription[] = [];
 
@@ -23,7 +24,9 @@ export class CategoriesIndexComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.categories$ = this.categoryService.getCategories();
+        this.subscriptions.push(
+            this.categoryService.getCategories().subscribe((categories: any[]) => this.categories = categories)
+        );
     }
 
     ngOnDestroy(): void {
@@ -33,7 +36,6 @@ export class CategoriesIndexComponent implements OnInit, OnDestroy {
     onClickCreateNewCategory(): void {
         this.subscriptions.push(
             this.categoryService.createCategory().subscribe((res: any) => {
-                console.log(res);
                 if (res && _.isNumber(res)) {
                     this.router.navigate(['categories', res, 'edit']);
                 }
@@ -42,12 +44,23 @@ export class CategoriesIndexComponent implements OnInit, OnDestroy {
     }
 
     onClickDeleteCategory(category: any): void {
-        const confirmed = window.confirm(this.deleteConfirmMessage);
-
-        if (!confirmed) {
+        if (!window.confirm(this.deleteConfirmMessage)) {
             return;
         }
 
-        console.log('Todo: Delete request');
+        this.deletingCategoryIds.push(category.id);
+
+        this.subscriptions.push(
+            this.categoryService.deleteCategory(category.id).subscribe((deleted: boolean) => {
+                console.log('deleted:', deleted, _.findIndex(this.categories));
+                this.categories.splice(_.findIndex(this.categories, {id: category.id}), 1);
+            }, null, () => {
+                this.deletingCategoryIds.splice(category.id, 1);
+            })
+        );
+    }
+
+    isDeletingCategory(category: any): boolean {
+        return _.includes(this.deletingCategoryIds, category.id);
     }
 }

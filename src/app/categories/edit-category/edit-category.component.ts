@@ -21,12 +21,12 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     subscriptions: Subscription[] = [];
 
     constructor(private categoryService: CategoriesService, private route: ActivatedRoute) {
-        this.categoryId = route.snapshot.params.id;
+        this.categoryId = route.snapshot.params['id'];
     }
 
     ngOnInit(): void {
         this.subscriptions.push(
-            this.categoryService.getCategory(this.route.snapshot.params.id).subscribe(c => {
+            this.categoryService.getCategory(this.route.snapshot.params['id']).subscribe(c => {
                 this.category = c;
                 this.persistedCategory = _.cloneDeep(c);
             })
@@ -70,17 +70,21 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
         this.updatingIndices.push(i);
 
         this.subscriptions.push(
-            this.categoryService.updateCategoryLocalized(this.categoryId, _.nth(this.category.categories_localized.records, i).id, {
-                name: _.nth(this.category.categories_localized.records, i).name
+            this.categoryService.updateCategoryLocalized(this.categoryId, _.nth(this.category.categories_localized.records, i)['id'], {
+                name: _.nth(this.category.categories_localized.records, i)['name']
             }).subscribe((updated: any) => {
                 if (updated) {
-                    this.persistedCategory.categories_localized.records[i].name = this.category.categories_localized.records[i].name;
+                    this.persistedCategory.categories_localized.records[i]['name'] = this.category.categories_localized.records[i]['name'];
                 } else {
-                    this.category.categories_localized.records[i].name = this.persistedCategory.categories_localized.records[i].name;
+                    this.category.categories_localized.records[i]['name'] = this.persistedCategory.categories_localized.records[i]['name'];
                 }
-            }, null, () => {
+            }, () => {
+                this.category.categories_localized.records[i]['name'] = this.persistedCategory.categories_localized.records[i]['name'];
+                this.updatingIndices.splice(this.updatingIndices.indexOf(i), 1);
+            }, () => {
                 this.updatingIndices.splice(this.updatingIndices.indexOf(i), 1);
             })
         );
     }
 }
+

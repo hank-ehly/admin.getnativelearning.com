@@ -87,18 +87,17 @@ export class EditSubcategoryComponent implements OnInit, OnDestroy {
 
         this.updatingIndices.push(i);
 
-        const subLocalizedId = _.nth(this.subcategory.subcategories_localized.records, i).id;
-        const changes = {name: _.nth(this.subcategory.subcategories_localized.records, i).name};
+        const subLocalizedId = _.nth(this.subcategory.subcategories_localized.records, i)['id'];
+        const changes = {name: _.nth(this.subcategory.subcategories_localized.records, i)['name']};
 
         const s = this.service.updateSubcategoryLocalized(this.subcategory.id, subLocalizedId, changes).subscribe((updated: boolean) => {
             if (updated) {
                 this.persistedSubcategory.subcategories_localized.records[i].name =
                     this.subcategory.subcategories_localized.records[i].name;
             } else {
-                this.subcategory.subcategories_localized.records[i].name =
-                    this.persistedSubcategory.subcategories_localized.records[i].name;
+                this.onUpdateNameAtIndexError(i);
             }
-        }, null, () => {
+        }, this.onUpdateNameAtIndexError.bind(this, i), () => {
             this.updatingIndices.splice(this.updatingIndices.indexOf(i), 1);
         });
 
@@ -115,9 +114,21 @@ export class EditSubcategoryComponent implements OnInit, OnDestroy {
             if (updated) {
                 this.persistedCategoryId = this.selectedCategoryId;
             } else {
-                this.selectedCategoryId = this.persistedCategoryId;
+                this.onUpdateCategoryIdError();
             }
-        }, null, () => this.isUpdatingCategory = false);
+        }, this.onUpdateCategoryIdError, () => {
+            this.isUpdatingCategory = false;
+        });
         this.subscriptions.push(s);
+    }
+
+    private onUpdateNameAtIndexError(i: number) {
+        this.subcategory.subcategories_localized.records[i].name = this.persistedSubcategory.subcategories_localized.records[i].name;
+        this.updatingIndices.splice(this.updatingIndices.indexOf(i), 1);
+    }
+
+    private onUpdateCategoryIdError() {
+        this.selectedCategoryId = this.persistedCategoryId;
+        this.isUpdatingCategory = false;
     }
 }

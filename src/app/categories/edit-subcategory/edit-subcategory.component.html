@@ -30,8 +30,6 @@
     <option *ngFor="let category of categories$ | async" [selected]="category?.id === selectedCategoryId" [value]="category?.id">{{ category?.name }}</option>
 </select>
 <div>
-    <button class="btn btn-default categories__submit-button" *ngIf="!isUpdatingCategory"
-            [disabled]="selectedCategoryId === persistedCategoryId" (click)="onClickSubmitCategoryId()">Apply
-    </button>
+    <button class="btn btn-default categories__submit-button" *ngIf="!isUpdatingCategory" [disabled]="selectedCategoryId === persistedCategoryId" (click)="onClickSubmitCategoryId()">Apply</button>
     <i class="fa fa-circle-o-notch fa-spin categories__submit-loading-spinner" *ngIf="isUpdatingCategory"></i>
 </div>

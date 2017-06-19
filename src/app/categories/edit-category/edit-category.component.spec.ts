@@ -92,7 +92,7 @@ describe('EditCategoryComponent', () => {
         const inputField = _.first(fixture.debugElement.queryAll(By.css('.category__name'))).nativeElement;
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            expect(inputField.value).toEqual(_.first(mockCategory.categories_localized.records).name);
+            expect(inputField.value).toEqual(_.first(mockCategory.categories_localized.records)['name']);
             done();
         });
     });
@@ -148,23 +148,23 @@ describe('EditCategoryComponent', () => {
     });
 
     it('should reset the category name to its original value after pressing the X icon', () => {
-        const originalValue = _.first(mockCategory.categories_localized.records).name;
+        const originalValue = _.first(mockCategory.categories_localized.records)['name'];
         const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
         editButton.dispatchEvent(new Event('click'));
         fixture.detectChanges();
-        _.first(component.category.categories_localized.records).name = 'new value';
+        _.first(component.category.categories_localized.records)['name'] = 'new value';
         fixture.detectChanges();
         const cancelIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--cancel'))).nativeElement;
         cancelIcon.dispatchEvent(new Event('click'));
         fixture.detectChanges();
-        expect(_.first(component.category.categories_localized.records).name).toEqual(originalValue);
+        expect(_.first(component.category.categories_localized.records)['name']).toEqual(originalValue);
     });
 
     it('should set the updating index after clicking the check mark', () => {
         const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
         editButton.dispatchEvent(new Event('click'));
         fixture.detectChanges();
-        _.first(component.category.categories_localized.records).name = 'new value';
+        _.first(component.category.categories_localized.records)['name'] = 'new value';
         fixture.detectChanges();
         const commitIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--commit'))).nativeElement;
         commitIcon.dispatchEvent(new Event('click'));
@@ -173,25 +173,25 @@ describe('EditCategoryComponent', () => {
     });
 
     it('should reset the category name to the original value if the update request fails', () => {
-        const originalValue = _.first(mockCategory.categories_localized.records).name;
+        const originalValue = _.first(mockCategory.categories_localized.records)['name'];
         spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategoryLocalized').and.returnValue(Observable.of(false));
 
         const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
         editButton.dispatchEvent(new Event('click'));
         fixture.detectChanges();
 
-        _.first(component.category.categories_localized.records).name = 'new value';
+        _.first(component.category.categories_localized.records)['name'] = 'new value';
         fixture.detectChanges();
 
         const commitIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--commit'))).nativeElement;
         commitIcon.dispatchEvent(new Event('click'));
         fixture.detectChanges();
 
-        expect(_.first(component.category.categories_localized.records).name).toEqual(originalValue);
+        expect(_.first(component.category.categories_localized.records)['name']).toEqual(originalValue);
     });
 
     it('should update the name of the persistedCategory after a successful update', () => {
-        const originalValue = _.first(mockCategory.categories_localized.records).name;
+        const originalValue = _.first(mockCategory.categories_localized.records)['name'];
         const newValue = 'new value';
         spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategoryLocalized').and.returnValue(Observable.of(true));
 
@@ -199,14 +199,14 @@ describe('EditCategoryComponent', () => {
         editButton.dispatchEvent(new Event('click'));
         fixture.detectChanges();
 
-        _.first(component.category.categories_localized.records).name = newValue;
+        _.first(component.category.categories_localized.records)['name'] = newValue;
         fixture.detectChanges();
 
         const commitIcon = _.first(fixture.debugElement.queryAll(By.css('.category__actions--commit'))).nativeElement;
         commitIcon.dispatchEvent(new Event('click'));
         fixture.detectChanges();
 
-        expect(_.first(component.persistedCategory.categories_localized.records).name).toEqual(newValue);
+        expect(_.first(component.persistedCategory.categories_localized.records)['name']).toEqual(newValue);
     });
 
     it('should display a list of subcategories', async () => {
@@ -217,24 +217,24 @@ describe('EditCategoryComponent', () => {
     it('should display the subcategory id', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__id')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records).id.toString());
+        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records)['id'].toString());
     });
 
     it('should display the subcategory name', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__name')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records).name.toString());
+        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records)['name'].toString());
     });
 
     it('should display the subcategory creation DateTime', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__created-at')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records).created_at);
+        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records)['created_at']);
     });
 
     it('should display the subcategory update DateTime', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__updated-at')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records).updated_at);
+        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records)['updated_at']);
     });
 });

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
@@ -85,9 +85,44 @@ describe('CategoriesIndexComponent', () => {
     });
 
     it('should display a confirm dialog after pressing the delete button', () => {
+        const windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(false);
         click(_.nth(page.deleteButtons, 3));
         fixture.detectChanges();
-        expect(page.windowConfirmSpy).toHaveBeenCalledWith(comp.deleteConfirmMessage);
+        expect(windowConfirmSpy).toHaveBeenCalledWith(comp.deleteConfirmMessage);
+    });
+
+    it('should call deleteCategory if the user clicks OK at the confirm dialog', () => {
+        spyOn(window, 'confirm').and.returnValue(true);
+        const deleteCategorySpy = spyOn(page.categoriesService, 'deleteCategory').and.returnValue(Observable.of(true));
+        click(_.nth(page.deleteButtons, 3));
+        fixture.detectChanges();
+        expect(deleteCategorySpy).toHaveBeenCalled();
+    });
+
+    it('should not call deleteCategory if the user clicks Cancel at the confirm dialog', () => {
+        spyOn(window, 'confirm').and.returnValue(false);
+        const deleteCategorySpy = spyOn(page.categoriesService, 'deleteCategory').and.returnValue(Observable.of(true));
+        click(_.nth(page.deleteButtons, 3));
+        fixture.detectChanges();
+        expect(deleteCategorySpy).not.toHaveBeenCalled();
+    });
+
+    it('should disable the delete button after beginning the delete request', () => {
+        const categoryIndex = 3;
+        spyOn(window, 'confirm').and.returnValue(true);
+        spyOn(page.categoriesService, 'deleteCategory').and.returnValue(Observable.of(true));
+        click(_.nth(page.deleteButtons, categoryIndex));
+        fixture.detectChanges();
+        expect(_.nth(page.deleteButtons, categoryIndex).disabled).toBe(true);
+    });
+
+    it('should remove the category row from the table after a successful deletion', () => {
+        spyOn(window, 'confirm').and.returnValue(true);
+        spyOn(page.categoriesService, 'deleteCategory').and.returnValue(Observable.of(true));
+        click(_.nth(page.deleteButtons, 3));
+        fixture.detectChanges();
+        page.refreshPageElements();
+        expect(page.categoryIds.length).toEqual(MockApiResponse_CategoriesIndex.count - 1);
     });
 });
 
@@ -107,13 +142,12 @@ class Page {
     deleteButtons: HTMLButtonElement[];
     createNewCategoryButton: HTMLButtonElement;
     createCategorySpy: jasmine.Spy;
-    windowConfirmSpy: jasmine.Spy;
+    categoriesService: CategoriesService;
 
     constructor() {
-        const categoriesService = fixture.debugElement.injector.get(CategoriesService);
-        spyOn(categoriesService, 'getCategories').and.returnValue(Observable.of(MockApiResponse_CategoriesIndex.records));
-        this.createCategorySpy = spyOn(categoriesService, 'createCategory').and.returnValue(Observable.of(true));
-        this.windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(false);
+        this.categoriesService = fixture.debugElement.injector.get(CategoriesService);
+        spyOn(this.categoriesService, 'getCategories').and.returnValue(Observable.of(MockApiResponse_CategoriesIndex.records));
+        this.createCategorySpy = spyOn(this.categoriesService, 'createCategory').and.returnValue(Observable.of(true));
     }
 
     refreshPageElements() {
