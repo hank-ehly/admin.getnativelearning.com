@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { CategoriesService } from '../categories.service';
 
@@ -20,7 +20,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     updatingIndices: number[] = [];
     subscriptions: Subscription[] = [];
 
-    constructor(private categoryService: CategoriesService, private route: ActivatedRoute) {
+    constructor(private categoryService: CategoriesService, private route: ActivatedRoute, private router: Router) {
         this.categoryId = route.snapshot.params['id'];
     }
 
@@ -86,5 +86,12 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
             })
         );
     }
-}
 
+    onClickCreateNewSubcategory(): void {
+        this.subscriptions.push(
+            this.categoryService.createSubcategory(this.categoryId).subscribe((res: any) => {
+                this.router.navigate(['categories', res.categoryId, 'subcategories', res.subcategoryId, 'edit']);
+            })
+        );
+    }
+}

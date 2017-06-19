@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { MockApiResponse_CategoriesShow } from '../../testing/mock-api-responses/categories-show';
 import { EditCategoryComponent } from './edit-category.component';
 import { CategoriesService } from '../categories.service';
 import { AuthService } from '../../core/auth.service';
@@ -11,9 +12,10 @@ import { HttpService } from '../../core/http.service';
 
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
+import { click } from '../../testing/index';
+import { MockApiResponse_SubcategoriesCreate } from '../../testing/mock-api-responses/subcategories-create';
 
 describe('EditCategoryComponent', () => {
-    let mockCategory: any;
     let component: EditCategoryComponent;
     let fixture: ComponentFixture<EditCategoryComponent>;
 
@@ -38,44 +40,9 @@ describe('EditCategoryComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(EditCategoryComponent);
         component = fixture.componentInstance;
-        spyOn(fixture.debugElement.injector.get(CategoriesService), 'getCategory').and.returnValue(Observable.of(mockCategory));
+        const val = Observable.of(MockApiResponse_CategoriesShow);
+        spyOn(fixture.debugElement.injector.get(CategoriesService), 'getCategory').and.returnValue(val);
         fixture.detectChanges();
-
-        mockCategory = {
-            id: 123,
-            categories_localized: {
-                records: [
-                    {
-                        language: {
-                            name: 'English',
-                            code: 'en'
-                        },
-                        name: 'Category 1'
-                    },
-                    {
-                        language: {
-                            name: '日本語',
-                            code: 'ja'
-                        },
-                        name: 'カテゴリー１'
-                    }
-                ],
-                count: 2
-            },
-            created_at: 'Wed Jan 11 04:35:55 +0000 2017',
-            updated_at: 'Wed Jan 11 04:35:55 +0000 2017',
-            subcategories: {
-                records: [
-                    {
-                        id: 456,
-                        name: 'Subcategory 1',
-                        created_at: 'Wed Jan 11 04:35:55 +0000 2017',
-                        updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
-                    }
-                ],
-                count: 1
-            }
-        };
     });
 
     it('should be created', () => {
@@ -84,7 +51,7 @@ describe('EditCategoryComponent', () => {
 
     it('should display a list of category name input fields', () => {
         const textInputFields = fixture.debugElement.queryAll(By.css('.category__name'));
-        const numberOfLanguages = mockCategory.categories_localized.count;
+        const numberOfLanguages = MockApiResponse_CategoriesShow.categories_localized.count;
         expect(textInputFields.length).toEqual(numberOfLanguages);
     });
 
@@ -92,7 +59,7 @@ describe('EditCategoryComponent', () => {
         const inputField = _.first(fixture.debugElement.queryAll(By.css('.category__name'))).nativeElement;
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            expect(inputField.value).toEqual(_.first(mockCategory.categories_localized.records)['name']);
+            expect(inputField.value).toEqual(_.first(MockApiResponse_CategoriesShow.categories_localized.records)['name']);
             done();
         });
     });
@@ -148,7 +115,7 @@ describe('EditCategoryComponent', () => {
     });
 
     it('should reset the category name to its original value after pressing the X icon', () => {
-        const originalValue = _.first(mockCategory.categories_localized.records)['name'];
+        const originalValue = _.first(MockApiResponse_CategoriesShow.categories_localized.records)['name'];
         const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
         editButton.dispatchEvent(new Event('click'));
         fixture.detectChanges();
@@ -173,7 +140,7 @@ describe('EditCategoryComponent', () => {
     });
 
     it('should reset the category name to the original value if the update request fails', () => {
-        const originalValue = _.first(mockCategory.categories_localized.records)['name'];
+        const originalValue = _.first(MockApiResponse_CategoriesShow.categories_localized.records)['name'];
         spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategoryLocalized').and.returnValue(Observable.of(false));
 
         const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
@@ -191,7 +158,6 @@ describe('EditCategoryComponent', () => {
     });
 
     it('should update the name of the persistedCategory after a successful update', () => {
-        const originalValue = _.first(mockCategory.categories_localized.records)['name'];
         const newValue = 'new value';
         spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategoryLocalized').and.returnValue(Observable.of(true));
 
@@ -211,30 +177,38 @@ describe('EditCategoryComponent', () => {
 
     it('should display a list of subcategories', async () => {
         const subcategoriesEl = fixture.debugElement.queryAll(By.css('.subcategory'));
-        expect(subcategoriesEl.length).toEqual(mockCategory.subcategories.count);
+        expect(subcategoriesEl.length).toEqual(MockApiResponse_CategoriesShow.subcategories.count);
     });
 
     it('should display the subcategory id', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__id')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records)['id'].toString());
+        expect(subcategoryEl.textContent).toEqual(_.first(MockApiResponse_CategoriesShow.subcategories.records)['id'].toString());
     });
 
     it('should display the subcategory name', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__name')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records)['name'].toString());
+        expect(subcategoryEl.textContent).toEqual(_.first(MockApiResponse_CategoriesShow.subcategories.records)['name'].toString());
     });
 
     it('should display the subcategory creation DateTime', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__created-at')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records)['created_at']);
+        expect(subcategoryEl.textContent).toEqual(_.first(MockApiResponse_CategoriesShow.subcategories.records)['created_at']);
     });
 
     it('should display the subcategory update DateTime', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__updated-at')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(mockCategory.subcategories.records)['updated_at']);
+        expect(subcategoryEl.textContent).toEqual(_.first(MockApiResponse_CategoriesShow.subcategories.records)['updated_at']);
+    });
+
+    it('should call the CategoriesService createSubcategory method after pressing the Create New Subcategory button', () => {
+        const createSubcategorySpy = spyOn(fixture.debugElement.injector.get(CategoriesService), 'createSubcategory').and
+            .returnValue(Observable.of(MockApiResponse_SubcategoriesCreate));
+        click(fixture.debugElement.query(By.css('.subcategory__create-button')));
+        fixture.detectChanges();
+        expect(createSubcategorySpy.calls.count()).toEqual(1);
     });
 });
