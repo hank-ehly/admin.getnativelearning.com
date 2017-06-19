@@ -56,4 +56,8 @@ export class CategoriesService {
     createCategory(): Observable<boolean> {
         return this.http.request('/categories', {method: RequestMethod.Post}).map((r: any) => _.isNumber(r.id) ? r.id : false);
     }
+
+    deleteCategory(id: number): Observable<boolean> {
+        return this.http.request(`/categories/${id}`, {method: RequestMethod.Delete}).map(_.isNull);
+    }
 }

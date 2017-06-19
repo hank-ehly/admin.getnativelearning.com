@@ -201,4 +201,28 @@ describe('CategoriesService', () => {
                 expect(res).toEqual(false);
             });
         }));
+
+    it('should return true after successfully deleting a Category', inject([CategoriesService, MockBackend],
+        (service: CategoriesService, mockBackend: MockBackend) => {
+            const mockResponse = new Response(
+                new ResponseOptions({
+                    body: JSON.stringify(null)
+                })
+            );
+
+            mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
+
+            service.deleteCategory(1).subscribe(res => {
+                expect(res).toEqual(true);
+            });
+        }));
+
+    it('should return false after failing to delete a Category', inject([CategoriesService, MockBackend],
+        (service: CategoriesService, mockBackend: MockBackend) => {
+            mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
+
+            service.deleteCategory(1).subscribe(res => {
+                expect(res).toEqual(false);
+            });
+        }));
 });
