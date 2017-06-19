@@ -4,16 +4,16 @@ import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { MockApiResponse_SubcategoriesCreate } from '../../testing/mock-api-responses/subcategories-create';
 import { MockApiResponse_CategoriesShow } from '../../testing/mock-api-responses/categories-show';
 import { EditCategoryComponent } from './edit-category.component';
 import { CategoriesService } from '../categories.service';
 import { AuthService } from '../../core/auth.service';
 import { HttpService } from '../../core/http.service';
+import { click } from '../../testing/index';
 
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
-import { click } from '../../testing/index';
-import { MockApiResponse_SubcategoriesCreate } from '../../testing/mock-api-responses/subcategories-create';
 
 describe('EditCategoryComponent', () => {
     let component: EditCategoryComponent;
@@ -206,7 +206,10 @@ describe('EditCategoryComponent', () => {
 
     it('should call the CategoriesService createSubcategory method after pressing the Create New Subcategory button', () => {
         const createSubcategorySpy = spyOn(fixture.debugElement.injector.get(CategoriesService), 'createSubcategory').and
-            .returnValue(Observable.of(MockApiResponse_SubcategoriesCreate));
+            .returnValue(Observable.of({
+                subcategoryId: MockApiResponse_SubcategoriesCreate.id,
+                categoryId: MockApiResponse_SubcategoriesCreate.category_id
+            }));
         click(fixture.debugElement.query(By.css('.subcategory__create-button')));
         fixture.detectChanges();
         expect(createSubcategorySpy.calls.count()).toEqual(1);

@@ -90,7 +90,9 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     onClickCreateNewSubcategory(): void {
         this.subscriptions.push(
             this.categoryService.createSubcategory(this.categoryId).subscribe((res: any) => {
-                this.router.navigate(['categories', res.categoryId, 'subcategories', res.subcategoryId, 'edit']);
+                if (res.categoryId && res.subcategoryId) {
+                    this.router.navigate(['categories', res.categoryId, 'subcategories', res.subcategoryId, 'edit']);
+                }
             })
         );
     }

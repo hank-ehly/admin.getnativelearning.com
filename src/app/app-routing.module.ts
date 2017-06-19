@@ -53,7 +53,6 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     }
 ];
-
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
