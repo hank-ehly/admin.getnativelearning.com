@@ -74,4 +74,8 @@ export class CategoriesService {
     deleteCategory(id: number): Observable<boolean> {
         return this.http.request(`/categories/${id}`, {method: RequestMethod.Delete}).map(_.isNull);
     }
+
+    deleteSubcategory(categoryId: number, subcategoryId: number): Observable<boolean> {
+        return this.http.request(`/categories/${categoryId}/subcategories/${subcategoryId}`, {method: RequestMethod.Delete}).map(_.isNull);
+    }
 }

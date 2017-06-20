@@ -19,6 +19,8 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     editingIndices: number[] = [];
     updatingIndices: number[] = [];
     subscriptions: Subscription[] = [];
+    deleteConfirmMessage = 'Are you sure?';
+    deletingSubcategoryIds: number[] = [];
 
     constructor(private categoryService: CategoriesService, private route: ActivatedRoute, private router: Router) {
         this.categoryId = route.snapshot.params['id'];
@@ -93,6 +95,29 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
                 if (res.categoryId && res.subcategoryId) {
                     this.router.navigate(['categories', res.categoryId, 'subcategories', res.subcategoryId, 'edit']);
                 }
+            })
+        );
+    }
+
+    isDeletingSubcategory(subcategory: any): boolean {
+        return _.includes(this.deletingSubcategoryIds, subcategory['id']);
+    }
+
+    onClickDeleteSubcategory(subcategory: any): void {
+        if (!window.confirm(this.deleteConfirmMessage)) {
+            return;
+        }
+
+        this.deletingSubcategoryIds.push(subcategory.id);
+
+        this.subscriptions.push(
+            this.categoryService.deleteSubcategory(this.categoryId, subcategory.id).subscribe((deleted: boolean) => {
+                if (deleted) {
+                    this.category.subcategories.records.splice(_.findIndex(this.category.subcategories, {id: subcategory.id}), 1);
+                    this.category.subcategories.count--;
+                }
+            }, null, () => {
+                this.deletingSubcategoryIds.splice(subcategory.id, 1);
             })
         );
     }

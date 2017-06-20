@@ -214,4 +214,54 @@ describe('EditCategoryComponent', () => {
         fixture.detectChanges();
         expect(createSubcategorySpy.calls.count()).toEqual(1);
     });
+
+    ////
+
+    it('should display a confirm dialog after pressing the delete button', () => {
+        const deleteButton = _.first(fixture.debugElement.queryAll(By.css('.subcategory__delete-button'))).nativeElement;
+        const windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(false);
+        click(deleteButton);
+        fixture.detectChanges();
+        expect(windowConfirmSpy).toHaveBeenCalledWith(component.deleteConfirmMessage);
+    });
+
+    it('should call deleteSubcategory if the user clicks OK at the confirm dialog', () => {
+        const deleteButton = _.first(fixture.debugElement.queryAll(By.css('.subcategory__delete-button'))).nativeElement;
+        spyOn(window, 'confirm').and.returnValue(true);
+        const deleteCategorySpy = spyOn(fixture.debugElement.injector.get(CategoriesService), 'deleteSubcategory').and
+            .returnValue(Observable.of(true));
+        click(deleteButton);
+        fixture.detectChanges();
+        expect(deleteCategorySpy).toHaveBeenCalled();
+    });
+
+    it('should not call deleteSubcategory if the user clicks Cancel at the confirm dialog', () => {
+        const deleteButton = _.first(fixture.debugElement.queryAll(By.css('.subcategory__delete-button'))).nativeElement;
+        spyOn(window, 'confirm').and.returnValue(false);
+        const deleteCategorySpy = spyOn(fixture.debugElement.injector.get(CategoriesService), 'deleteSubcategory').and
+            .returnValue(Observable.of(true));
+        click(deleteButton);
+        fixture.detectChanges();
+        expect(deleteCategorySpy).not.toHaveBeenCalled();
+    });
+
+    it('should disable the delete button after beginning the delete request', () => {
+        const deleteButton = _.first(fixture.debugElement.queryAll(By.css('.subcategory__delete-button'))).nativeElement;
+        spyOn(window, 'confirm').and.returnValue(true);
+        spyOn(fixture.debugElement.injector.get(CategoriesService), 'deleteSubcategory').and.returnValue(Observable.of(true));
+        click(deleteButton);
+        fixture.detectChanges();
+        expect(deleteButton.disabled).toBe(true);
+    });
+
+    it('should remove the category row from the table after a successful deletion', () => {
+        const deleteButton = _.first(fixture.debugElement.queryAll(By.css('.subcategory__delete-button'))).nativeElement;
+        spyOn(window, 'confirm').and.returnValue(true);
+        spyOn(fixture.debugElement.injector.get(CategoriesService), 'deleteSubcategory').and.returnValue(Observable.of(true));
+        click(deleteButton);
+        fixture.detectChanges();
+        // page.refreshPageElements();
+        expect(fixture.debugElement.queryAll(By.css('.category__name')).length)
+            .toEqual(MockApiResponse_CategoriesShow.subcategories.count - 1);
+    });
 });

@@ -50,7 +50,9 @@ export class CategoriesIndexComponent implements OnInit, OnDestroy {
 
         this.subscriptions.push(
             this.categoryService.deleteCategory(category.id).subscribe((deleted: boolean) => {
-                this.categories.splice(_.findIndex(this.categories, {id: category.id}), 1);
+                if (deleted) {
+                    this.categories.splice(_.findIndex(this.categories, {id: category.id}), 1);
+                }
             }, null, () => {
                 this.deletingCategoryIds.splice(category.id, 1);
             })
