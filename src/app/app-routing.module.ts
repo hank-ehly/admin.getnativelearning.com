@@ -10,12 +10,20 @@ import { AuthGuard } from './core/auth.guard';
 import { EditCategoryComponent } from './categories/edit-category/edit-category.component';
 import { CategoriesIndexComponent } from './categories/categories-index/categories-index.component';
 import { EditSubcategoryComponent } from './categories/edit-subcategory/edit-subcategory.component';
+import { NewVideoComponent } from './videos/new-video/new-video.component';
 
 const routes: Routes = [
     {
         path: 'videos',
         component: VideosComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        children: [
+            {
+                path: 'new',
+                component: NewVideoComponent
+            }
+        ]
     },
     {
         path: 'categories',

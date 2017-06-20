@@ -1,52 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
-
-import { GoogleCloudSpeechLanguage, GoogleCloudSpeechLanguages } from './google-cloud-speech-languages';
-import { VideosService } from './videos.service';
-
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import * as _ from 'lodash';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'gn-videos',
     templateUrl: './videos.component.html',
     styleUrls: ['./videos.component.scss']
 })
-export class VideosComponent implements OnDestroy {
+export class VideosComponent {
     title = 'Videos';
-    languages = GoogleCloudSpeechLanguages;
-    selectedLanguage: GoogleCloudSpeechLanguage;
-    selectedVideoFile: File = null;
-    transcriptionEmitted$: Observable<string>;
-
-    private emitTranscriptSource: Subject<string>;
-    private subscriptions: Subscription[] = [];
-
-    constructor(private videoService: VideosService) {
-        this.emitTranscriptSource = new Subject<string>();
-        this.transcriptionEmitted$ = this.emitTranscriptSource.asObservable();
-        this.selectedLanguage = _.find(this.languages, {code: 'en-US'});
-    }
-
-    ngOnDestroy(): void {
-        _.each(this.subscriptions, s => s.unsubscribe());
-    }
-
-    onSelectLanguage(e: Event): void {
-        const selectedIndex = (<HTMLSelectElement>e.target).selectedIndex;
-        this.selectedLanguage = _.nth(this.languages, selectedIndex);
-    }
-
-    onFileChange(e: Event) {
-        this.selectedVideoFile = _.first((<HTMLInputElement>e.target).files);
-    }
-
-    onClickTranscribe(): void {
-        const subscription = this.videoService.transcribe(this.selectedVideoFile, this.selectedLanguage.code).subscribe((t: string) => {
-            this.emitTranscriptSource.next(t);
-        });
-
-        this.subscriptions.push(subscription);
-    }
 }
