@@ -14,6 +14,7 @@ import { click } from '../../testing/index';
 
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
+import { Router } from '@angular/router';
 
 let component: EditCategoryComponent;
 let fixture: ComponentFixture<EditCategoryComponent>;
@@ -44,7 +45,7 @@ describe('EditCategoryComponent', () => {
 
     it('should display a list of category name input fields', () => {
         const textInputFields = fixture.debugElement.queryAll(By.css('.category__name'));
-        const numberOfLanguages = MockApiResponse_CategoriesShow.categories_localized.count;
+        const numberOfLanguages = page.showCategoryResponse.categories_localized.count;
         expect(textInputFields.length).toEqual(numberOfLanguages);
     });
 
@@ -52,7 +53,7 @@ describe('EditCategoryComponent', () => {
         const inputField = _.first(fixture.debugElement.queryAll(By.css('.category__name'))).nativeElement;
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            expect(inputField.value).toEqual(_.first(MockApiResponse_CategoriesShow.categories_localized.records)['name']);
+            expect(inputField.value).toEqual(_.first(page.showCategoryResponse.categories_localized.records)['name']);
             done();
         });
     });
@@ -108,7 +109,7 @@ describe('EditCategoryComponent', () => {
     });
 
     it('should reset the category name to its original value after pressing the X icon', () => {
-        const originalValue = _.first(MockApiResponse_CategoriesShow.categories_localized.records)['name'];
+        const originalValue = _.first(page.showCategoryResponse.categories_localized.records)['name'];
         const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
         editButton.dispatchEvent(new Event('click'));
         fixture.detectChanges();
@@ -133,7 +134,7 @@ describe('EditCategoryComponent', () => {
     });
 
     it('should reset the category name to the original value if the update request fails', () => {
-        const originalValue = _.first(MockApiResponse_CategoriesShow.categories_localized.records)['name'];
+        const originalValue = _.first(page.showCategoryResponse.categories_localized.records)['name'];
         spyOn(fixture.debugElement.injector.get(CategoriesService), 'updateCategoryLocalized').and.returnValue(Observable.of(false));
 
         const editButton = _.first(fixture.debugElement.queryAll(By.css('.category__actions--edit'))).nativeElement;
@@ -170,38 +171,39 @@ describe('EditCategoryComponent', () => {
 
     it('should display a list of subcategories', async () => {
         const subcategoriesEl = fixture.debugElement.queryAll(By.css('.subcategory'));
-        expect(subcategoriesEl.length).toEqual(MockApiResponse_CategoriesShow.subcategories.count);
+        expect(subcategoriesEl.length).toEqual(page.showCategoryResponse.subcategories.count);
     });
 
     it('should display the subcategory id', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__id')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(MockApiResponse_CategoriesShow.subcategories.records)['id'].toString());
+        expect(subcategoryEl.textContent).toEqual(_.first(page.showCategoryResponse.subcategories.records)['id'].toString());
     });
 
     it('should display the subcategory name', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__name')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(MockApiResponse_CategoriesShow.subcategories.records)['name'].toString());
+        expect(subcategoryEl.textContent).toEqual(_.first(page.showCategoryResponse.subcategories.records)['name'].toString());
     });
 
     it('should display the subcategory creation DateTime', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__created-at')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(MockApiResponse_CategoriesShow.subcategories.records)['created_at']);
+        expect(subcategoryEl.textContent).toEqual(_.first(page.showCategoryResponse.subcategories.records)['created_at']);
     });
 
     it('should display the subcategory update DateTime', () => {
         const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
             .query(By.css('.subcategory__updated-at')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(MockApiResponse_CategoriesShow.subcategories.records)['updated_at']);
+        expect(subcategoryEl.textContent).toEqual(_.first(page.showCategoryResponse.subcategories.records)['updated_at']);
     });
 
     it('should call the CategoriesService createSubcategory method after pressing the Create New Subcategory button', () => {
         const createSubcategorySpy = spyOn(page.categoriesService, 'createSubcategory').and.returnValue(Observable.of({
-            subcategoryId: MockApiResponse_SubcategoriesCreate.id,
-            categoryId: MockApiResponse_SubcategoriesCreate.category_id
+            subcategoryId: page.createSubcategoryResponse.id,
+            categoryId: page.createSubcategoryResponse.category_id
         }));
+        spyOn(fixture.debugElement.injector.get(Router), 'navigate').and.returnValue(true);
         click(fixture.debugElement.query(By.css('.subcategory__create-button')));
         fixture.detectChanges();
         expect(createSubcategorySpy.calls.count()).toEqual(1);
@@ -230,22 +232,22 @@ describe('EditCategoryComponent', () => {
         expect(deleteCategorySpy).toHaveBeenCalled();
     });
 
-    // it('should disable the delete button after beginning the delete request', () => {
-    //     spyOn(window, 'confirm').and.returnValue(true);
-    //     // spyOn(page.categoriesService, 'deleteSubcategory').and.returnValue(Observable.of(true));
-    //     click(_.first(page.deleteButtons));
-    //     fixture.detectChanges();
-    //     expect(_.first(page.deleteButtons).disabled).toBe(true);
-    // });
-    //
-    // it('should remove the subcategory row from the table after a successful deletion', () => {
-    //     spyOn(window, 'confirm').and.returnValue(true);
-    //     // spyOn(page.categoriesService, 'deleteSubcategory').and.returnValue(Observable.of(true));
-    //     click(_.first(page.deleteButtons));
-    //     fixture.detectChanges();
-    //     expect(fixture.debugElement.queryAll(By.css('.subcategory__name')).length)
-    //         .toEqual(MockApiResponse_CategoriesShow.subcategories.count - 1);
-    // });
+    it('should disable the delete button after beginning the delete request', () => {
+        spyOn(window, 'confirm').and.returnValue(true);
+        spyOn(page.categoriesService, 'deleteSubcategory').and.returnValue(Observable.of(true));
+        click(_.first(page.deleteButtons));
+        fixture.detectChanges();
+        expect(_.first(page.deleteButtons).disabled).toBe(true);
+    });
+
+    it('should remove the subcategory row from the table after a successful deletion', () => {
+        spyOn(window, 'confirm').and.returnValue(true);
+        spyOn(page.categoriesService, 'deleteSubcategory').and.returnValue(Observable.of(true));
+        click(_.first(page.deleteButtons));
+        fixture.detectChanges();
+        expect(fixture.debugElement.queryAll(By.css('.subcategory__name')).length)
+            .toEqual(page.showCategoryResponse.subcategories.count - 1);
+    });
 });
 
 function createComponent() {
@@ -263,9 +265,14 @@ class Page {
     deleteButtons: HTMLButtonElement[];
     categoriesService: CategoriesService;
 
+    showCategoryResponse: any;
+    createSubcategoryResponse: any;
+
     constructor() {
         this.categoriesService = fixture.debugElement.injector.get(CategoriesService);
         spyOn(this.categoriesService, 'getCategory').and.returnValue(Observable.of(MockApiResponse_CategoriesShow));
+        this.showCategoryResponse = _.cloneDeep(MockApiResponse_CategoriesShow);
+        this.createSubcategoryResponse = MockApiResponse_SubcategoriesCreate;
     }
 
     refreshPageElements(): void {

@@ -37,8 +37,26 @@ export const MockApiResponse_CategoriesShow = {
                 name: 'Subcategory 1',
                 created_at: 'Wed Jan 11 04:35:55 +0000 2017',
                 updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
+            },
+            {
+                id: 789,
+                name: 'Subcategory 2',
+                created_at: 'Wed Jan 11 04:35:55 +0000 2017',
+                updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
+            },
+            {
+                id: 1234,
+                name: 'Subcategory 3',
+                created_at: 'Wed Jan 11 04:35:55 +0000 2017',
+                updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
+            },
+            {
+                id: 2345,
+                name: 'Subcategory 4',
+                created_at: 'Wed Jan 11 04:35:55 +0000 2017',
+                updated_at: 'Wed Jan 11 04:35:55 +0000 2017'
             }
         ],
-        count: 1
+        count: 4
     }
 };

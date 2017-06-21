@@ -23,6 +23,22 @@ let page: Page;
 
 describe('EditSubcategoryComponent', () => {
     beforeEach(async(() => {
+        const ActivatedRouteStubProvider = {
+            provide: ActivatedRoute,
+            useValue: {
+                snapshot: {
+                    params: {
+                        category_id: _.first(MockApiResponse_CategoriesIndex.records).id,
+                        subcategory_id: MockApiResponse_SubcategoriesShow.id
+                    }
+                }
+            }
+        };
+
+        const RouterStubProvider = {
+            provide: Router, useClass: RouterStub
+        };
+
         TestBed.configureTestingModule({
             imports: [
                 HttpModule,
@@ -35,20 +51,8 @@ describe('EditSubcategoryComponent', () => {
                 CategoriesService,
                 HttpService,
                 AuthService,
-                {
-                    provide: ActivatedRoute,
-                    useValue: {
-                        snapshot: {
-                            params: {
-                                category_id: _.first(MockApiResponse_CategoriesIndex.records).id,
-                                subcategory_id: MockApiResponse_SubcategoriesShow.id
-                            }
-                        }
-                    }
-                },
-                {
-                    provide: Router, useClass: RouterStub
-                }
+                ActivatedRouteStubProvider,
+                RouterStubProvider
             ]
         }).compileComponents().then(createComponent);
     }));
@@ -58,11 +62,11 @@ describe('EditSubcategoryComponent', () => {
     });
 
     it('should show an input for each subcategory name', () => {
-        expect(page.nameInputs.length).toEqual(MockApiResponse_SubcategoriesShow.subcategories_localized.count);
+        expect(page.nameInputs.length).toEqual(page.showSubcategoryResponse.subcategories_localized.count);
     });
 
     it('should display subcategory names in the appropriate text input field', () => {
-        expect(_.first(page.nameInputs).value).toEqual(_.first(MockApiResponse_SubcategoriesShow.subcategories_localized.records).name);
+        expect(_.first(page.nameInputs).value).toEqual(_.first(page.showSubcategoryResponse.subcategories_localized.records)['name']);
     });
 
     it('should disable editing of category names by default', () => {
@@ -124,7 +128,7 @@ describe('EditSubcategoryComponent', () => {
     });
 
     it('should reset the subcategory name to its original value after pressing the X icon', () => {
-        const originalValue = _.first(MockApiResponse_SubcategoriesShow.subcategories_localized.records).name;
+        const originalValue = _.first(page.showSubcategoryResponse.subcategories_localized.records)['name'];
 
         click(_.first(page.editButtons));
         fixture.detectChanges();
@@ -157,7 +161,7 @@ describe('EditSubcategoryComponent', () => {
 
     it('should reset an edited subcategory name to its original value if the update request fails', () => {
         const index = 1;
-        const originalValue = _.nth(MockApiResponse_SubcategoriesShow.subcategories_localized.records, index).name;
+        const originalValue = _.nth(page.showSubcategoryResponse.subcategories_localized.records, index)['name'];
         const service = fixture.debugElement.injector.get(CategoriesService);
 
         spyOn(service, 'updateSubcategoryLocalized').and.returnValue(Observable.of(false));
@@ -177,7 +181,6 @@ describe('EditSubcategoryComponent', () => {
     });
 
     it('should update the name of the persistedSubcategory after a successful update', () => {
-        const originalValue = _.first(MockApiResponse_SubcategoriesShow.subcategories_localized.records).name;
         const newValue = 'new value';
         const service = fixture.debugElement.injector.get(CategoriesService);
 
@@ -198,18 +201,18 @@ describe('EditSubcategoryComponent', () => {
     });
 
     // Works when you test alone
-    // it('should display a dropdown list of categories', () => {
-    //     expect(page.selectEl.options.length).toEqual(MockApiResponse_CategoriesIndex.count);
-    // });
+    it('should display a dropdown list of categories', () => {
+        expect(page.selectEl.options.length).toEqual(page.indexCategoriesResponse.records.length);
+    });
 
     it('should set the persistedCategory when the categories are first retrieved', () => {
-        expect(comp.persistedCategoryId).toEqual(MockApiResponse_SubcategoriesShow.category.id);
+        expect(comp.persistedCategoryId).toEqual(page.showSubcategoryResponse.category.id);
     });
 
     it('should set the selectedCategoryId when a category is selected', () => {
         const selectedIndex = 2;
         page.selectCategoryAtIndex(selectedIndex);
-        const expectedCategoryId = _.nth(MockApiResponse_CategoriesIndex.records, selectedIndex).id;
+        const expectedCategoryId = _.nth(page.indexCategoriesResponse.records, selectedIndex)['id'];
         expect(comp.selectedCategoryId).toEqual(expectedCategoryId);
     });
 
@@ -256,16 +259,9 @@ describe('EditSubcategoryComponent', () => {
 function createComponent() {
     fixture = TestBed.createComponent(EditSubcategoryComponent);
     comp = fixture.componentInstance;
-
-    const categoriesService = fixture.debugElement.injector.get(CategoriesService);
-    spyOn(categoriesService, 'getSubcategory').and.returnValue(Observable.of(MockApiResponse_SubcategoriesShow));
-    spyOn(categoriesService, 'getCategories').and.returnValue(Observable.of(MockApiResponse_CategoriesIndex.records));
-
-    fixture.detectChanges();
-
     page = new Page();
+    fixture.detectChanges();
     page.refreshPageElements();
-
     return fixture.whenStable();
 }
 
@@ -276,6 +272,16 @@ class Page {
     editButtons: HTMLButtonElement[];
     selectEl: HTMLSelectElement;
     categorySubmitButton: HTMLButtonElement;
+    showSubcategoryResponse: any;
+    indexCategoriesResponse: any;
+
+    constructor() {
+        this.showSubcategoryResponse = MockApiResponse_SubcategoriesShow;
+        this.indexCategoriesResponse = MockApiResponse_CategoriesIndex;
+        const categoriesService = fixture.debugElement.injector.get(CategoriesService);
+        spyOn(categoriesService, 'getSubcategory').and.returnValue(Observable.of(this.showSubcategoryResponse));
+        spyOn(categoriesService, 'getCategories').and.returnValue(Observable.of(this.indexCategoriesResponse.records));
+    }
 
     refreshPageElements() {
         this.nameInputs = fixture.debugElement.queryAll(By.css('.subcategory__name')).map(de => de.nativeElement);
