@@ -1,9 +1,13 @@
-import { Component, OnDestroy } from '@angular/core';
-import { VideosService } from '../videos.service';
-import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { GoogleCloudSpeechLanguage, GoogleCloudSpeechLanguages } from '../google-cloud-speech-languages';
+import { CategoriesService } from '../../categories/categories.service';
+import { LanguagesService } from '../../core/languages.service';
+import { VideosService } from '../videos.service';
+
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
 
 @Component({
@@ -11,28 +15,38 @@ import * as _ from 'lodash';
     templateUrl: './new-video.component.html',
     styleUrls: ['./new-video.component.scss']
 })
-export class NewVideoComponent implements OnDestroy {
-    languages = GoogleCloudSpeechLanguages;
-    selectedLanguage: GoogleCloudSpeechLanguage;
+export class NewVideoComponent implements OnInit, OnDestroy {
+    transcriptionLanguages = GoogleCloudSpeechLanguages;
+    languages: any[];
+    selectedTranscriptionLanguage: GoogleCloudSpeechLanguage;
     selectedVideoFile: File = null;
     transcriptionEmitted$: Observable<string>;
+    categories: any[];
 
     private emitTranscriptSource: Subject<string>;
     private subscriptions: Subscription[] = [];
 
-    constructor(private videoService: VideosService) {
+    constructor(private videoService: VideosService, private langService: LanguagesService, private categoryService: CategoriesService) {
         this.emitTranscriptSource = new Subject<string>();
         this.transcriptionEmitted$ = this.emitTranscriptSource.asObservable();
-        this.selectedLanguage = _.find(this.languages, {code: 'en-US'});
+        this.selectedTranscriptionLanguage = _.find(this.transcriptionLanguages, {code: 'en-US'});
+    }
+
+    ngOnInit(): void {
+        this.subscriptions.push(
+            this.langService.getLanguages().subscribe((languages: any[]) => this.languages = languages),
+            this.categoryService.getCategories().subscribe((categories: any[]) => {
+                this.categories = categories;
+            })
+        );
     }
 
     ngOnDestroy(): void {
         _.each(this.subscriptions, s => s.unsubscribe());
     }
 
-    onSelectLanguage(e: Event): void {
-        const selectedIndex = (<HTMLSelectElement>e.target).selectedIndex;
-        this.selectedLanguage = _.nth(this.languages, selectedIndex);
+    onSelectTranscriptionLanguage(e: Event): void {
+        this.selectedTranscriptionLanguage = _.nth(this.transcriptionLanguages, (<HTMLSelectElement>e.target).selectedIndex);
     }
 
     onFileChange(e: Event) {
@@ -40,9 +54,10 @@ export class NewVideoComponent implements OnDestroy {
     }
 
     onClickTranscribe(): void {
-        const subscription = this.videoService.transcribe(this.selectedVideoFile, this.selectedLanguage.code).subscribe((t: string) => {
-            this.emitTranscriptSource.next(t);
-        });
+        const subscription = this.videoService.transcribe(this.selectedVideoFile, this.selectedTranscriptionLanguage.code)
+            .subscribe((t: string) => {
+                this.emitTranscriptSource.next(t);
+            });
 
         this.subscriptions.push(subscription);
     }

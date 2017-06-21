@@ -1,20 +1,37 @@
-<div class="form-group">
-    <label for="video">Video File</label>
-    <input type="file" id="video" (change)="onFileChange($event)">
-    <p class="help-block">Select a video file.</p>
+<div class="col-lg-6">
+    <div class="form-group">
+        <label for="video">Video File</label>
+        <input type="file" id="video" (change)="onFileChange($event)">
+        <p class="help-block">Select a video file.</p>
+    </div>
+
+    <div class="form-group">
+        <label for="transcription">Transcription:</label>
+        <textarea class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="transcription-language">Transcription Language</label>
+        <select class="form-control video__transcription-language" id="transcription-language" (input)="onSelectTranscriptionLanguage($event)">
+            <option *ngFor="let language of transcriptionLanguages" [value]="language?.code" [selected]="language === selectedTranscriptionLanguage">{{ language?.englishName }}</option>
+        </select>
+    </div>
+
+    <button id="transcribe-button" class="btn btn-default" [disabled]="!selectedVideoFile" (click)="onClickTranscribe()">Transcribe</button>
 </div>
 
-<div class="form-group">
-    <label for="transcription">Transcription:</label>
-    <textarea class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
-</div>
+<div class="col-lg-2">
+    <div class="form-group">
+        <label for="video-language">Language</label>
+        <select class="form-control video__language" id="video-language">
+            <option *ngFor="let language of languages" [value]="language?.code">{{ language?.name }}</option>
+        </select>
+    </div>
 
-<div class="form-group">
-    <label for="language">Transcription Language</label>
-    <select class="form-control" id="language" (input)="onSelectLanguage($event)">
-        <option *ngFor="let language of languages" [value]="language.code"
-                [selected]="language === selectedLanguage">{{ language.englishName }}</option>
-    </select>
+    <div class="form-group">
+        <label for="video-category">Category</label>
+        <select class="form-control video__category" id="video-category">
+            <option *ngFor="let category of categories" [value]="category?.id">{{ category?.name }}</option>
+        </select>
+    </div>
 </div>
-
-<button id="transcribe-button" class="btn btn-default" [disabled]="!selectedVideoFile" (click)="onClickTranscribe()">Transcribe</button>
