@@ -22,6 +22,8 @@ export class NewVideoComponent implements OnInit, OnDestroy {
     selectedVideoFile: File = null;
     transcriptionEmitted$: Observable<string>;
     categories: any[];
+    selectedCategory: any = null;
+    selectedSubcategory: any = null;
 
     private emitTranscriptSource: Subject<string>;
     private subscriptions: Subscription[] = [];
@@ -35,9 +37,7 @@ export class NewVideoComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.subscriptions.push(
             this.langService.getLanguages().subscribe((languages: any[]) => this.languages = languages),
-            this.categoryService.getCategories().subscribe((categories: any[]) => {
-                this.categories = categories;
-            })
+            this.categoryService.getCategories().subscribe((categories: any[]) => this.categories = categories)
         );
     }
 
@@ -55,10 +55,21 @@ export class NewVideoComponent implements OnInit, OnDestroy {
 
     onClickTranscribe(): void {
         const subscription = this.videoService.transcribe(this.selectedVideoFile, this.selectedTranscriptionLanguage.code)
-            .subscribe((t: string) => {
-                this.emitTranscriptSource.next(t);
-            });
+            .subscribe((t: string) => this.emitTranscriptSource.next(t));
 
         this.subscriptions.push(subscription);
+    }
+
+    onSelectCategory(e: Event): void {
+        const target = <HTMLSelectElement>e.target;
+        const selectedOption = <HTMLOptionElement>target.options[target.selectedIndex];
+        this.selectedCategory = _.find(this.categories, {id: +selectedOption.value});
+        this.selectedSubcategory = null;
+    }
+
+    onSelectSubcategory(e: Event): void {
+        const target = <HTMLSelectElement>e.target;
+        const selectedOption = <HTMLOptionElement>target.options[target.selectedIndex];
+        this.selectedSubcategory = _.find(this.selectedCategory.subcategories.records, {id: +selectedOption.value});
     }
 }

@@ -11,6 +11,7 @@ import { NewVideoComponent } from './new-video.component';
 import { HttpService } from '../../core/http.service';
 import { AuthService } from '../../core/auth.service';
 import { VideosService } from '../videos.service';
+import { select } from '../../testing/index';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/observable/of';
@@ -108,6 +109,35 @@ describe('NewVideoComponent', () => {
     it('should retrieve a list of categories', () => {
         expect(comp.categories.length).toEqual(MockApiResponse_CategoriesIndex.records.length);
     });
+
+    it('should display a disabled subcategories dropdown by default', () => {
+        expect(page.subcategoriesSelect.disabled).toEqual(true);
+    });
+
+    it('should set comp.selectedCategory after selecting a Category from the category dropdown', () => {
+        select(page.categoriesSelect, 1, fixture);
+        expect(comp.selectedCategory).not.toBeNull();
+    });
+
+    it('should set comp.selectedSubcategory after selecting a Subcategory from the subcategoryDropdown', () => {
+        select(page.categoriesSelect, 1, fixture);
+        select(page.subcategoriesSelect, 0, fixture);
+        // The first category option is "-"
+        const expectedSubcategory = _.first(_.nth(page.indexCategoriesResponse.records, 0)['subcategories'].records);
+        expect(comp.selectedSubcategory).toEqual(expectedSubcategory);
+    });
+
+    it('should set the selectedSubcategory to null after selecting a new category', () => {
+        select(page.categoriesSelect, 1, fixture);
+        select(page.subcategoriesSelect, 0, fixture);
+        select(page.categoriesSelect, 2, fixture);
+        expect(comp.selectedSubcategory).toBeNull();
+    });
+
+    it('should enable the subcategory dropdown after selecting a category', () => {
+        select(page.categoriesSelect, 1, fixture);
+        expect(page.subcategoriesSelect.disabled).toEqual(false);
+    });
 });
 
 function createComponent() {
@@ -132,10 +162,19 @@ class Page {
     fileInput: HTMLInputElement;
     transcribeButton: HTMLButtonElement;
     videoLanguageSelect: HTMLSelectElement;
+    categoriesSelect: HTMLSelectElement;
+    subcategoriesSelect: HTMLSelectElement;
+    indexCategoriesResponse: any;
+
+    constructor() {
+        this.indexCategoriesResponse = _.cloneDeep(MockApiResponse_CategoriesIndex);
+    }
 
     refreshPageElements(): void {
         this.fileInput = fixture.debugElement.query(By.css('input[type=file]')).nativeElement;
         this.transcribeButton = fixture.debugElement.query(By.css('button')).nativeElement;
         this.videoLanguageSelect = fixture.debugElement.query(By.css('select.video__language')).nativeElement;
+        this.categoriesSelect = fixture.debugElement.query(By.css('select.video__category')).nativeElement;
+        this.subcategoriesSelect = fixture.debugElement.query(By.css('select.video__subcategory')).nativeElement;
     }
 }

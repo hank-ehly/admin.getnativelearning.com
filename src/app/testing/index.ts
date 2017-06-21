@@ -6,6 +6,7 @@
  */
 
 import { DebugElement } from '@angular/core';
+import { ComponentFixture } from '@angular/core/testing';
 
 export function newEvent(eventName: string, bubbles = false, cancelable = false) {
     const evt = document.createEvent('CustomEvent');
@@ -26,4 +27,10 @@ export function click(el: DebugElement | HTMLElement, eventObj: any = ButtonClic
     } else {
         el.triggerEventHandler('click', eventObj);
     }
+}
+
+export function select<T>(el: HTMLSelectElement, index: number, fixture: ComponentFixture<T>) {
+    el.selectedIndex = index;
+    el.dispatchEvent(newEvent('input'));
+    fixture.detectChanges();
 }
