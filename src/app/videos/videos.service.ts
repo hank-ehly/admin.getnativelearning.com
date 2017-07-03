@@ -13,7 +13,7 @@ export class VideosService {
 
     transcribe(file: File, languageCode: string): Observable<string> {
         const formData = new FormData();
-        formData.append('file', file, file.name);
+        formData.append('video', file, file.name);
 
         const search = new URLSearchParams();
         search.set('language_code', languageCode);
