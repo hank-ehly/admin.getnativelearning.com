@@ -3,7 +3,7 @@
     <legend>Upload</legend>
         <div class="form-group col-xs-6">
             <label for="video">Video File</label>
-            <input type="file" id="video" (change)="onFileChange($event)">
+            <input type="file" id="video" name="file" (change)="onFileChange($event)" required>
             <p class="help-block">Select a video file.</p>
         </div>
         <div class="form-group col-xs-6">
@@ -17,29 +17,28 @@
         <legend>Metadata</legend>
         <div class="form-group">
             <label for="video-language">Language</label>
-            <select class="form-control video__language" id="video-language">
-                <option *ngFor="let language of languages" [value]="language?.code">{{ language?.name }}</option>
+            <select class="form-control video__language" id="video-language" name="language" [(ngModel)]="video.languageId" required>
+                <option *ngFor="let language of languages" [value]="language?.id">{{ language?.name }}</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="video-category">Category</label>
-            <select class="form-control video__category" id="video-category" (input)="onSelectCategory($event)">
-                <option value="">-</option>
+            <select class="form-control video__category" id="video-category" (input)="onSelectCategory($event)" required>
                 <option *ngFor="let category of categories" [value]="category?.id">{{ category?.name }}</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="video-subcategory">Subcategory</label>
-            <select class="form-control video__subcategory" [disabled]="!selectedCategory" id="video-subcategory" (input)="onSelectSubcategory($event)">
+            <select class="form-control video__subcategory" [disabled]="!selectedCategory" id="video-subcategory" name="subcategoryId" [(ngModel)]="video.subcategoryId" required>
                 <option *ngFor="let subcategory of selectedCategory?.subcategories?.records" [value]="subcategory?.id">{{ subcategory?.name }}</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="video-speaker">Speaker</label>
-            <select id="video-speaker" class="form-control">
+            <select id="video-speaker" class="form-control" name="speakerId" [(ngModel)]="video.speakerId" required>
                 <option value="">-</option>
             </select>
         </div>
@@ -57,7 +56,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button id="transcribe-button" class="btn btn-default" [disabled]="!selectedVideoFile" (click)="onClickTranscribe()">Transcribe</button>
+                    <button id="transcribe-button" class="btn btn-default" [disabled]="!video.file" (click)="onClickTranscribe()">Transcribe</button>
                 </div>
             </div>
 
@@ -72,11 +71,14 @@
         <hr>
 
         <div class="row">
-            <p class="help-block">Enclose collocation occurrences in curly braces.</p>
+            <p class="help-block">* Enclose collocation occurrences in curly braces for the original video language.</p>
 
-            <div class="col-xs-6 form-group" *ngFor="let language of languages">
-                <label for="transcription_{{ language?.code }}">{{ language?.name }}</label>
-                <textarea name="" id="transcription_{{ language?.code }}" cols="30" rows="10" class="form-control"></textarea>
+            <div class="col-xs-6 form-group" *ngFor="let transcript of video.transcripts; let i = index">
+                <label for="transcript-{{ transcript?.languageId }}">{{ nameOfLanguageForId(transcript?.languageId) }}</label>
+                <textarea name="transcript-{{ transcript?.languageId }}" [ngModel]="video.transcripts[i].text"
+                          (ngModelChange)="transcriptForLanguageChanged(transcript.languageId, $event)"
+                          id="transcript-{{ transcript?.languageId }}" cols="30" rows="10"
+                          class="form-control transcript" required></textarea>
             </div>
         </div>
     </fieldset>

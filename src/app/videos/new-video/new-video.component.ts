@@ -10,7 +10,19 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
-import { sanitizeSrcset } from '@angular/platform-browser/src/security/url_sanitizer';
+
+interface Transcript {
+    text: string;
+    languageId: number;
+}
+
+interface Video {
+    subcategoryId: number;
+    file: File;
+    speakerId: number;
+    languageId: number;
+    transcripts: Transcript[];
+}
 
 @Component({
     selector: 'gn-new-video',
@@ -21,12 +33,18 @@ export class NewVideoComponent implements OnInit, OnDestroy {
     transcriptionLanguages = GoogleCloudSpeechLanguages;
     languages: any[];
     selectedTranscriptionLanguage: GoogleCloudSpeechLanguage;
-    selectedVideoFile: File = null;
+    previewFileUrl: SafeUrl;
     transcriptionEmitted$: Observable<string>;
     categories: any[];
     selectedCategory: any = null;
-    selectedSubcategory: any = null;
-    previewFileUrl: SafeUrl;
+
+    video: Video = {
+        subcategoryId: null,
+        file: null,
+        speakerId: null,
+        languageId: null,
+        transcripts: []
+    };
 
     private emitTranscriptSource: Subject<string>;
     private subscriptions: Subscription[] = [];
@@ -42,7 +60,10 @@ export class NewVideoComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.subscriptions.push(
-            this.langService.getLanguages().subscribe((languages: any[]) => this.languages = languages),
+            this.langService.getLanguages().subscribe((languages: any[]) => {
+                this.languages = languages;
+                _.each(languages, l => this.video.transcripts.push({languageId: l.id, text: ''}));
+            }),
             this.categoryService.getCategories().subscribe((categories: any[]) => this.categories = categories)
         );
     }
@@ -57,12 +78,12 @@ export class NewVideoComponent implements OnInit, OnDestroy {
 
     onFileChange(e: Event) {
         const inputElement: HTMLInputElement = <HTMLInputElement>e.target;
-        this.selectedVideoFile = _.first(inputElement.files);
-        this.previewFileUrl = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(this.selectedVideoFile));
+        this.video.file = _.first(inputElement.files);
+        this.previewFileUrl = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(this.video.file));
     }
 
     onClickTranscribe(): void {
-        const subscription = this.videoService.transcribe(this.selectedVideoFile, this.selectedTranscriptionLanguage.code)
+        const subscription = this.videoService.transcribe(this.video.file, this.selectedTranscriptionLanguage.code)
             .subscribe((t: string) => this.emitTranscriptSource.next(t));
 
         this.subscriptions.push(subscription);
@@ -72,12 +93,14 @@ export class NewVideoComponent implements OnInit, OnDestroy {
         const target = <HTMLSelectElement>e.target;
         const selectedOption = <HTMLOptionElement>target.options[target.selectedIndex];
         this.selectedCategory = _.find(this.categories, {id: +selectedOption.value});
-        this.selectedSubcategory = null;
+        this.video.subcategoryId = null;
     }
 
-    onSelectSubcategory(e: Event): void {
-        const target = <HTMLSelectElement>e.target;
-        const selectedOption = <HTMLOptionElement>target.options[target.selectedIndex];
-        this.selectedSubcategory = _.find(this.selectedCategory.subcategories.records, {id: +selectedOption.value});
+    nameOfLanguageForId(id: number) {
+        return _.find(this.languages, {id: id}).name;
+    }
+
+    transcriptForLanguageChanged(languageId: number, text: string): void {
+        _.find(this.video.transcripts, {languageId: languageId}).text = text;
     }
 }
