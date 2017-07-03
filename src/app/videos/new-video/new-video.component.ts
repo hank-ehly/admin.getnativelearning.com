@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
 
 import { GoogleCloudSpeechLanguage, GoogleCloudSpeechLanguages } from '../google-cloud-speech-languages';
 import { CategoriesService } from '../../categories/categories.service';
@@ -9,6 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
+import { sanitizeSrcset } from '@angular/platform-browser/src/security/url_sanitizer';
 
 @Component({
     selector: 'gn-new-video',
@@ -24,11 +26,15 @@ export class NewVideoComponent implements OnInit, OnDestroy {
     categories: any[];
     selectedCategory: any = null;
     selectedSubcategory: any = null;
+    previewFileUrl: SafeUrl;
 
     private emitTranscriptSource: Subject<string>;
     private subscriptions: Subscription[] = [];
 
-    constructor(private videoService: VideosService, private langService: LanguagesService, private categoryService: CategoriesService) {
+    constructor(private videoService: VideosService,
+                private langService: LanguagesService,
+                private categoryService: CategoriesService,
+                private sanitizer: DomSanitizer) {
         this.emitTranscriptSource = new Subject<string>();
         this.transcriptionEmitted$ = this.emitTranscriptSource.asObservable();
         this.selectedTranscriptionLanguage = _.find(this.transcriptionLanguages, {code: 'en-US'});
@@ -50,7 +56,9 @@ export class NewVideoComponent implements OnInit, OnDestroy {
     }
 
     onFileChange(e: Event) {
-        this.selectedVideoFile = _.first((<HTMLInputElement>e.target).files);
+        const inputElement: HTMLInputElement = <HTMLInputElement>e.target;
+        this.selectedVideoFile = _.first(inputElement.files);
+        this.previewFileUrl = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(this.selectedVideoFile));
     }
 
     onClickTranscribe(): void {

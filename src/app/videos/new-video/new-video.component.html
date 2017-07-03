@@ -1,27 +1,16 @@
 <form>
-    <div class="form-group">
-        <label for="video">Video File</label>
-        <input type="file" id="video" (change)="onFileChange($event)">
-        <p class="help-block">Select a video file.</p>
-    </div>
-
     <fieldset>
-        <legend>Transcriptions</legend>
-        <div class="form-group">
-            <label for="transcription">Transcription:</label>
-            <textarea class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
+    <legend>Upload</legend>
+        <div class="form-group col-xs-6">
+            <label for="video">Video File</label>
+            <input type="file" id="video" (change)="onFileChange($event)">
+            <p class="help-block">Select a video file.</p>
+        </div>
+        <div class="form-group col-xs-6">
+            <h4>Preview:</h4>
+            <video controls [src]="previewFileUrl" *ngIf="previewFileUrl" width="300" height="200"></video>
         </div>
 
-        <div class="form-group">
-            <label for="transcription-language">Transcription Language</label>
-            <select class="form-control video__transcription-language" id="transcription-language" (input)="onSelectTranscriptionLanguage($event)">
-                <option *ngFor="let language of transcriptionLanguages" [value]="language?.code" [selected]="language === selectedTranscriptionLanguage">{{ language?.englishName }}</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <button id="transcribe-button" class="btn btn-default" [disabled]="!selectedVideoFile" (click)="onClickTranscribe()">Transcribe</button>
-        </div>
     </fieldset>
 
     <fieldset>
@@ -49,7 +38,46 @@
         </div>
 
         <div class="form-group">
-            <button class="btn btn-default" type="submit">Submit</button>
+            <label for="video-speaker">Speaker</label>
+            <select id="video-speaker" class="form-control">
+                <option value="">-</option>
+            </select>
         </div>
     </fieldset>
+
+    <fieldset>
+        <legend>Transcriptions</legend>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="transcription-language">Transcription Language</label>
+                    <select class="form-control video__transcription-language" id="transcription-language" (input)="onSelectTranscriptionLanguage($event)">
+                        <option *ngFor="let language of transcriptionLanguages" [value]="language?.code" [selected]="language === selectedTranscriptionLanguage">{{ language?.englishName }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button id="transcribe-button" class="btn btn-default" [disabled]="!selectedVideoFile" (click)="onClickTranscribe()">Transcribe</button>
+                </div>
+            </div>
+
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="transcription"></label>
+                    <textarea cols="30" rows="10" class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 form-group" *ngFor="let language of languages">
+                <label for="transcription_{{ language?.code }}">{{ language?.name }}</label>
+                <textarea name="" id="transcription_{{ language?.code }}" cols="30" rows="10" class="form-control"></textarea>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
 </form>
