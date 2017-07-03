@@ -49,15 +49,16 @@ describe('NewVideoComponent', () => {
         expect(page.fileInput).toBeTruthy();
     });
 
-    it('contains an empty textarea', () => {
+    it('contains an empty textarea for each language plus one for the transcript text', () => {
         const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelectorAll('textarea').length).toEqual(1);
+        expect(compiled.querySelectorAll('textarea').length).toEqual(2 + 1);
     });
 
     it('should have a dropdown with an option whose value is en-US and textContent is English (United States)', () => {
         const compiled = fixture.debugElement.nativeElement;
 
-        const option = _.find(compiled.querySelector('select').options, {value: 'en-US'}) as HTMLOptionElement;
+        const option = _.find(compiled.querySelector('select.video__transcription-language').options,
+            {value: 'en-US'}) as HTMLOptionElement;
 
         expect(option).toBeTruthy();
         expect(option.textContent).toEqual('English (United States)');

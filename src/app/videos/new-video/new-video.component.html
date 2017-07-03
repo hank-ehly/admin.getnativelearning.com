@@ -46,7 +46,7 @@
     </fieldset>
 
     <fieldset>
-        <legend>Transcriptions</legend>
+        <legend>Transcription</legend>
         <div class="row">
             <div class="col-xs-6">
                 <div class="form-group">
@@ -64,12 +64,16 @@
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="transcription"></label>
-                    <textarea cols="30" rows="10" class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
+                    <textarea cols="30" rows="10" readonly class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
                 </div>
             </div>
         </div>
 
+        <hr>
+
         <div class="row">
+            <p class="help-block">Enclose collocation occurrences in curly braces.</p>
+
             <div class="col-xs-6 form-group" *ngFor="let language of languages">
                 <label for="transcription_{{ language?.code }}">{{ language?.name }}</label>
                 <textarea name="" id="transcription_{{ language?.code }}" cols="30" rows="10" class="form-control"></textarea>
