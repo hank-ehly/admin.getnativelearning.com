@@ -5,39 +5,51 @@
         <p class="help-block">Select a video file.</p>
     </div>
 
-    <div class="form-group">
-        <label for="transcription">Transcription:</label>
-        <textarea class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
-    </div>
+    <fieldset>
+        <legend>Transcriptions</legend>
+        <div class="form-group">
+            <label for="transcription">Transcription:</label>
+            <textarea class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
+        </div>
 
-    <div class="form-group">
-        <label for="transcription-language">Transcription Language</label>
-        <select class="form-control video__transcription-language" id="transcription-language" (input)="onSelectTranscriptionLanguage($event)">
-            <option *ngFor="let language of transcriptionLanguages" [value]="language?.code" [selected]="language === selectedTranscriptionLanguage">{{ language?.englishName }}</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="transcription-language">Transcription Language</label>
+            <select class="form-control video__transcription-language" id="transcription-language" (input)="onSelectTranscriptionLanguage($event)">
+                <option *ngFor="let language of transcriptionLanguages" [value]="language?.code" [selected]="language === selectedTranscriptionLanguage">{{ language?.englishName }}</option>
+            </select>
+        </div>
 
-    <button id="transcribe-button" class="btn btn-default" [disabled]="!selectedVideoFile" (click)="onClickTranscribe()">Transcribe</button>
+        <div class="form-group">
+            <button id="transcribe-button" class="btn btn-default" [disabled]="!selectedVideoFile" (click)="onClickTranscribe()">Transcribe</button>
+        </div>
+    </fieldset>
 
-    <div class="form-group">
-        <label for="video-language">Language</label>
-        <select class="form-control video__language" id="video-language">
-            <option *ngFor="let language of languages" [value]="language?.code">{{ language?.name }}</option>
-        </select>
-    </div>
+    <fieldset>
+        <legend>Metadata</legend>
+        <div class="form-group">
+            <label for="video-language">Language</label>
+            <select class="form-control video__language" id="video-language">
+                <option *ngFor="let language of languages" [value]="language?.code">{{ language?.name }}</option>
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label for="video-category">Category</label>
-        <select class="form-control video__category" id="video-category" (input)="onSelectCategory($event)">
-            <option value="">-</option>
-            <option *ngFor="let category of categories" [value]="category?.id">{{ category?.name }}</option>
-        </select>
+        <div class="form-group">
+            <label for="video-category">Category</label>
+            <select class="form-control video__category" id="video-category" (input)="onSelectCategory($event)">
+                <option value="">-</option>
+                <option *ngFor="let category of categories" [value]="category?.id">{{ category?.name }}</option>
+            </select>
+        </div>
 
-        <label for="video-subcategory">Subcategory</label>
-        <select class="form-control video__subcategory" [disabled]="!selectedCategory" id="video-subcategory" (input)="onSelectSubcategory($event)">
-            <option *ngFor="let subcategory of selectedCategory?.subcategories?.records" [value]="subcategory?.id">{{ subcategory?.name }}</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="video-subcategory">Subcategory</label>
+            <select class="form-control video__subcategory" [disabled]="!selectedCategory" id="video-subcategory" (input)="onSelectSubcategory($event)">
+                <option *ngFor="let subcategory of selectedCategory?.subcategories?.records" [value]="subcategory?.id">{{ subcategory?.name }}</option>
+            </select>
+        </div>
 
-    <button class="btn btn-default" type="submit">Submit</button>
+        <div class="form-group">
+            <button class="btn btn-default" type="submit">Submit</button>
+        </div>
+    </fieldset>
 </form>
