@@ -1,34 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
-import { LanguagesService } from '../../core/languages.service';
 import { SpeakerService } from '../speaker.service';
+import { Speaker } from '../../models/speaker';
+import { Gender } from '../../models/gender';
 
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
-
-interface Language {
-    id: number
-    code: string
-    name: string
-}
-
-interface SpeakerLocalization {
-    language: Language
-    name?: string
-    description?: string
-    location?: string
-}
-
-interface Speaker {
-    gender?: Gender
-    pictureUrl?: string
-    localizations?: SpeakerLocalization[]
-}
-
-interface Gender {
-    id?: number
-    name?: string
-}
 
 @Component({
     selector: 'gn-speaker-form',
@@ -40,7 +17,7 @@ export class SpeakerFormComponent implements OnInit, OnDestroy {
     subscriptions: Subscription[] = [];
     @Input() speaker: Speaker;
 
-    constructor(private lang: LanguagesService, private speakerService: SpeakerService) {
+    constructor(private speakerService: SpeakerService) {
     }
 
     ngOnInit(): void {

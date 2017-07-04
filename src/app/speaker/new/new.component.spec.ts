@@ -11,6 +11,7 @@ import { AuthService } from '../../core/auth.service';
 import { SpeakerModule } from '../speaker.module';
 
 import { Observable } from 'rxjs/Observable';
+import * as _ from 'lodash';
 
 let comp: NewSpeakerComponent;
 let fixture: ComponentFixture<NewSpeakerComponent>;
@@ -26,6 +27,46 @@ describe('NewSpeakerComponent', () => {
 
     it('should be created', () => {
         expect(comp).toBeTruthy();
+    });
+
+    it('should initialize a speaker with a null gender.id', () => {
+        expect(comp.speaker.gender.id).toBeNull();
+    });
+
+    it('should initialize a speaker with a pictureUrl set to an empty string', () => {
+        expect(comp.speaker.pictureUrl).toEqual('');
+    });
+
+    it('should initialize a speaker with as many localization objects as there are languages', () => {
+        expect(comp.speaker.localizations.length).toEqual(MockApiResponse_LanguagesIndex.count);
+    });
+
+    it('should initialize a speaker with a localizations[N].description set to an empty string', () => {
+        expect(_.first(comp.speaker.localizations)['description']).toEqual('');
+    });
+
+    it('should initialize a speaker with a localizations[N].name set to an empty string', () => {
+        expect(_.first(comp.speaker.localizations)['name']).toEqual('');
+    });
+
+    it('should initialize a speaker with a localizations[N].location set to an empty string', () => {
+        expect(_.first(comp.speaker.localizations)['location']).toEqual('');
+    });
+
+    it('should initialize a speaker with a localizations[N].language object', () => {
+        expect(_.first(comp.speaker.localizations)['language']).toBeDefined();
+    });
+
+    it('should initialize a speaker with a localizations[N].language.id', () => {
+        expect(_.first(comp.speaker.localizations)['language'].id).toEqual(_.first(MockApiResponse_LanguagesIndex.records).id);
+    });
+
+    it('should initialize a speaker with a localizations[N].language.code', () => {
+        expect(_.first(comp.speaker.localizations)['language'].code).toEqual(_.first(MockApiResponse_LanguagesIndex.records).code);
+    });
+
+    it('should initialize a speaker with a localizations[N].language.name', () => {
+        expect(_.first(comp.speaker.localizations)['language'].name).toEqual(_.first(MockApiResponse_LanguagesIndex.records).name);
     });
 });
 

@@ -24,7 +24,7 @@ describe('SpeakerFormComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [SpeakerModule, HttpModule],
-            providers: [LanguagesService, HttpService, AuthService]
+            providers: [HttpService, AuthService]
         }).compileComponents().then(createComponent);
     }));
 
@@ -147,8 +147,6 @@ class Page {
     constructor() {
         spyOn(fixture.debugElement.injector.get(SpeakerService), 'getGenders').and
             .returnValue(Observable.of(MockApiResponse_GendersIndex.records));
-        spyOn(fixture.debugElement.injector.get(LanguagesService), 'getLanguages').and
-            .returnValue(Observable.of(MockApiResponse_LanguagesIndex.records));
     }
 
     refreshPageElements() {
