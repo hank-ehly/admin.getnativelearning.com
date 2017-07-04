@@ -6,6 +6,31 @@
  */
 
 export const MockApiResponse_SpeakersIndex = {
-    records: [],
-    count: 0
+    records: [
+        {
+            id: 73,
+            description: 'Harold Ford is a man from Kansas City, MO. He loves the Chiefs and listens to samba.',
+            name: 'Harold Ford',
+            location: 'Kansas City, MO',
+            picture_url: 'https://example.com',
+            is_silhouette_picture: false,
+            gender: {
+                id: 5,
+                name: 'male'
+            }
+        },
+        {
+            id: 89,
+            description: 'Jessica Smith is a teacher at the institute. She plays the piano in her free time.',
+            name: 'Jessica Smith',
+            location: 'Tokyo, JP',
+            picture_url: 'https://example.com',
+            is_silhouette_picture: false,
+            gender: {
+                id: 6,
+                name: 'female'
+            }
+        }
+    ],
+    count: 2
 };
