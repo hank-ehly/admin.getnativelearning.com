@@ -8,10 +8,10 @@ import { MockApiResponse_LanguagesIndex } from '../../testing/mock-api-responses
 import { GoogleCloudSpeechLanguages } from '../google-cloud-speech-languages';
 import { CategoriesService } from '../../categories/categories.service';
 import { LanguagesService } from '../../core/languages.service';
-import { NewVideoComponent } from './new-video.component';
+import { NewVideoComponent } from './new.component';
 import { HttpService } from '../../core/http.service';
 import { AuthService } from '../../core/auth.service';
-import { VideosService } from '../videos.service';
+import { VideoService } from '../video.service';
 import { select } from '../../testing/index';
 
 import { Observable } from 'rxjs/Observable';
@@ -23,23 +23,11 @@ let fixture: ComponentFixture<NewVideoComponent>;
 let page: Page;
 
 describe('NewVideoComponent', () => {
-
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [
-                HttpModule,
-                FormsModule
-            ],
-            declarations: [
-                NewVideoComponent
-            ],
-            providers: [
-                VideosService,
-                HttpService,
-                AuthService,
-                LanguagesService,
-                CategoriesService
-            ]
+            imports: [HttpModule, FormsModule],
+            declarations: [NewVideoComponent],
+            providers: [VideoService, HttpService, AuthService, LanguagesService, CategoriesService]
         }).compileComponents().then(createComponent);
     }));
 

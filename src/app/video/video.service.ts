@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/pluck';
 
 @Injectable()
-export class VideosService {
+export class VideoService {
     constructor(private http: HttpService) {
     }
 

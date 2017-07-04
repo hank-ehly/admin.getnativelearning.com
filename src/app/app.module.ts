@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
-import { VideosModule } from './videos/videos.module';
+import { VideoModule } from './video/video.module';
 import { CoreModule } from './core/core.module';
 import { LoginComponent } from './login/login.component';
 import { CategoriesModule } from './categories/categories.module';
@@ -26,7 +26,7 @@ import { SpeakerModule } from './speaker/speaker.module';
         FormsModule,
         AppRoutingModule,
         SharedModule,
-        VideosModule,
+        VideoModule,
         CategoriesModule,
         SpeakerModule
     ],

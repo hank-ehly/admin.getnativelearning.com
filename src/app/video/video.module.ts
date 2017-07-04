@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 
-import { VideosService } from './videos.service';
-import { VideosComponent } from './videos.component';
-import { NewVideoComponent } from './new-video/new-video.component';
+import { VideoService } from './video.service';
+import { VideoComponent } from './video.component';
+import { NewVideoComponent } from './new/new.component';
 
 @NgModule({
     imports: [
@@ -16,12 +16,12 @@ import { NewVideoComponent } from './new-video/new-video.component';
         HttpModule // todo: this errors if I don't import it here -- why is it really necessary?
     ],
     declarations: [
-        VideosComponent,
+        VideoComponent,
         NewVideoComponent
     ],
     providers: [
-        VideosService
+        VideoService
     ]
 })
-export class VideosModule {
+export class VideoModule {
 }

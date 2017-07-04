@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { VideosComponent } from './videos/videos.component';
+import { VideoComponent } from './video/video.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { UsersComponent } from './users/users.component';
 import { LoginComponent } from './login/login.component';
@@ -10,7 +10,7 @@ import { AuthGuard } from './core/auth.guard';
 import { EditCategoryComponent } from './categories/edit-category/edit-category.component';
 import { CategoriesIndexComponent } from './categories/categories-index/categories-index.component';
 import { EditSubcategoryComponent } from './categories/edit-subcategory/edit-subcategory.component';
-import { NewVideoComponent } from './videos/new-video/new-video.component';
+import { NewVideoComponent } from './video/new/new.component';
 import { SpeakerComponent } from './speaker/speaker.component';
 import { IndexSpeakerComponent } from './speaker/index/index.component';
 import { ShowSpeakerComponent } from './speaker/show/show.component';
@@ -20,7 +20,7 @@ import { EditSpeakerComponent } from './speaker/edit/edit.component';
 const routes: Routes = [
     {
         path: 'videos',
-        component: VideosComponent,
+        component: VideoComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [

@@ -10,23 +10,15 @@ import { RouterStub } from './testing/router-stub';
 describe('AppComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [
-                RouterTestingModule,
-                SharedModule
-            ],
-            declarations: [
-                AppComponent
-            ],
-            providers: [
-                AuthService,
-                {provide: Router, useClass: RouterStub}
-            ]
+            imports: [RouterTestingModule, SharedModule],
+            declarations: [AppComponent],
+            providers: [AuthService, {provide: Router, useClass: RouterStub}]
         }).compileComponents();
     }));
 
     it('should create the app', async(() => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
-        expect(app).toBeTruthy();
+        return expect(app).toBeTruthy();
     }));
 });

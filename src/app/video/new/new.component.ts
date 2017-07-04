@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { GoogleCloudSpeechLanguage, GoogleCloudSpeechLanguages } from '../google-cloud-speech-languages';
 import { CategoriesService } from '../../categories/categories.service';
 import { LanguagesService } from '../../core/languages.service';
-import { VideosService } from '../videos.service';
+import { VideoService } from '../video.service';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
@@ -26,8 +26,7 @@ interface Video {
 
 @Component({
     selector: 'gn-new-video',
-    templateUrl: './new-video.component.html',
-    styleUrls: ['./new-video.component.scss']
+    templateUrl: './new.component.html'
 })
 export class NewVideoComponent implements OnInit, OnDestroy {
     transcriptionLanguages = GoogleCloudSpeechLanguages;
@@ -49,7 +48,7 @@ export class NewVideoComponent implements OnInit, OnDestroy {
     private emitTranscriptSource: Subject<string>;
     private subscriptions: Subscription[] = [];
 
-    constructor(private videoService: VideosService,
+    constructor(private videoService: VideoService,
                 private langService: LanguagesService,
                 private categoryService: CategoriesService,
                 private sanitizer: DomSanitizer) {

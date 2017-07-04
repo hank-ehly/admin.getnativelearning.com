@@ -4,16 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
 
-import { VideosComponent } from './videos.component';
+import { VideoComponent } from './video.component';
 import { RouterStub } from '../testing/router-stub';
 import { HttpService } from '../core/http.service';
 import { AuthService } from '../core/auth.service';
-import { VideosService } from './videos.service';
+import { VideoService } from './video.service';
 
-let component: VideosComponent;
-let fixture: ComponentFixture<VideosComponent>;
+let component: VideoComponent;
+let fixture: ComponentFixture<VideoComponent>;
 
-describe('VideosComponent', () => {
+describe('VideoComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
@@ -22,10 +22,10 @@ describe('VideosComponent', () => {
                 FormsModule
             ],
             declarations: [
-                VideosComponent
+                VideoComponent
             ],
             providers: [
-                VideosService,
+                VideoService,
                 HttpService,
                 AuthService,
                 {provide: Router, useClass: RouterStub}
@@ -48,7 +48,7 @@ describe('VideosComponent', () => {
 });
 
 function createComponent() {
-    fixture = TestBed.createComponent(VideosComponent);
+    fixture = TestBed.createComponent(VideoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     return fixture.whenStable();
