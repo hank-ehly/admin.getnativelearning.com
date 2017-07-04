@@ -1,7 +1,18 @@
 <form #form="ngForm">
-<!--
-- upload picture
--->
+    <fieldset>
+        <legend>Upload</legend>
+        <div class="form-group col-xs-6">
+            <label for="picture">Picture</label>
+            <input type="file" id="picture" name="picture" required>
+            <p class="help-block">Select an image file.</p>
+        </div>
+        <!--<div class="form-group col-xs-6">
+            <h4>Preview:</h4>
+            <video controls [src]="previewFileUrl" *ngIf="previewFileUrl" width="300" height="200"></video>
+        </div>-->
+
+    </fieldset>
+
     <label *ngFor="let gender of genders">{{ gender?.name }}
         <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker.genderId">
     </label>

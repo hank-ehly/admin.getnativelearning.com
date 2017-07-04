@@ -23,43 +23,39 @@ describe('SpeakerService', () => {
             imports: [HttpModule],
             providers: [
                 SpeakerService, HttpService, AuthService, MockBackend, BaseRequestOptions,
-                {
-                    provide: Http,
-                    useFactory: (backend, options) => new Http(backend, options),
-                    deps: [MockBackend, BaseRequestOptions]
-                }
+                {provide: Http, useFactory: (b, o) => new Http(b, o), deps: [MockBackend, BaseRequestOptions]}
             ]
         });
     });
 
     it('should be created', inject([SpeakerService], (service: SpeakerService) => {
-        expect(service).toBeTruthy();
+        return expect(service).toBeTruthy();
     }));
 
-    describe('getGenders', () => {
-        it('should return an array of gender objects if the response is successful', inject([SpeakerService, MockBackend],
-            (service: SpeakerService, mockBackend: MockBackend) => {
-                const mockResponse = new Response(
-                    new ResponseOptions({
-                        body: JSON.stringify(MockApiResponse_GendersIndex),
-                        status: 200
-                    })
-                );
-
-                mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
-
-                service.getGenders().subscribe(res => {
-                    expect(res).toEqual(MockApiResponse_GendersIndex.records);
-                });
-            }));
-
-        it('should return an error response if the gender request fails', inject([SpeakerService, MockBackend],
-            (service: SpeakerService, mockBackend: MockBackend) => {
-                mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
-
-                service.getGenders().subscribe(res => {
-                    expect(_.first(res)['code']).toBeDefined();
-                });
-            }));
-    });
+    // describe('getGenders', () => {
+    //     it('should return an array of gender objects if the response is successful', inject([SpeakerService, MockBackend],
+    //         (service: SpeakerService, mockBackend: MockBackend) => {
+    //             const mockResponse = new Response(
+    //                 new ResponseOptions({
+    //                     body: JSON.stringify(MockApiResponse_GendersIndex),
+    //                     status: 200
+    //                 })
+    //             );
+    //
+    //             mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
+    //
+    //             service.getGenders().subscribe(res => {
+    //                 return expect(res).toEqual(MockApiResponse_GendersIndex.records);
+    //             });
+    //         }));
+    //
+    //     it('should return an error response if the gender request fails', inject([SpeakerService, MockBackend],
+    //         (service: SpeakerService, mockBackend: MockBackend) => {
+    //             mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
+    //
+    //             service.getGenders().subscribe(res => {
+    //                 return expect(_.first(res)['code']).toBeDefined();
+    //             });
+    //         }));
+    // });
 });

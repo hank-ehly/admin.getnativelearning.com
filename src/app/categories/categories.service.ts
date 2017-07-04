@@ -10,7 +10,6 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class CategoriesService {
-
     constructor(private http: HttpService) {
     }
 

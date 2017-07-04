@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { LanguagesService } from '../../core/languages.service';
 import { SpeakerService } from '../speaker.service';
+
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
 
@@ -13,6 +15,7 @@ interface SpeakerLocalization {
 
 interface Speaker {
     genderId: number
+    picture: File
     localizations: SpeakerLocalization[]
 }
 
@@ -31,6 +34,7 @@ export class SpeakerFormComponent implements OnInit, OnDestroy {
     subscriptions: Subscription[] = [];
     speaker: Speaker = {
         genderId: null,
+        picture: null,
         localizations: []
     };
 

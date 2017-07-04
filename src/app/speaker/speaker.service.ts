@@ -11,7 +11,7 @@ export class SpeakerService {
     constructor(private http: HttpService) {
     }
 
-    getGenders(): Observable<any> {
+    getGenders(): Observable<any[]> {
         return this.http.request('/genders', {method: RequestMethod.Get}).pluck('records');
     }
 }

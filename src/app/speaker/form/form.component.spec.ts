@@ -27,32 +27,36 @@ describe('SpeakerFormComponent', () => {
     }));
 
     it('should be created', () => {
-        expect(comp).toBeTruthy();
+        return expect(comp).toBeTruthy();
     });
 
     describe('component model', () => {
         it('should initialize a model object with a genderId property', () => {
-            expect(comp.speaker.genderId).toBeNull();
+            return expect(comp.speaker.genderId).toBeNull();
+        });
+
+        it('should initialize a model object with a picture property', () => {
+            return expect(comp.speaker.picture).toBeNull();
         });
 
         it('should initialize a model with a localizations array containing as many objects as there are languages', () => {
             const numberOfLanguages = 2;
-            expect(comp.speaker.localizations.length).toEqual(numberOfLanguages);
+            return expect(comp.speaker.localizations.length).toEqual(numberOfLanguages);
         });
 
         it('should initialize a localization object with a description property', () => {
             const firstLocalization = _.first(comp.speaker.localizations);
-            expect(firstLocalization.description).toBeNull();
+            return expect(firstLocalization.description).toBeNull();
         });
 
         it('should initialize a localization object with a name property', () => {
             const firstLocalization = _.first(comp.speaker.localizations);
-            expect(firstLocalization.name).toBeNull();
+            return expect(firstLocalization.name).toBeNull();
         });
 
         it('should initialize a localization object with a location property', () => {
             const firstLocalization = _.first(comp.speaker.localizations);
-            expect(firstLocalization.location).toBeNull();
+            return expect(firstLocalization.location).toBeNull();
         });
     });
 
@@ -64,7 +68,11 @@ describe('SpeakerFormComponent', () => {
             page.genderInput.dispatchEvent(new Event('change'));
             fixture.detectChanges();
             // expect model value to have changed
-            expect(comp.speaker.genderId).toEqual(genderObj['id']);
+            return expect(comp.speaker.genderId).toEqual(genderObj['id']);
+        });
+
+        it('should bind the speaker.picture model to the template as a file input', () => {
+            return expect(page.pictureInput).toBeTruthy();
         });
 
         it('should bind a localization.description to the template as a textarea', () => {
@@ -75,7 +83,7 @@ describe('SpeakerFormComponent', () => {
             firstDesc.dispatchEvent(new Event('input'));
             fixture.detectChanges();
             // expect description value to equal change
-            expect(_.first(comp.speaker.localizations).description).toEqual(testValue);
+            return expect(_.first(comp.speaker.localizations).description).toEqual(testValue);
         });
 
         it('should bind a localization.name to the template as a text input', () => {
@@ -86,7 +94,7 @@ describe('SpeakerFormComponent', () => {
             firstName.dispatchEvent(new Event('input'));
             fixture.detectChanges();
             // expect name value to equal change
-            expect(_.first(comp.speaker.localizations).name).toEqual(testValue);
+            return expect(_.first(comp.speaker.localizations).name).toEqual(testValue);
         });
 
         it('should bind a localization.location to the template as a text input', () => {
@@ -97,7 +105,7 @@ describe('SpeakerFormComponent', () => {
             firstLocation.dispatchEvent(new Event('input'));
             fixture.detectChanges();
             // expect location value to equal change
-            expect(_.first(comp.speaker.localizations).location).toEqual(testValue);
+            return expect(_.first(comp.speaker.localizations).location).toEqual(testValue);
         });
     });
 
@@ -121,6 +129,7 @@ function createComponent() {
 
 class Page {
     genderInput: HTMLInputElement;
+    pictureInput: HTMLInputElement;
     lzDescTextAreaEls: HTMLTextAreaElement[];
     lzNameTextInputEls: HTMLInputElement[];
     lzLocTextInputEls: HTMLInputElement[];
@@ -134,6 +143,7 @@ class Page {
 
     refreshPageElements() {
         this.genderInput = fixture.debugElement.query(By.css('input[type=radio]')).nativeElement;
+        this.pictureInput = fixture.debugElement.query(By.css('input[type=file]')).nativeElement;
         this.lzDescTextAreaEls = fixture.debugElement.queryAll(By.css('textarea.description')).map(e => e.nativeElement);
         this.lzNameTextInputEls = fixture.debugElement.queryAll(By.css('input[type=text].name')).map(e => e.nativeElement);
         this.lzLocTextInputEls = fixture.debugElement.queryAll(By.css('input[type=text].location')).map(e => e.nativeElement);

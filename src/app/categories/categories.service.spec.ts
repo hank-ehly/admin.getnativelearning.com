@@ -3,10 +3,9 @@ import { TestBed, inject } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 import { Router } from '@angular/router';
 
+import { MockApiResponse_SubcategoriesCreate } from '../testing/mock-api-responses/subcategories-create';
 import { MockApiResponse_CategoriesIndex } from '../testing/mock-api-responses/categories-index';
 import { MockApiResponse_CategoriesShow } from '../testing/mock-api-responses/categories-show';
-import { MockApiResponse_CategoriesCreate } from '../testing/mock-api-responses/categories-create';
-import { MockApiResponse_SubcategoriesCreate } from '../testing/mock-api-responses/subcategories-create';
 import { MockApiResponse_404 } from '../testing/mock-api-responses/404';
 import { CategoriesService } from './categories.service';
 import { RouterStub } from '../testing/router-stub';
@@ -25,30 +24,16 @@ describe('CategoriesService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [
-                HttpModule
-            ],
+            imports: [HttpModule],
             providers: [
-                CategoriesService,
-                HttpService,
-                AuthService,
-                MockBackend,
-                BaseRequestOptions,
-                {
-                    provide: Http,
-                    useFactory: (backend, options) => new Http(backend, options),
-                    deps: [MockBackend, BaseRequestOptions]
-                },
-                {
-                    provide: Router,
-                    useClass: RouterStub
-                }
+                CategoriesService, HttpService, AuthService, MockBackend, BaseRequestOptions, {provide: Router, useClass: RouterStub},
+                {provide: Http, useFactory: (b, o) => new Http(b, o), deps: [MockBackend, BaseRequestOptions]}
             ]
         });
     });
 
     it('should be created', inject([CategoriesService], (service: CategoriesService) => {
-        expect(service).toBeTruthy();
+        return expect(service).toBeTruthy();
     }));
 
     it('should return a list of categories', inject([CategoriesService, MockBackend],
@@ -63,7 +48,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
 
             service.getCategories().subscribe(res => {
-                expect(res).toEqual(MockApiResponse_CategoriesIndex.records);
+                return expect(res).toEqual(MockApiResponse_CategoriesIndex.records);
             });
         }));
 
@@ -79,7 +64,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
 
             service.getCategory(_.first(MockApiResponse_CategoriesIndex.records).id).subscribe(res => {
-                expect(res).toEqual(_.first(MockApiResponse_CategoriesIndex.records));
+                return expect(res).toEqual(_.first(MockApiResponse_CategoriesIndex.records));
             });
         }));
 
@@ -98,7 +83,7 @@ describe('CategoriesService', () => {
                 _.first(MockApiResponse_CategoriesIndex.records).id,
                 _.first(_.first(MockApiResponse_CategoriesIndex.records).subcategories.records).id
             ).subscribe(res => {
-                expect(res).toEqual(_.first(_.first(MockApiResponse_CategoriesIndex.records).subcategories.records));
+                return expect(res).toEqual(_.first(_.first(MockApiResponse_CategoriesIndex.records).subcategories.records));
             });
         }));
 
@@ -118,7 +103,7 @@ describe('CategoriesService', () => {
                 _.first(MockApiResponse_CategoriesShow.categories_localized.records).id,
                 {name: 'new name'}
             ).subscribe(res => {
-                expect(res).toEqual(true);
+                return expect(res).toEqual(true);
             });
         }));
 
@@ -131,7 +116,7 @@ describe('CategoriesService', () => {
                 _.first(MockApiResponse_CategoriesShow.categories_localized.records).id,
                 {name: 'new name'}
             ).subscribe(res => {
-                expect(res).toEqual(false);
+                return expect(res).toEqual(false);
             });
         }));
 
@@ -147,7 +132,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
 
             service.updateSubcategoryLocalized(1, 2, {name: 'name'}).subscribe(res => {
-                expect(res).toEqual(true);
+                return expect(res).toEqual(true);
             });
         }));
 
@@ -156,7 +141,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
 
             service.updateSubcategoryLocalized(1, 2, {name: 'name'}).subscribe(res => {
-                expect(res).toEqual(false);
+                return expect(res).toEqual(false);
             });
         }));
 
@@ -172,7 +157,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
 
             service.updateSubcategory(1, 2, {category_id: 1}).subscribe(res => {
-                expect(res).toEqual(true);
+                return expect(res).toEqual(true);
             });
         }));
 
@@ -181,7 +166,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
 
             service.updateSubcategory(1, 2, {category_id: 1}).subscribe(res => {
-                expect(res).toEqual(false);
+                return expect(res).toEqual(false);
             });
         }));
 
@@ -206,7 +191,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
 
             service.createCategory().subscribe(res => {
-                expect(res).toEqual(false);
+                return expect(res).toEqual(false);
             });
         }));
 
@@ -222,7 +207,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
 
             service.deleteCategory(1).subscribe(res => {
-                expect(res).toEqual(true);
+                return expect(res).toEqual(true);
             });
         }));
 
@@ -231,7 +216,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
 
             service.deleteCategory(1).subscribe(res => {
-                expect(res).toEqual(false);
+                return expect(res).toEqual(false);
             });
         }));
 
@@ -247,7 +232,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
 
             service.createSubcategory(1).subscribe(res => {
-                expect(res).toEqual({
+                return expect(res).toEqual({
                     subcategoryId: MockApiResponse_SubcategoriesCreate.id,
                     categoryId: MockApiResponse_SubcategoriesCreate.category_id
                 });
@@ -259,7 +244,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
 
             service.createSubcategory(1).subscribe(res => {
-                expect(res).toEqual(false);
+                return expect(res).toEqual(false);
             });
         }));
 
@@ -275,7 +260,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockResponse));
 
             service.deleteSubcategory(1, 2).subscribe(res => {
-                expect(res).toEqual(true);
+                return expect(res).toEqual(true);
             });
         }));
 
@@ -284,7 +269,7 @@ describe('CategoriesService', () => {
             mockBackend.connections.subscribe(c => c.mockRespond(mockErrorResponse));
 
             service.deleteSubcategory(1, 2).subscribe(res => {
-                expect(res).toEqual(false);
+                return expect(res).toEqual(false);
             });
         }));
 });
