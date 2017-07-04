@@ -14,4 +14,12 @@ export class SpeakerService {
     getGenders(): Observable<any[]> {
         return this.http.request('/genders', {method: RequestMethod.Get}).pluck('records');
     }
+
+    getSpeaker(id: number): Observable<any> {
+        return this.http.request(`/speakers/${id}`, {method: RequestMethod.Get});
+    }
+
+    getSpeakerLocalizations(id: number): Observable<any[]> {
+        return this.http.request(`/speakers/${id}/speakers_localized`, {method: RequestMethod.Get}).pluck('records');
+    }
 }

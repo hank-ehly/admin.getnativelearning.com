@@ -13,6 +13,8 @@ import * as _ from 'lodash';
 import { By } from '@angular/platform-browser';
 import { SpeakerService } from '../speaker.service';
 import { MockApiResponse_GendersIndex } from '../../testing/mock-api-responses/genders-index';
+import { MockApiResponse_SpeakersShow } from '../../testing/mock-api-responses/speakers-show';
+import { MockApiResponse_SpeakersLocalizedIndex } from '../../testing/mock-api-responses/speakers-localized-index';
 
 let comp: SpeakerFormComponent;
 let fixture: ComponentFixture<SpeakerFormComponent>;
@@ -31,12 +33,12 @@ describe('SpeakerFormComponent', () => {
     });
 
     describe('component model', () => {
-        it('should initialize a model object with a genderId property', () => {
-            return expect(comp.speaker.genderId).toBeNull();
+        it('should initialize a model object with a gender.id property', () => {
+            return expect(comp.speaker.gender.id).toEqual(MockApiResponse_SpeakersShow.gender.id);
         });
 
-        it('should initialize a model object with a picture property', () => {
-            return expect(comp.speaker.picture).toBeNull();
+        it('should initialize a model object with a pictureUrl property', () => {
+            return expect(comp.speaker.pictureUrl).toEqual(MockApiResponse_SpeakersShow.picture_url);
         });
 
         it('should initialize a model with a localizations array containing as many objects as there are languages', () => {
@@ -46,29 +48,29 @@ describe('SpeakerFormComponent', () => {
 
         it('should initialize a localization object with a description property', () => {
             const firstLocalization = _.first(comp.speaker.localizations);
-            return expect(firstLocalization.description).toBeNull();
+            return expect(firstLocalization.description).toEqual(_.first(MockApiResponse_SpeakersLocalizedIndex.records).description);
         });
 
         it('should initialize a localization object with a name property', () => {
             const firstLocalization = _.first(comp.speaker.localizations);
-            return expect(firstLocalization.name).toBeNull();
+            return expect(firstLocalization.name).toEqual(_.first(MockApiResponse_SpeakersLocalizedIndex.records).name);
         });
 
         it('should initialize a localization object with a location property', () => {
             const firstLocalization = _.first(comp.speaker.localizations);
-            return expect(firstLocalization.location).toBeNull();
+            return expect(firstLocalization.location).toEqual(_.first(MockApiResponse_SpeakersLocalizedIndex.records).location);
         });
     });
 
     describe('template bindings', () => {
-        it('should bind the genderId to the template as a radio selection', () => {
+        it('should bind the gender.id to the template as a radio selection', () => {
             // change radio value
             const genderObj = _.find(comp.genders, {name: 'male'});
             page.genderInput.value = genderObj['id'].toString();
             page.genderInput.dispatchEvent(new Event('change'));
             fixture.detectChanges();
             // expect model value to have changed
-            return expect(comp.speaker.genderId).toEqual(genderObj['id']);
+            return expect(comp.speaker.gender.id).toEqual(genderObj['id']);
         });
 
         it('should bind the speaker.picture model to the template as a file input', () => {
@@ -118,9 +120,17 @@ describe('SpeakerFormComponent', () => {
     });
 });
 
+function setupMockSpeaker() {
+    const speaker = _.omit(_.mapKeys(MockApiResponse_SpeakersShow, (v, k) => _.camelCase(k)),
+        ['description', 'isSilhouettePicture', 'gender.name', 'location']);
+    speaker['localizations'] = MockApiResponse_SpeakersLocalizedIndex.records;
+    return speaker;
+}
+
 function createComponent() {
     fixture = TestBed.createComponent(SpeakerFormComponent);
     comp = fixture.componentInstance;
+    comp.speaker = setupMockSpeaker();
     page = new Page();
     fixture.detectChanges();
     page.refreshPageElements();

@@ -11,13 +11,14 @@
             <video controls [src]="previewFileUrl" *ngIf="previewFileUrl" width="300" height="200"></video>
         </div>-->
 
+
     </fieldset>
 
     <label *ngFor="let gender of genders">{{ gender?.name }}
-        <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker.genderId">
+        <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id">
     </label>
 
-    <div *ngFor="let localization of speaker.localizations">
+    <div *ngFor="let localization of speaker?.localizations">
         <label for="description[{{ localization.languageId }}]">Description</label>
         <textarea name="description[{{ localization.languageId }}]" class="description" id="description[{{ localization.languageId }}]" [(ngModel)]="localization.description" cols="30" rows="10"></textarea>
 

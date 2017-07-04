@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { LanguagesService } from '../../core/languages.service';
 import { SpeakerService } from '../speaker.service';
@@ -14,14 +14,14 @@ interface SpeakerLocalization {
 }
 
 interface Speaker {
-    genderId: number
-    picture: File
-    localizations: SpeakerLocalization[]
+    gender?: Gender
+    pictureUrl?: string
+    localizations?: SpeakerLocalization[]
 }
 
 interface Gender {
-    id: number
-    name: string
+    id?: number
+    name?: string
 }
 
 @Component({
@@ -32,27 +32,13 @@ interface Gender {
 export class SpeakerFormComponent implements OnInit, OnDestroy {
     genders: Gender[];
     subscriptions: Subscription[] = [];
-    speaker: Speaker = {
-        genderId: null,
-        picture: null,
-        localizations: []
-    };
+    @Input() speaker: Speaker;
 
     constructor(private lang: LanguagesService, private speakerService: SpeakerService) {
     }
 
     ngOnInit(): void {
         this.subscriptions.push(
-            this.lang.getLanguages().subscribe(languages => {
-                for (const language of languages) {
-                    this.speaker.localizations.push({
-                        languageId: language.id,
-                        name: null,
-                        description: null,
-                        location: null
-                    });
-                }
-            }),
             this.speakerService.getGenders().subscribe((genders: Gender[]) => this.genders = genders)
         );
     }
