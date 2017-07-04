@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./index.component.scss']
 })
 export class IndexSpeakerComponent implements OnInit {
+    speakers: any[];
 
     constructor() {
     }

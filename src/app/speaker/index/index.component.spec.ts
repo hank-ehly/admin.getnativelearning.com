@@ -1,25 +1,74 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { IndexSpeakerComponent } from './index.component';
+import { MockApiResponse_SpeakersIndex } from '../../testing/mock-api-responses/speakers-index';
+import { By } from '@angular/platform-browser';
+
+let comp: IndexSpeakerComponent;
+let fixture: ComponentFixture<IndexSpeakerComponent>;
+let page: Page;
 
 describe('IndexSpeakerComponent', () => {
-    let component: IndexSpeakerComponent;
-    let fixture: ComponentFixture<IndexSpeakerComponent>;
-
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [IndexSpeakerComponent]
-        })
-            .compileComponents();
+        }).compileComponents().then(createComponent);
     }));
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(IndexSpeakerComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+    it('should be created', () => {
+        return expect(comp).toBeTruthy();
     });
 
-    it('should be created', () => {
-        expect(component).toBeTruthy();
+    it('should obtain a list of speakers', () => {
+        return expect(comp.speakers.length).toEqual(MockApiResponse_SpeakersIndex.count);
+    });
+
+    it('should display the speaker name', () => {
+        return expect(page.speakerNames.length).toEqual(MockApiResponse_SpeakersIndex.count);
+    });
+
+    it('should display the speaker gender name', () => {
+        return expect(page.speakerGenderNames.length).toEqual(MockApiResponse_SpeakersIndex.count);
+    });
+
+    it('should display the speaker description', () => {
+        return expect(page.speakerDescriptions.length).toEqual(MockApiResponse_SpeakersIndex.count);
+    });
+
+    it('should display the speaker location', () => {
+        return expect(page.speakerLocations.length).toEqual(MockApiResponse_SpeakersIndex.count);
+    });
+
+    it('should display the speaker picture', () => {
+        return expect(page.speakerPictures.length).toEqual(MockApiResponse_SpeakersIndex.count);
     });
 });
+
+function createComponent() {
+    fixture = TestBed.createComponent(IndexSpeakerComponent);
+    comp = fixture.componentInstance;
+    page = new Page();
+    fixture.detectChanges();
+    page.refreshPageElements();
+    return fixture.whenStable();
+}
+
+class Page {
+    speakerNames: HTMLElement[];
+    speakerGenderNames: HTMLElement[];
+    speakerDescriptions: HTMLElement[];
+    speakerLocations: HTMLElement[];
+    speakerPictures: HTMLImageElement[];
+
+    constructor() {
+        // spyOn speaker index
+    }
+
+    refreshPageElements() {
+        this.speakerNames = fixture.debugElement.queryAll(By.css('.name')).map(e => e.nativeElement);
+        this.speakerGenderNames = fixture.debugElement.queryAll(By.css('.gender')).map(e => e.nativeElement);
+        this.speakerDescriptions = fixture.debugElement.queryAll(By.css('.description')).map(e => e.nativeElement);
+        this.speakerLocations = fixture.debugElement.queryAll(By.css('.location')).map(e => e.nativeElement);
+        this.speakerPictures = fixture.debugElement.queryAll(By.css('.id')).map(e => e.nativeElement);
+    }
+}
