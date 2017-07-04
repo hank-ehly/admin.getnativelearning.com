@@ -60,16 +60,16 @@ const routes: Routes = [
                 component: IndexSpeakerComponent
             },
             {
-                path: ':id',
-                component: ShowSpeakerComponent
-            },
-            {
-                path: '/new',
+                path: 'new',
                 component: SpeakerFormComponent
             },
             {
                 path: ':id/edit',
                 component: SpeakerFormComponent
+            },
+            {
+                path: ':id',
+                component: ShowSpeakerComponent
             }
         ]
     },

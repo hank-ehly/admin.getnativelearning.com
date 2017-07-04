@@ -10,6 +10,9 @@ import { SpeakerModule } from '../speaker.module';
 
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
+import { By } from '@angular/platform-browser';
+import { SpeakerService } from '../speaker.service';
+import { MockApiResponse_GendersIndex } from '../../testing/mock-api-responses/genders-index';
 
 let comp: SpeakerFormComponent;
 let fixture: ComponentFixture<SpeakerFormComponent>;
@@ -54,10 +57,48 @@ describe('SpeakerFormComponent', () => {
     });
 
     describe('template bindings', () => {
-        it('should bind the genderId to the template as a radio selection');
-        it('should bind a localization.description to the template as a textarea');
-        it('should bind a localization.name to the template as a text input');
-        it('should bind a localization.location to the template as a text input');
+        it('should bind the genderId to the template as a radio selection', () => {
+            // change radio value
+            const genderObj = _.find(comp.genders, {name: 'male'});
+            page.genderInput.value = genderObj['id'].toString();
+            page.genderInput.dispatchEvent(new Event('change'));
+            fixture.detectChanges();
+            // expect model value to have changed
+            expect(comp.speaker.genderId).toEqual(genderObj['id']);
+        });
+
+        it('should bind a localization.description to the template as a textarea', () => {
+            // change description value
+            const testValue = 'Test Description';
+            const firstDesc = _.first(page.lzDescTextAreaEls);
+            firstDesc.value = testValue;
+            firstDesc.dispatchEvent(new Event('input'));
+            fixture.detectChanges();
+            // expect description value to equal change
+            expect(_.first(comp.speaker.localizations).description).toEqual(testValue);
+        });
+
+        it('should bind a localization.name to the template as a text input', () => {
+            // change name value
+            const testValue = 'Test Name';
+            const firstName = _.first(page.lzNameTextInputEls);
+            firstName.value = testValue;
+            firstName.dispatchEvent(new Event('input'));
+            fixture.detectChanges();
+            // expect name value to equal change
+            expect(_.first(comp.speaker.localizations).name).toEqual(testValue);
+        });
+
+        it('should bind a localization.location to the template as a text input', () => {
+            // change location value
+            const testValue = 'Test Location';
+            const firstLocation = _.first(page.lzLocTextInputEls);
+            firstLocation.value = testValue;
+            firstLocation.dispatchEvent(new Event('input'));
+            fixture.detectChanges();
+            // expect location value to equal change
+            expect(_.first(comp.speaker.localizations).location).toEqual(testValue);
+        });
     });
 
     describe('"create" request', () => {
@@ -79,12 +120,22 @@ function createComponent() {
 }
 
 class Page {
+    genderInput: HTMLInputElement;
+    lzDescTextAreaEls: HTMLTextAreaElement[];
+    lzNameTextInputEls: HTMLInputElement[];
+    lzLocTextInputEls: HTMLInputElement[];
+
     constructor() {
+        spyOn(fixture.debugElement.injector.get(SpeakerService), 'getGenders').and
+            .returnValue(Observable.of(MockApiResponse_GendersIndex.records));
         spyOn(fixture.debugElement.injector.get(LanguagesService), 'getLanguages').and
             .returnValue(Observable.of(MockApiResponse_LanguagesIndex.records));
     }
 
     refreshPageElements() {
-        //
+        this.genderInput = fixture.debugElement.query(By.css('input[type=radio]')).nativeElement;
+        this.lzDescTextAreaEls = fixture.debugElement.queryAll(By.css('textarea.description')).map(e => e.nativeElement);
+        this.lzNameTextInputEls = fixture.debugElement.queryAll(By.css('input[type=text].name')).map(e => e.nativeElement);
+        this.lzLocTextInputEls = fixture.debugElement.queryAll(By.css('input[type=text].location')).map(e => e.nativeElement);
     }
 }

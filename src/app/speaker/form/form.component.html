@@ -1,11 +1,19 @@
-<p>
-    speaker-form works!
-</p>
+<form #form="ngForm">
 <!--
 - upload picture
-- set gender
-- per languages:
--- description
--- name
--- location
 -->
+    <label *ngFor="let gender of genders">{{ gender?.name }}
+        <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker.genderId">
+    </label>
+
+    <div *ngFor="let localization of speaker.localizations">
+        <label for="description[{{ localization.languageId }}]">Description</label>
+        <textarea name="description[{{ localization.languageId }}]" class="description" id="description[{{ localization.languageId }}]" [(ngModel)]="localization.description" cols="30" rows="10"></textarea>
+
+        <label for="name[{{ localization.languageId }}]"></label>
+        <input type="text" name="name[{{ localization.languageId }}]" class="name" [(ngModel)]="localization.name" id="name[{{ localization.languageId }}]">
+
+        <label for="location[{{ localization.languageId }}]"></label>
+        <input type="text" name="location[{{ localization.languageId }}]" class="location" [(ngModel)]="localization.location" id="location[{{ localization.languageId }}]">
+    </div>
+</form>

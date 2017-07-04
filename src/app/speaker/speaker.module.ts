@@ -7,10 +7,14 @@ import { SpeakerFormComponent } from './form/form.component';
 import { SpeakerService } from './speaker.service';
 import { NewSpeakerComponent } from './new/new.component';
 import { EditSpeakerComponent } from './edit/edit.component';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
+        FormsModule,
+        RouterModule
     ],
     declarations: [
         NewSpeakerComponent,
