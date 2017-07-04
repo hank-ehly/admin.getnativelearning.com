@@ -5,12 +5,14 @@ import { HttpModule } from '@angular/http';
 
 import { MockApiResponse_CategoriesIndex } from '../../testing/mock-api-responses/categories-index';
 import { MockApiResponse_LanguagesIndex } from '../../testing/mock-api-responses/languages-index';
+import { MockApiResponse_SpeakersIndex } from '../../testing/mock-api-responses/speakers-index';
 import { GoogleCloudSpeechLanguages } from '../google-cloud-speech-languages';
 import { CategoriesService } from '../../categories/categories.service';
 import { LanguagesService } from '../../core/languages.service';
-import { NewVideoComponent } from './new.component';
+import { SpeakerService } from '../../speaker/speaker.service';
 import { HttpService } from '../../core/http.service';
 import { AuthService } from '../../core/auth.service';
+import { NewVideoComponent } from './new.component';
 import { VideoService } from '../video.service';
 import { select } from '../../testing/index';
 
@@ -23,25 +25,32 @@ let fixture: ComponentFixture<NewVideoComponent>;
 let page: Page;
 
 describe('NewVideoComponent', () => {
+    const mockSpeakerService = {
+        getSpeakers(): Observable<any> {
+            return Observable.of(MockApiResponse_SpeakersIndex.records);
+        }
+    };
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [HttpModule, FormsModule],
             declarations: [NewVideoComponent],
-            providers: [VideoService, HttpService, AuthService, LanguagesService, CategoriesService]
+            providers: [VideoService, HttpService, AuthService, LanguagesService, CategoriesService,
+                {provide: SpeakerService, useValue: mockSpeakerService}
+            ]
         }).compileComponents().then(createComponent);
     }));
 
     it('should be created', () => {
-        expect(comp).toBeTruthy();
+        return expect(comp).toBeTruthy();
     });
 
     it('contains a file input element', () => {
-        expect(page.fileInput).toBeTruthy();
+        return expect(page.fileInput).toBeTruthy();
     });
 
     it('contains an empty textarea for each language plus one for the transcript text', () => {
         const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelectorAll('textarea').length).toEqual(2 + 1);
+        return expect(compiled.querySelectorAll('textarea').length).toEqual(2 + 1);
     });
 
     it('should have a dropdown with an option whose value is en-US and textContent is English (United States)', () => {
@@ -50,12 +59,11 @@ describe('NewVideoComponent', () => {
         const option = _.find(compiled.querySelector('select.video__transcription-language').options,
             {value: 'en-US'}) as HTMLOptionElement;
 
-        expect(option).toBeTruthy();
-        expect(option.textContent).toEqual('English (United States)');
+        return expect(option.textContent).toEqual('English (United States)');
     });
 
     it('should have a list of transcription transcriptionLanguages', () => {
-        expect(comp.transcriptionLanguages.length).toBeGreaterThan(0);
+        return expect(comp.transcriptionLanguages.length).toBeGreaterThan(0);
     });
 
     it('should change the selected option in the language dropdown when the selected language model changes', () => {
@@ -67,7 +75,7 @@ describe('NewVideoComponent', () => {
             {value: 'af-ZA'}) as HTMLOptionElement;
         fixture.detectChanges();
 
-        expect(option.selected).toBeTruthy();
+        return expect(option.selected).toBeTruthy();
     });
 
     it('should change the selected language model when an option is selected in the language dropdown', async () => {
@@ -75,46 +83,46 @@ describe('NewVideoComponent', () => {
         select.selectedIndex = _.findIndex(GoogleCloudSpeechLanguages, {code: 'af-ZA'});
         select.dispatchEvent(new Event('input'));
         fixture.detectChanges();
-        expect(comp.selectedTranscriptionLanguage.code).toEqual('af-ZA');
+        return expect(comp.selectedTranscriptionLanguage.code).toEqual('af-ZA');
     });
 
     it('should disable the transcribe button by default', () => {
-        expect(page.transcribeButton.disabled).toBeTruthy();
+        return expect(page.transcribeButton.disabled).toBeTruthy();
     });
 
     it('should enable the transcribe button after the video.file is populated', () => {
         comp.video.file = new File([], 'file');
         fixture.detectChanges();
-        expect(page.transcribeButton.disabled).toBeFalsy();
+        return expect(page.transcribeButton.disabled).toBeFalsy();
     });
 
     // it('should retrieve a list of languages', (done) => {
-    //     expect(comp.languages.length).toEqual(MockApiResponse_LanguagesIndex.count);
+    //     return expect(comp.languages.length).toEqual(MockApiResponse_LanguagesIndex.count);
     // });
 
     it('should list all possible video transcriptionLanguages', () => {
         const numberOfLanguages = 2;
-        expect(page.videoLanguageSelect.options.length).toEqual(numberOfLanguages);
+        return expect(page.videoLanguageSelect.options.length).toEqual(numberOfLanguages);
     });
 
     it('should retrieve a list of categories', () => {
-        expect(comp.categories.length).toEqual(MockApiResponse_CategoriesIndex.records.length);
+        return expect(comp.categories.length).toEqual(MockApiResponse_CategoriesIndex.records.length);
     });
 
     it('should display a disabled subcategories dropdown by default', () => {
-        expect(page.subcategoriesSelect.disabled).toEqual(true);
+        return expect(page.subcategoriesSelect.disabled).toEqual(true);
     });
 
     it('should set comp.selectedCategory after selecting a Category from the category dropdown', () => {
         select(page.categoriesSelect, 0, fixture);
-        expect(comp.selectedCategory).not.toBeNull();
+        return expect(comp.selectedCategory).not.toBeNull();
     });
 
     it('should set the video.subcategoryId to null after selecting a new category', () => {
         select(page.categoriesSelect, 0, fixture);
         select(page.subcategoriesSelect, 0, fixture);
         select(page.categoriesSelect, 2, fixture);
-        expect(comp.video.subcategoryId).toBeNull();
+        return expect(comp.video.subcategoryId).toBeNull();
     });
 
     it('should update the appropriate transcription model after entering text into the textarea', () => {
@@ -125,11 +133,20 @@ describe('NewVideoComponent', () => {
         englishTranscriptTextarea.value = testValue;
         englishTranscriptTextarea.dispatchEvent(new Event('input'));
         fixture.detectChanges();
-        expect(comp.video.transcripts[englishTranscriptModelIndex].text).toEqual(testValue);
+        return expect(comp.video.transcripts[englishTranscriptModelIndex].text).toEqual(testValue);
     });
 
     it('should initialize the transcripts in the component', () => {
-        expect(comp.video.transcripts.length).toEqual(comp.languages.length);
+        return expect(comp.video.transcripts.length).toEqual(comp.languages.length);
+    });
+
+    it('should display a list of speakers', () => {
+        return expect(page.speakerSelect.options.length).toEqual(MockApiResponse_SpeakersIndex.count);
+    });
+
+    it('should update the model speakerId after selecting a speaker', () => {
+        select(page.speakerSelect, 1, fixture);
+        return expect(+comp.video.speakerId).toEqual(MockApiResponse_SpeakersIndex.records[1].id);
     });
 });
 
@@ -157,6 +174,7 @@ class Page {
     videoLanguageSelect: HTMLSelectElement;
     categoriesSelect: HTMLSelectElement;
     subcategoriesSelect: HTMLSelectElement;
+    speakerSelect: HTMLSelectElement;
     indexCategoriesResponse: any;
     transcriptTextareaEls: HTMLTextAreaElement[];
 
@@ -170,6 +188,7 @@ class Page {
         this.videoLanguageSelect = fixture.debugElement.query(By.css('select.video__language')).nativeElement;
         this.categoriesSelect = fixture.debugElement.query(By.css('select.video__category')).nativeElement;
         this.subcategoriesSelect = fixture.debugElement.query(By.css('select.video__subcategory')).nativeElement;
+        this.speakerSelect = fixture.debugElement.query(By.css('select.video__speaker')).nativeElement;
         this.transcriptTextareaEls = fixture.debugElement.queryAll(By.css('textarea.transcript')).map(el => el.nativeElement);
     }
 }

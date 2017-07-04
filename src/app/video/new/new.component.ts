@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
+import { SpeakerService } from '../../speaker/speaker.service';
 
 interface Transcript {
     text: string;
@@ -36,6 +37,7 @@ export class NewVideoComponent implements OnInit, OnDestroy {
     transcriptionEmitted$: Observable<string>;
     categories: any[];
     selectedCategory: any = null;
+    speakers: any[];
 
     video: Video = {
         subcategoryId: null,
@@ -51,7 +53,8 @@ export class NewVideoComponent implements OnInit, OnDestroy {
     constructor(private videoService: VideoService,
                 private langService: LanguagesService,
                 private categoryService: CategoriesService,
-                private sanitizer: DomSanitizer) {
+                private sanitizer: DomSanitizer,
+                private speakerService: SpeakerService) {
         this.emitTranscriptSource = new Subject<string>();
         this.transcriptionEmitted$ = this.emitTranscriptSource.asObservable();
         this.selectedTranscriptionLanguage = _.find(this.transcriptionLanguages, {code: 'en-US'});
@@ -63,7 +66,8 @@ export class NewVideoComponent implements OnInit, OnDestroy {
                 this.languages = languages;
                 _.each(languages, l => this.video.transcripts.push({languageId: l.id, text: ''}));
             }),
-            this.categoryService.getCategories().subscribe((categories: any[]) => this.categories = categories)
+            this.categoryService.getCategories().subscribe((categories: any[]) => this.categories = _.sortBy(categories, 'name')),
+            this.speakerService.getSpeakers().subscribe(speakers => this.speakers = _.sortBy(speakers, ['name', 'location']))
         );
     }
 

@@ -2,15 +2,10 @@ import { BaseRequestOptions, Http, HttpModule, ResponseOptions } from '@angular/
 import { TestBed, inject } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 
-import { MockApiResponse_GendersIndex } from '../testing/mock-api-responses/genders-index';
 import { MockApiResponse_404 } from '../testing/mock-api-responses/404';
 import { SpeakerService } from './speaker.service';
 import { HttpService } from '../core/http.service';
 import { AuthService } from '../core/auth.service';
-
-import * as _ from 'lodash';
-import { Mock } from 'protractor/built/driverProviders';
-import { MockApiResponse_SpeakersLocalizedIndex } from '../testing/mock-api-responses/speakers-localized-index';
 
 describe('SpeakerService', () => {
     const mockErrorResponse = new Response(

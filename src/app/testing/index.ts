@@ -32,5 +32,6 @@ export function click(el: DebugElement | HTMLElement, eventObj: any = ButtonClic
 export function select<T>(el: HTMLSelectElement, index: number, fixture: ComponentFixture<T>) {
     el.selectedIndex = index;
     el.dispatchEvent(newEvent('input'));
+    el.dispatchEvent(newEvent('change'));
     fixture.detectChanges();
 }

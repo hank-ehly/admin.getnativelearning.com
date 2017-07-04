@@ -22,7 +22,7 @@ export class IndexSpeakerComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.subscriptions.push(
             this.speakerService.getSpeakers().subscribe(speakers => {
-                this.speakers = speakers;
+                this.speakers = _.sortBy(speakers, ['name', 'location']);
             })
         );
     }

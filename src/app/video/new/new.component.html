@@ -18,28 +18,28 @@
         <div class="form-group">
             <label for="video-language">Language</label>
             <select class="form-control video__language" id="video-language" name="language" [(ngModel)]="video.languageId" required>
-                <option *ngFor="let language of languages" [value]="language?.id">{{ language?.name }}</option>
+                <option *ngFor="let language of languages" [value]="language.id">{{ language.name }}</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="video-category">Category</label>
             <select class="form-control video__category" id="video-category" (input)="onSelectCategory($event)" required>
-                <option *ngFor="let category of categories" [value]="category?.id">{{ category?.name }}</option>
+                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="video-subcategory">Subcategory</label>
             <select class="form-control video__subcategory" [disabled]="!selectedCategory" id="video-subcategory" name="subcategoryId" [(ngModel)]="video.subcategoryId" required>
-                <option *ngFor="let subcategory of selectedCategory?.subcategories?.records" [value]="subcategory?.id">{{ subcategory?.name }}</option>
+                <option *ngFor="let subcategory of selectedCategory?.subcategories?.records" [value]="subcategory.id">{{ subcategory.name }}</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="video-speaker">Speaker</label>
-            <select id="video-speaker" class="form-control" name="speakerId" [(ngModel)]="video.speakerId" required>
-                <option value="">-</option>
+            <select id="video-speaker" class="form-control video__speaker" name="speakerId" [(ngModel)]="video.speakerId" required>
+                <option *ngFor="let speaker of speakers" [value]="speaker.id">{{ speaker.name }} ({{ speaker.location }})</option>
             </select>
         </div>
     </fieldset>
@@ -71,7 +71,7 @@
         <hr>
 
         <div class="row">
-            <p class="help-block">* Enclose collocation occurrences in curly braces for the original video language.</p>
+            <p class="help-block">* For the original video language, enclose collocation occurrences in curly braces.</p>
 
             <div class="col-xs-6 form-group" *ngFor="let transcript of video.transcripts; let i = index">
                 <label for="transcript-{{ transcript?.languageId }}">{{ nameOfLanguageForId(transcript?.languageId) }}</label>
