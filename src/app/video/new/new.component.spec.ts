@@ -96,9 +96,9 @@ describe('NewVideoComponent', () => {
         return expect(page.transcribeButton.disabled).toBeFalsy();
     });
 
-    // it('should retrieve a list of languages', (done) => {
-    //     return expect(comp.languages.length).toEqual(MockApiResponse_LanguagesIndex.count);
-    // });
+    it('should retrieve a list of languages', () => {
+        return expect(comp.languages.length).toEqual(MockApiResponse_LanguagesIndex.count);
+    });
 
     it('should list all possible video transcriptionLanguages', () => {
         const numberOfLanguages = 2;
