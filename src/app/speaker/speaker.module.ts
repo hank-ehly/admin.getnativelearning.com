@@ -5,12 +5,21 @@ import { ShowSpeakerComponent } from './show/show.component';
 import { SpeakerComponent } from './speaker.component';
 import { SpeakerFormComponent } from './form/form.component';
 import { SpeakerService } from './speaker.service';
+import { NewSpeakerComponent } from './new/new.component';
+import { EditSpeakerComponent } from './edit/edit.component';
 
 @NgModule({
     imports: [
         CommonModule
     ],
-    declarations: [IndexSpeakerComponent, ShowSpeakerComponent, SpeakerComponent, SpeakerFormComponent],
+    declarations: [
+        NewSpeakerComponent,
+        EditSpeakerComponent,
+        IndexSpeakerComponent,
+        ShowSpeakerComponent,
+        SpeakerComponent,
+        SpeakerFormComponent
+    ],
     exports: [IndexSpeakerComponent, ShowSpeakerComponent, SpeakerComponent, SpeakerFormComponent],
     providers: [SpeakerService]
 })
