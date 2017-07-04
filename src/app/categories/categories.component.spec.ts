@@ -11,18 +11,10 @@ describe('CategoriesComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [
-                HttpModule,
-                RouterTestingModule
-            ],
-            declarations: [
-                CategoriesComponent,
-            ],
-            providers: [
-                CategoriesService
-            ]
-        })
-            .compileComponents();
+            imports: [HttpModule, RouterTestingModule],
+            declarations: [CategoriesComponent],
+            providers: [CategoriesService]
+        }).compileComponents();
     }));
 
     beforeEach(() => {

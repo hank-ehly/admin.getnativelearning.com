@@ -14,7 +14,8 @@ import { NewVideoComponent } from './videos/new-video/new-video.component';
 import { SpeakerComponent } from './speaker/speaker.component';
 import { IndexSpeakerComponent } from './speaker/index/index.component';
 import { ShowSpeakerComponent } from './speaker/show/show.component';
-import { SpeakerFormComponent } from './speaker/form/form.component';
+import { NewSpeakerComponent } from './speaker/new/new.component';
+import { EditSpeakerComponent } from './speaker/edit/edit.component';
 
 const routes: Routes = [
     {
@@ -61,11 +62,11 @@ const routes: Routes = [
             },
             {
                 path: 'new',
-                component: SpeakerFormComponent
+                component: NewSpeakerComponent
             },
             {
                 path: ':id/edit',
-                component: SpeakerFormComponent
+                component: EditSpeakerComponent
             },
             {
                 path: ':id',

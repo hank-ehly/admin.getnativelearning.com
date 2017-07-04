@@ -24,7 +24,14 @@ import { RouterModule } from '@angular/router';
         SpeakerComponent,
         SpeakerFormComponent
     ],
-    exports: [IndexSpeakerComponent, ShowSpeakerComponent, SpeakerComponent, SpeakerFormComponent],
+    exports: [
+        NewSpeakerComponent,
+        EditSpeakerComponent,
+        IndexSpeakerComponent,
+        ShowSpeakerComponent,
+        SpeakerComponent,
+        SpeakerFormComponent
+    ],
     providers: [SpeakerService]
 })
 export class SpeakerModule {
