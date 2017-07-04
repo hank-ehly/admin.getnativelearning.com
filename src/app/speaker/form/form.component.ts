@@ -6,8 +6,14 @@ import { SpeakerService } from '../speaker.service';
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
 
+interface Language {
+    id: number
+    code: string
+    name: string
+}
+
 interface SpeakerLocalization {
-    languageId?: number
+    language: Language
     name?: string
     description?: string
     location?: string

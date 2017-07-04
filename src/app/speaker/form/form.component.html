@@ -1,31 +1,54 @@
 <form #form="ngForm">
+    <div class="form-group">
+        <div class="radio" *ngFor="let gender of genders">
+            <label>
+                <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id"
+                       [checked]="gender?.id === speaker?.gender.id">
+                {{ gender?.name | titlecase }}
+            </label>
+        </div>
+    </div>
+
     <fieldset>
-        <legend>Upload</legend>
+        <legend>Thumbnail Image</legend>
         <div class="form-group col-xs-6">
-            <label for="picture">Picture</label>
+            <label for="picture">Picture File</label>
             <input type="file" id="picture" name="picture" required>
-            <p class="help-block">Select an image file.</p>
+            <p class="help-block">Select an image.</p>
         </div>
         <div class="form-group col-xs-6">
             <h4>Preview:</h4>
             <img [src]="speaker?.pictureUrl" alt="speaker picture">
         </div>
-
-
     </fieldset>
 
-    <label *ngFor="let gender of genders">{{ gender?.name }}
-        <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id">
-    </label>
+    <fieldset *ngFor="let localization of speaker?.localizations">
+        <legend>{{ localization.language.name }}</legend>
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="description[{{ localization.language.id }}]">Description</label>
+                <textarea name="description[{{ localization.language.id }}]" class="description form-control"
+                          id="description[{{ localization.language.id }}]" [(ngModel)]="localization.description" cols="30"
+                          rows="5" required></textarea>
+            </div>
 
-    <div *ngFor="let localization of speaker?.localizations">
-        <label for="description[{{ localization.languageId }}]">Description</label>
-        <textarea name="description[{{ localization.languageId }}]" class="description" id="description[{{ localization.languageId }}]" [(ngModel)]="localization.description" cols="30" rows="10"></textarea>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="name[{{ localization.language.id }}]">Name</label>
+                    <input type="text" name="name[{{ localization.language.id }}]" class="name form-control" [(ngModel)]="localization.name"
+                           id="name[{{ localization.language.id }}]" required>
+                </div>
 
-        <label for="name[{{ localization.languageId }}]"></label>
-        <input type="text" name="name[{{ localization.languageId }}]" class="name" [(ngModel)]="localization.name" id="name[{{ localization.languageId }}]">
+                <div class="form-group">
+                    <label for="location[{{ localization.language.id }}]">Location</label>
+                    <input type="text" name="location[{{ localization.language.id }}]" class="location form-control"
+                           [(ngModel)]="localization.location" id="location[{{ localization.language.id }}]" required>
+                </div>
+            </div>
+        </div>
+    </fieldset>
 
-        <label for="location[{{ localization.languageId }}]"></label>
-        <input type="text" name="location[{{ localization.languageId }}]" class="location" [(ngModel)]="localization.location" id="location[{{ localization.languageId }}]">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Submit</button>
     </div>
 </form>
