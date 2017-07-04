@@ -11,6 +11,7 @@ import { VideosModule } from './videos/videos.module';
 import { CoreModule } from './core/core.module';
 import { LoginComponent } from './login/login.component';
 import { CategoriesModule } from './categories/categories.module';
+import { SpeakerModule } from './speaker/speaker.module';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import { CategoriesModule } from './categories/categories.module';
         AppRoutingModule,
         SharedModule,
         VideosModule,
-        CategoriesModule
+        CategoriesModule,
+        SpeakerModule
     ],
     bootstrap: [
         AppComponent

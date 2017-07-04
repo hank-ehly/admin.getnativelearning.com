@@ -11,6 +11,11 @@ import { EditCategoryComponent } from './categories/edit-category/edit-category.
 import { CategoriesIndexComponent } from './categories/categories-index/categories-index.component';
 import { EditSubcategoryComponent } from './categories/edit-subcategory/edit-subcategory.component';
 import { NewVideoComponent } from './videos/new-video/new-video.component';
+import { SpeakerComponent } from './speaker/speaker.component';
+import { IndexSpeakerComponent } from './speaker/index-speaker/index-speaker.component';
+import { ShowSpeakerComponent } from './speaker/show-speaker/show-speaker.component';
+import { NewSpeakerComponent } from './speaker/new-speaker/new-speaker.component';
+import { EditSpeakerComponent } from './speaker/edit-speaker/edit-speaker.component';
 
 const routes: Routes = [
     {
@@ -42,6 +47,30 @@ const routes: Routes = [
             {
                 path: ':category_id/subcategories/:subcategory_id/edit',
                 component: EditSubcategoryComponent
+            }
+        ]
+    },
+    {
+        path: 'speakers',
+        component: SpeakerComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        children: [
+            {
+                path: '',
+                component: IndexSpeakerComponent
+            },
+            {
+                path: ':id',
+                component: ShowSpeakerComponent
+            },
+            {
+                path: '/new',
+                component: NewSpeakerComponent
+            },
+            {
+                path: ':id/edit',
+                component: EditSpeakerComponent
             }
         ]
     },
