@@ -3,23 +3,23 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SpeakerComponent } from './speaker.component';
 
 describe('SpeakerComponent', () => {
-  let component: SpeakerComponent;
-  let fixture: ComponentFixture<SpeakerComponent>;
+    let component: SpeakerComponent;
+    let fixture: ComponentFixture<SpeakerComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SpeakerComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [SpeakerComponent]
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SpeakerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(SpeakerComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should be created', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(component).toBeTruthy();
+    });
 });

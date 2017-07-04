@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IndexSpeakerComponent } from './index-speaker/index-speaker.component';
-import { ShowSpeakerComponent } from './show-speaker/show-speaker.component';
+import { IndexSpeakerComponent } from './index/index.component';
+import { ShowSpeakerComponent } from './show/show.component';
 import { SpeakerComponent } from './speaker.component';
-import { SpeakerFormComponent } from './speaker-form/speaker-form.component';
+import { SpeakerFormComponent } from './form/form.component';
 
 @NgModule({
     imports: [

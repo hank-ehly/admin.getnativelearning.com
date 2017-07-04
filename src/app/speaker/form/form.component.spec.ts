@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SpeakerFormComponent } from './speaker-form.component';
+import { SpeakerFormComponent } from './form.component';
 
 describe('SpeakerFormComponent', () => {
   let component: SpeakerFormComponent;

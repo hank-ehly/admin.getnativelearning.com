@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShowSpeakerComponent } from './show-speaker.component';
+import { ShowSpeakerComponent } from './show.component';
 
 describe('ShowSpeakerComponent', () => {
     let component: ShowSpeakerComponent;

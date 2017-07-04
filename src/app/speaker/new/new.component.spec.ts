@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditSpeakerComponent } from './edit-speaker.component';
+import { NewSpeakerComponent } from './new.component';
 
-describe('EditSpeakerComponent', () => {
-    let component: EditSpeakerComponent;
-    let fixture: ComponentFixture<EditSpeakerComponent>;
+describe('NewSpeakerComponent', () => {
+    let component: NewSpeakerComponent;
+    let fixture: ComponentFixture<NewSpeakerComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EditSpeakerComponent]
+            declarations: [NewSpeakerComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(EditSpeakerComponent);
+        fixture = TestBed.createComponent(NewSpeakerComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

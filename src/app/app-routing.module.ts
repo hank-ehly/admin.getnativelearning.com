@@ -12,9 +12,9 @@ import { CategoriesIndexComponent } from './categories/categories-index/categori
 import { EditSubcategoryComponent } from './categories/edit-subcategory/edit-subcategory.component';
 import { NewVideoComponent } from './videos/new-video/new-video.component';
 import { SpeakerComponent } from './speaker/speaker.component';
-import { IndexSpeakerComponent } from './speaker/index-speaker/index-speaker.component';
-import { ShowSpeakerComponent } from './speaker/show-speaker/show-speaker.component';
-import { SpeakerFormComponent } from './speaker/speaker-form/speaker-form.component';
+import { IndexSpeakerComponent } from './speaker/index/index.component';
+import { ShowSpeakerComponent } from './speaker/show/show.component';
+import { SpeakerFormComponent } from './speaker/form/form.component';
 
 const routes: Routes = [
     {
