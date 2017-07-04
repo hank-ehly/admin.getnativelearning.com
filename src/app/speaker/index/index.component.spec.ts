@@ -1,8 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { IndexSpeakerComponent } from './index.component';
-import { MockApiResponse_SpeakersIndex } from '../../testing/mock-api-responses/speakers-index';
+import { ActivatedRoute, Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+
+import { MockApiResponse_SpeakersIndex } from '../../testing/mock-api-responses/speakers-index';
+import { IndexSpeakerComponent } from './index.component';
+import { RouterStub } from '../../testing/router-stub';
+import { AuthService } from '../../core/auth.service';
+import { HttpService } from '../../core/http.service';
+import { SpeakerService } from '../speaker.service';
+import { SpeakerModule } from '../speaker.module';
+
+import { Observable } from 'rxjs/Observable';
 
 let comp: IndexSpeakerComponent;
 let fixture: ComponentFixture<IndexSpeakerComponent>;
@@ -11,12 +20,17 @@ let page: Page;
 describe('IndexSpeakerComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [IndexSpeakerComponent]
+            imports: [SpeakerModule, HttpModule],
+            providers: [HttpService, AuthService, {provide: Router, useClass: RouterStub}, {provide: ActivatedRoute, useValue: {}}]
         }).compileComponents().then(createComponent);
     }));
 
     it('should be created', () => {
         return expect(comp).toBeTruthy();
+    });
+
+    it('should call the speaker service "getSpeakers" method', () => {
+        return expect(page.speakerIndexSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should obtain a list of speakers', () => {
@@ -59,9 +73,12 @@ class Page {
     speakerDescriptions: HTMLElement[];
     speakerLocations: HTMLElement[];
     speakerPictures: HTMLImageElement[];
+    speakerIndexSpy: jasmine.Spy;
 
     constructor() {
-        // spyOn speaker index
+        this.speakerIndexSpy = spyOn(fixture.debugElement.injector.get(SpeakerService), 'getSpeakers').and.returnValue(
+            Observable.of(MockApiResponse_SpeakersIndex.records)
+        );
     }
 
     refreshPageElements() {
@@ -69,6 +86,6 @@ class Page {
         this.speakerGenderNames = fixture.debugElement.queryAll(By.css('.gender')).map(e => e.nativeElement);
         this.speakerDescriptions = fixture.debugElement.queryAll(By.css('.description')).map(e => e.nativeElement);
         this.speakerLocations = fixture.debugElement.queryAll(By.css('.location')).map(e => e.nativeElement);
-        this.speakerPictures = fixture.debugElement.queryAll(By.css('.id')).map(e => e.nativeElement);
+        this.speakerPictures = fixture.debugElement.queryAll(By.css('.picture')).map(e => e.nativeElement);
     }
 }

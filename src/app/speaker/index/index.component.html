@@ -1,3 +1,23 @@
-<p>
-    index works!
-</p>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Picture</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Description</th>
+        <th>Location</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tr *ngFor="let speaker of speakers">
+        <td><img class="picture" [src]="speaker.picture_url" [alt]="speaker.name" width="50" height="50"></td>
+        <td class="name">{{ speaker.name }}</td>
+        <td class="gender">{{ speaker.gender.name | titlecase }}</td>
+        <td class="description">{{ speaker.description }}</td>
+        <td class="location">{{ speaker.location }}</td>
+        <td>
+            <button type="button" class="btn btn-default btn-xs btn-block" [routerLink]="[speaker.id, 'edit']">Edit</button>
+            <button type="button" class="btn btn-danger btn-xs btn-block">Delete</button>
+        </td>
+    </tr>
+</table>

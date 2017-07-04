@@ -15,6 +15,10 @@ export class SpeakerService {
         return this.http.request('/genders', {method: RequestMethod.Get}).pluck('records');
     }
 
+    getSpeakers(): Observable<any[]> {
+        return this.http.request('/speakers', {method: RequestMethod.Get}).pluck('records');
+    }
+
     getSpeaker(id: number): Observable<any> {
         return this.http.request(`/speakers/${id}`, {method: RequestMethod.Get});
     }
