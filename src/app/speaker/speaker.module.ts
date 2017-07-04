@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NewSpeakerComponent } from './new-speaker/new-speaker.component';
 import { IndexSpeakerComponent } from './index-speaker/index-speaker.component';
 import { ShowSpeakerComponent } from './show-speaker/show-speaker.component';
 import { SpeakerComponent } from './speaker.component';
-import { EditSpeakerComponent } from './edit-speaker/edit-speaker.component';
+import { SpeakerFormComponent } from './speaker-form/speaker-form.component';
 
 @NgModule({
     imports: [
         CommonModule
     ],
-    declarations: [NewSpeakerComponent, IndexSpeakerComponent, ShowSpeakerComponent, SpeakerComponent, EditSpeakerComponent],
-    exports: [NewSpeakerComponent, IndexSpeakerComponent, ShowSpeakerComponent, SpeakerComponent, EditSpeakerComponent]
+    declarations: [IndexSpeakerComponent, ShowSpeakerComponent, SpeakerComponent, SpeakerFormComponent],
+    exports: [IndexSpeakerComponent, ShowSpeakerComponent, SpeakerComponent, SpeakerFormComponent]
 })
 export class SpeakerModule {
 }
