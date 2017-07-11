@@ -4,8 +4,7 @@
         <div class="form-group">
             <div class="radio" *ngFor="let gender of genders">
                 <label>
-                    <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id"
-                           [checked]="gender?.id === speaker?.gender.id">
+                    <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id" [checked]="gender?.id === speaker?.gender.id">
                     {{ gender?.name | titlecase }}
                 </label>
             </div>

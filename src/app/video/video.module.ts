@@ -7,6 +7,8 @@ import { NgModule } from '@angular/core';
 import { VideoService } from './video.service';
 import { VideoComponent } from './video.component';
 import { NewVideoComponent } from './new/new.component';
+import { VideoFormComponent } from './form/form.component';
+import { EditVideoComponent } from './edit/edit.component';
 
 @NgModule({
     imports: [
@@ -17,11 +19,14 @@ import { NewVideoComponent } from './new/new.component';
     ],
     declarations: [
         VideoComponent,
-        NewVideoComponent
+        NewVideoComponent,
+        VideoFormComponent,
+        EditVideoComponent
     ],
     providers: [
         VideoService
-    ]
+    ],
+    exports: [VideoFormComponent, EditVideoComponent, NewVideoComponent]
 })
 export class VideoModule {
 }

@@ -1,6 +1,7 @@
 import { RequestMethod, URLSearchParams } from '@angular/http';
 import { Injectable } from '@angular/core';
 
+import { CreateVideoRequestBody } from './new/create-video-request-body';
 import { HttpService } from '../core/http.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -25,5 +26,20 @@ export class VideoService {
         };
 
         return this.http.request('/videos/transcribe', options).pluck('transcription');
+    }
+
+    createVideo(file: File, metadata: CreateVideoRequestBody): Observable<any> {
+        const formData = new FormData();
+        formData.append('video', file, file.name);
+        formData.append('metadata', JSON.stringify(metadata));
+        return this.http.request('/videos', {method: RequestMethod.Post, body: formData}).pluck('id');
+    }
+
+    getVideo(id: number): Observable<any> {
+        return this.http.request(`/videos/${id}`, {method: RequestMethod.Get});
+    }
+
+    getVideoLocalizations(id: number): Observable<any[]> {
+        return this.http.request(`/videos/${id}/videos_localized`, {method: RequestMethod.Get}).pluck('records');
     }
 }
