@@ -17,8 +17,27 @@ import { ShowSpeakerComponent } from './speaker/show/show.component';
 import { NewSpeakerComponent } from './speaker/new/new.component';
 import { EditSpeakerComponent } from './speaker/edit/edit.component';
 import { EditVideoComponent } from './video/edit/edit.component';
+import { CollocationComponent } from './collocation/collocation.component';
+import { IndexCollocationComponent } from './collocation/index/index.component';
+import { EditCollocationComponent } from './collocation/edit/edit.component';
 
 const routes: Routes = [
+    {
+        path: 'collocations',
+        component: CollocationComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        children: [
+            {
+                path: '',
+                component: IndexCollocationComponent
+            },
+            {
+                path: ':id/edit',
+                component: EditCollocationComponent
+            }
+        ]
+    },
     {
         path: 'videos',
         component: VideoComponent,

@@ -1,0 +1,48 @@
+<form #form="ngForm">
+    <div class="row">
+        <div class="form-group col-sm-3">
+            <label for="collocation[text]">Collocation Occurrence Text</label>
+            <input class="form-control" type="text" name="collocation[text]" id="collocation[text]" [value]="collocation?.text" readonly>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-sm-3">
+            <label for="collocation[ipa_spelling]">IPA Spelling</label>
+            <input class="form-control" type="text" name="collocation[ipa_spelling]" id="collocation[ipa_spelling]" [value]="collocation?.ipa_spelling" required>
+            <p class="help-block"><a href="http://lingorado.com/ipa/" target="_blank">Lookup <i class="fa fa-external-link"></i></a></p>
+        </div>
+    </div>
+
+    <fieldset>
+        <legend>Usage Examples</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="usage-examples">
+                    <li *ngFor="let usageExample of collocation?.usage_examples?.records; let i = index">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label for="usage_example[{{ i }}]" class="sr-only"></label>
+                                <input type="text" class="form-control" name="usage_example[{{ i }}]" id="usage_example[{{ i }}]" [value]="usageExample.text" required>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-danger" type="button">Delete</button>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="form-group">
+                    <button class="btn btn-default" (click)="addUsageExample()"><i class="fa fa-plus"></i> Add Usage Example</button>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <button type="submit" [disabled]="form.invalid" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

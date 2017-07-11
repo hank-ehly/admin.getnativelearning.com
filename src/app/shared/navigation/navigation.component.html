@@ -235,7 +235,7 @@
                 <li>
                     <a><i class="fa fa-globe fa-fw"></i> Collocation Occurrences<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a><i class="fa fa-list"></i> List</a></li>
+                        <li><a [routerLink]="['collocations']"><i class="fa fa-list"></i> List</a></li>
                     </ul>
                 </li>
                 <li>
@@ -246,10 +246,10 @@
                     </ul>
                 </li>
                 <li>
-                    <a [routerLink]="'categories'"><i class="fa fa-list fa-fw"></i> Categories</a>
+                    <a [routerLink]="['categories']"><i class="fa fa-list fa-fw"></i> Categories</a>
                 </li>
                 <li>
-                    <a [routerLink]="'users'"><i class="fa fa-users fa-fw"></i> Users</a>
+                    <a [routerLink]="['users']"><i class="fa fa-users fa-fw"></i> Users</a>
                 </li>
             </ul>
         </div>

@@ -1,0 +1,24 @@
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Text</th>
+            <th>IPA</th>
+            <th># Usage Examples</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let collocation of collocations">
+            <td>{{ collocation.id }}</td>
+            <td>{{ collocation.text }}</td>
+            <td>{{ collocation.ipa_spelling }}</td>
+            <td>{{ collocation.usage_examples.count }}</td>
+            <td>
+                <button type="button" class="btn btn-default btn-xs btn-block" [routerLink]="[collocation.id, 'edit']">Edit</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

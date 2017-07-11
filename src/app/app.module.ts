@@ -12,6 +12,7 @@ import { CoreModule } from './core/core.module';
 import { LoginComponent } from './login/login.component';
 import { CategoriesModule } from './categories/categories.module';
 import { SpeakerModule } from './speaker/speaker.module';
+import { CollocationModule } from './collocation/collocation.module';
 
 @NgModule({
     declarations: [
@@ -28,7 +29,8 @@ import { SpeakerModule } from './speaker/speaker.module';
         SharedModule,
         VideoModule,
         CategoriesModule,
-        SpeakerModule
+        SpeakerModule,
+        CollocationModule
     ],
     bootstrap: [
         AppComponent
