@@ -114,10 +114,10 @@
             </div>
 
             <div class="col-sm-6 form-group" *ngFor="let transcript of video?.transcripts; let i = index">
-                <label for="transcript[{{ transcript['language']['code'] }}]">{{ transcript['language']['name'] }}</label>
-                <textarea name="transcript[{{ transcript['language']['code'] }}]"
+                <label for="transcript[{{ transcript.language_id }}]">{{ nameOfLanguageForId(transcript.language_id) }}</label>
+                <textarea name="transcript[{{ transcript.language_id }}]"
                           [(ngModel)]="transcript.text"
-                          id="transcript[{{ transcript['language']['code'] }}]"
+                          id="transcript[{{ transcript.language_id }}]"
                           cols="30"
                           rows="10"
                           class="form-control transcript"

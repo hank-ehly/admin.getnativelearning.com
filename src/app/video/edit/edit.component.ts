@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { LanguagesService } from '../../core/languages.service';
 import { VideoService } from '../video.service';
 import { Video } from '../../models/video';
 
@@ -20,12 +21,21 @@ export class EditVideoComponent implements OnInit {
         descriptions: []
     };
 
-    constructor(private videoService: VideoService, private route: ActivatedRoute) {
+    constructor(private videoService: VideoService, private route: ActivatedRoute, private lang: LanguagesService) {
     }
 
     ngOnInit() {
-        this.videoService.getVideo(this.route.snapshot.params['id']).concatMap(video => {
-            const transcripts = _.each(video.transcripts.records, r => _.unset(r, 'collocation_occurrences'));
+        const cache: any = {};
+        this.lang.getLanguages().concatMap(languages => {
+            _.set(cache, 'languages', languages);
+            return this.videoService.getVideo(this.route.snapshot.params['id']);
+        }).concatMap(video => {
+            const transcripts = _.each(video.transcripts.records, r => {
+                r.language_id = _.find(cache.languages, {code: r.language.code})['id'];
+                _.unset(r, 'collocation_occurrences');
+                _.unset(r, 'language');
+                return r;
+            });
             this.video = {
                 speaker_id: video.speaker.id,
                 language_id: video.language.id,
@@ -35,7 +45,6 @@ export class EditVideoComponent implements OnInit {
                 video_url: video.video_url,
                 is_public: video.is_public
             };
-            console.log(video);
             return this.videoService.getVideoLocalizations(this.route.snapshot.params['id']);
         }).subscribe(videosLocalized => {
             this.video.descriptions = videosLocalized;
