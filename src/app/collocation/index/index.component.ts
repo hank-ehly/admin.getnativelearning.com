@@ -1,30 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { CollocationOccurrence } from '../../models/collocation-occurrence';
+import { CollocationService } from '../collocation.service';
+
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'gn-collocation-index',
     templateUrl: './index.component.html',
     styleUrls: ['./index.component.scss']
 })
-export class IndexCollocationComponent implements OnInit {
-    collocations: CollocationOccurrence[] = [
-        {
-            id: 1,
-            text: 'funny thing',
-            ipa_spelling: 'ˈfʌni θɪŋ',
-            usage_examples: {
-                records: [],
-                count: 2
-            }
-        }
-    ];
+export class IndexCollocationComponent implements OnDestroy {
+    collocations: CollocationOccurrence[];
+    videoId: number;
+    private subscriptions: Subscription[] = [];
 
-    constructor() {
+    constructor(private collocationService: CollocationService) {
     }
 
-    ngOnInit() {
-        console.log('***');
+    ngOnDestroy(): void {
+        _.invokeMap(this.subscriptions, 'unsubscribe');
+    }
+
+    onSubmit(): void {
+        this.subscriptions.push(
+            this.collocationService.getCollocationOccurrencesForVideoId(this.videoId).subscribe(collocations => {
+                this.collocations = collocations;
+            }, async (e: Response) => {
+                this.collocations = null;
+                window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+            })
+        );
     }
 
 }

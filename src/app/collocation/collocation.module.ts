@@ -7,11 +7,13 @@ import { IndexCollocationComponent } from './index/index.component';
 import { CollocationFormComponent } from './form/form.component';
 import { EditCollocationComponent } from './edit/edit.component';
 import { FormsModule } from '@angular/forms';
+import { CollocationService } from './collocation.service';
 
 @NgModule({
     imports: [CommonModule, RouterModule, FormsModule],
     declarations: [CollocationComponent, IndexCollocationComponent, CollocationFormComponent, EditCollocationComponent],
-    exports: [CollocationComponent, IndexCollocationComponent, CollocationFormComponent, EditCollocationComponent]
+    exports: [CollocationComponent, IndexCollocationComponent, CollocationFormComponent, EditCollocationComponent],
+    providers: [CollocationService]
 })
 export class CollocationModule {
 }

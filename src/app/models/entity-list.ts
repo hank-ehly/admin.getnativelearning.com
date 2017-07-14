@@ -6,6 +6,6 @@
  */
 
 export interface EntityList<T> {
-    records: T[]
-    count: number
+    records?: T[]
+    count?: number
 }

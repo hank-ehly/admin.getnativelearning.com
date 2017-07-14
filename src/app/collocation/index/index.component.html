@@ -1,4 +1,20 @@
-<div class="table-responsive">
+<form #form="ngForm" (submit)="onSubmit()">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="video_id">Video ID</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" [(ngModel)]="videoId" name="video_id" id="video_id" placeholder="Ex. 123" required>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" [disabled]="form.invalid">Search</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive" *ngIf="collocations">
     <table class="table table-striped">
         <thead>
         <tr>

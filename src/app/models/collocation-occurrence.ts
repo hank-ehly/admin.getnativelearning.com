@@ -10,8 +10,7 @@ import { UsageExample } from './usage-example';
 import { Entity } from './entity';
 
 export interface CollocationOccurrence extends Entity {
-    id: number
-    text: string
-    ipa_spelling: string
-    usage_examples: EntityList<UsageExample>
+    text?: string
+    ipa_spelling?: string
+    usage_examples?: EntityList<UsageExample>
 }

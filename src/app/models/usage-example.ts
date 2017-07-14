@@ -8,5 +8,5 @@
 import { Entity } from './entity';
 
 export interface UsageExample extends Entity {
-    text: string
+    text?: string
 }
