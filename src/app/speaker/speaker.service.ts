@@ -26,4 +26,12 @@ export class SpeakerService {
     getSpeakerLocalizations(id: number): Observable<any[]> {
         return this.http.request(`/speakers/${id}/speakers_localized`, {method: RequestMethod.Get}).pluck('records');
     }
+
+    createSpeaker(body: any): Observable<any> {
+        return this.http.request('/speakers', {method: RequestMethod.Post, body: body});
+    }
+
+    updateSpeaker(id: number, body: any): Observable<any> {
+        return this.http.request('/speakers/' + id, {method: RequestMethod.Patch, body: body});
+    }
 }

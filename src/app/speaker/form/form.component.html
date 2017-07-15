@@ -1,26 +1,13 @@
-<form #form="ngForm">
+<form #form="ngForm" (submit)="onSubmit()">
     <fieldset>
         <legend>Gender</legend>
         <div class="form-group">
             <div class="radio" *ngFor="let gender of genders">
                 <label>
-                    <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id" [checked]="gender?.id === speaker?.gender.id">
+                    <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id" [checked]="gender?.id === speaker?.gender.id" required>
                     {{ gender?.name | titlecase }}
                 </label>
             </div>
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Thumbnail Image</legend>
-        <div class="form-group col-xs-6">
-            <label for="picture">Picture File</label>
-            <input type="file" id="picture" name="picture" required>
-            <p class="help-block">Select an image.</p>
-        </div>
-        <div class="form-group col-xs-6">
-            <h4>Preview:</h4>
-            <img [src]="speaker?.pictureUrl" alt="speaker picture">
         </div>
     </fieldset>
 

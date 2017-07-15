@@ -1,1 +1,20 @@
+<form #pictureForm="ngForm">
+    <fieldset>
+        <legend>Thumbnail Image</legend>
+        <div class="form-group col-xs-6">
+            <label for="picture">Picture File</label>
+            <input type="file" id="picture" name="picture" required>
+            <p class="help-block">Select an image.</p>
+        </div>
+        <div class="form-group col-xs-6" *ngIf="speaker?.pictureUrl">
+            <h4>Preview:</h4>
+            <img [src]="speaker?.pictureUrl" alt="speaker picture">
+        </div>
+    </fieldset>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="pictureForm.invalid">Upload</button>
+    </div>
+</form>
+
 <gn-speaker-form [speaker]="speaker"></gn-speaker-form>

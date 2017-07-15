@@ -7,8 +7,9 @@
 
 import { SpeakerLocalization } from './speaker-localization';
 import { Gender } from './gender';
+import { Entity } from './entity';
 
-export interface Speaker {
+export interface Speaker extends Entity {
     gender?: Gender
     pictureUrl?: string
     localizations?: SpeakerLocalization[]

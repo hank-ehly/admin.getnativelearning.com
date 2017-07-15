@@ -6,6 +6,7 @@ import { Gender } from '../../models/gender';
 
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'gn-speaker-form',
@@ -13,11 +14,11 @@ import * as _ from 'lodash';
     styleUrls: ['./form.component.scss']
 })
 export class SpeakerFormComponent implements OnInit, OnDestroy {
+    @Input() speaker: Speaker;
     genders: Gender[];
     subscriptions: Subscription[] = [];
-    @Input() speaker: Speaker;
 
-    constructor(private speakerService: SpeakerService) {
+    constructor(private speakerService: SpeakerService, private router: Router) {
     }
 
     ngOnInit(): void {
@@ -27,6 +28,45 @@ export class SpeakerFormComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        _.each(this.subscriptions, s => s.unsubscribe());
+        _.invokeMap(this.subscriptions, 'unsubscribe');
+    }
+
+    onSubmit(): void {
+        const body = {
+            gender_id: this.speaker.gender.id,
+            localizations: []
+        };
+
+        for (const localization of this.speaker.localizations) {
+            const index = body.localizations.push({
+                language_id: localization.language.id,
+                description: localization.description,
+                location: localization.location,
+                name: localization.name
+            });
+
+            if (_.has(localization, 'id')) {
+                body.localizations[index - 1].id = localization['id'];
+            }
+        }
+
+        let subscription;
+        if (_.has(this.speaker, 'id')) {
+            subscription = this.speakerService.updateSpeaker(this.speaker.id, body).subscribe(null, this.handleError);
+        } else {
+            subscription = this.speakerService.createSpeaker(body).subscribe(this.handleCreatedSpeaker.bind(this), this.handleError);
+        }
+
+        this.subscriptions.push(subscription);
+    }
+
+    private handleCreatedSpeaker(res: any) {
+        if (res && res.id) {
+            this.router.navigate(['speakers', res.id, 'edit']);
+        }
+    }
+
+    private async handleError(e: Response) {
+        window.alert(_.get(_.first(await e.json()), 'message', 'error'));
     }
 }
