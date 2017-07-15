@@ -41,11 +41,8 @@ export class CollocationFormComponent implements OnDestroy {
     onSubmitCollocationForm(): void {
         const body = _.pick(this.model, ['ipa_spelling']);
         const id = this.route.snapshot.params.id;
-        this.subscriptions.push(
-            this.collocationService.updateCollocationOccurrence(id, body).subscribe(null, async (e: Response) => {
-                window.alert(_.get(_.first(await e.json()), 'message', 'error'));
-            })
-        );
+        const subscription = this.collocationService.updateCollocationOccurrence(id, body).subscribe(null, this.errorResponse.bind(this));
+        this.subscriptions.push(subscription);
     }
 
     onSubmitUsageExampleAtIndex(i: number): void {
@@ -53,26 +50,38 @@ export class CollocationFormComponent implements OnDestroy {
         const body = {text: this.model.usage_examples.records[i].text};
         if (_.has(this.model.usage_examples.records[i], 'id')) {
             const id = _.get<number>(this.model.usage_examples.records[i], 'id');
-            subscription = this.collocationService.updateUsageExample(id, body).subscribe(null, async (e: Response) => {
-                window.alert(_.get(_.first(await e.json()), 'message', 'error'));
-            });
+            subscription = this.collocationService.updateUsageExample(id, body).subscribe(null, this.errorResponse.bind(this));
         } else {
             const id = this.route.snapshot.params.id;
             subscription = this.collocationService.createUsageExample(id, body).subscribe(example => {
                 if (example) {
                     this.model.usage_examples.records[i] = example;
                 }
-            }, async (e: Response) => {
-                window.alert(_.get(_.first(await e.json()), 'message', 'error'));
-            });
+            }, this.errorResponse.bind(this));
         }
         this.subscriptions.push(subscription);
     }
 
     onDeleteUsageExampleAtIndex(i: number): void {
         if (!_.has(this.model.usage_examples.records[i], 'id')) {
-            this.model.usage_examples.records.splice(i, 1);
-            this.model.usage_examples.count--;
+            return this.removeUsageExampleAtIndex(i);
         }
+        if (!window.confirm('Press OK to delete usage example.')) {
+            return;
+        }
+
+        const subscription = this.collocationService.deleteUsageExample(this.model.usage_examples.records[i].id)
+            .subscribe(this.removeUsageExampleAtIndex.bind(this, i), this.errorResponse.bind(this));
+
+        this.subscriptions.push(subscription);
+    }
+
+    private removeUsageExampleAtIndex(i: number): void {
+        this.model.usage_examples.records.splice(i, 1);
+        this.model.usage_examples.count--;
+    }
+
+    private async errorResponse(e: Response) {
+        window.alert(_.get(_.first(await e.json()), 'message', 'error'));
     }
 }

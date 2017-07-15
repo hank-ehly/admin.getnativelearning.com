@@ -43,4 +43,10 @@ export class CollocationService {
             body: body
         });
     }
+
+    deleteUsageExample(id: number): Observable<any> {
+        return this.http.request(`/usage_examples/${id}`, {
+            method: RequestMethod.Delete
+        });
+    }
 }
