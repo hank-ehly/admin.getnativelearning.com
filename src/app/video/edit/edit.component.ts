@@ -57,6 +57,7 @@ export class EditVideoComponent implements OnInit, OnDestroy {
             };
             return this.videoService.getVideoLocalizations(this.route.snapshot.params['id']);
         }).subscribe(videosLocalized => {
+            console.log(videosLocalized, this.video.localizations);
             for (const localization of videosLocalized) {
                 const editVideoObject = _.find(this.video.localizations, {language_id: localization.language_id});
                 editVideoObject.id = localization.id;

@@ -1,0 +1,80 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Search Conditions
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="search">Search</label>
+                            <input type="search" name="search" id="search" class="form-control" (input)="onInputQ($event)">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="language">Language</label>
+                            <select name="language" id="language" class="form-control" (change)="onLanguageChange($event)">
+                                <option [value]="''">- Unselected -</option>
+                                <option *ngFor="let language of languages" [value]="language.code">{{ language.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="subcategory">Category - Subcategory</label>
+                            <select name="subcategory" id="subcategory" class="form-control" (change)="onSubcategoryIdChange($event)">
+                                <option [value]="''">- Unselected -</option>
+                                <ng-container *ngFor="let category of categories">
+                                    <option *ngFor="let subcategory of category.subcategories.records" [value]="subcategory.id">{{ category.name }} - {{ subcategory.name }}</option>
+                                </ng-container>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Search Results
+    </div>
+    <div class="panel-body">
+        <p class="help-block" *ngIf="!(videosEmitted$ | async)">No results. Use the form above to change the search conditions.</p>
+        <div class="table-responsive" *ngIf="videosEmitted$ | async">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Thumbnail</th>
+                    <th>id</th>
+                    <th>Speaker</th>
+                    <th>Subcategory</th>
+                    <th>Loops</th>
+                    <th>Length</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let video of videosEmitted$ | async">
+                    <td><img [src]="video.picture_url" [alt]="video.id" class="video__picture"></td>
+                    <td>{{ video.id }}</td>
+                    <td>{{ video.speaker.name }}</td>
+                    <td>{{ video.subcategory.name }}</td>
+                    <td>{{ video.loop_count }}</td>
+                    <td>{{ video.length }}</td>
+                    <td>{{ video.created_at | date }}</td>
+                    <td>
+                        <button class="btn btn-xs btn-default btn-block" [routerLink]="['/videos', video.id, 'edit']">Edit</button>
+                        <button class="btn btn-xs btn-danger btn-block">Delete</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn btn-default" (click)="onClickLoadMore()" *ngIf="(videosEmitted$ | async) && !(loading$ | async)">Load More</button>
+        <i class="fa fa-circle-o-notch fa-spin" *ngIf="loading$ | async"></i>
+    </div>
+</div>

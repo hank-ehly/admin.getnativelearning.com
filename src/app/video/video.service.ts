@@ -28,6 +28,21 @@ export class VideoService {
         return this.http.request('/videos/transcribe', options).pluck('transcription');
     }
 
+    getVideos(params: any): Observable<any> {
+        const search = new URLSearchParams();
+        search.append('interface_lang', 'en');
+        search.append('include_private', 'true');
+
+        const whitelist = ['lang', 'count', 'max_id', 'subcategory_id', 'category_id', 'q', 'cued_only'];
+        for (const key in params) {
+            if (params.hasOwnProperty(key) && whitelist.includes(key) && params[key]) {
+                search.append(key, params[key]);
+            }
+        }
+
+        return this.http.request('/videos', {method: RequestMethod.Get, search: search}).pluck('records');
+    }
+
     createVideo(file: File, body: any): Observable<any> {
         return this.http.request('/videos', {method: RequestMethod.Post, body: body}).pluck('id');
     }

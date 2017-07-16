@@ -21,6 +21,7 @@ import { CollocationComponent } from './collocation/collocation.component';
 import { IndexCollocationComponent } from './collocation/index/index.component';
 import { EditCollocationComponent } from './collocation/edit/edit.component';
 import { TranscribeVideoComponent } from './video/transcribe/transcribe.component';
+import { IndexVideoComponent } from './video/index/index.component';
 
 const routes: Routes = [
     {
@@ -45,6 +46,10 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
+            {
+                path: '',
+                component: IndexVideoComponent
+            },
             {
                 path: 'new',
                 component: NewVideoComponent
