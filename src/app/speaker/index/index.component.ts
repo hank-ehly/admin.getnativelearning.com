@@ -30,4 +30,21 @@ export class IndexSpeakerComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         _.invokeMap(this.subscriptions, 'unsubscribe');
     }
+
+    onDeleteSpeaker(speaker: any): void {
+        if (window.confirm('Click OK to delete speaker')) {
+            this.subscriptions.push(
+                this.speakerService.deleteSpeaker(speaker.id).subscribe(this.handleDeleteSuccess.bind(this, speaker), this.handleError)
+            );
+        }
+    }
+
+    private handleDeleteSuccess(speaker: any): void {
+        this.speakers.splice(_.findIndex(this.speakers, {id: speaker.id}), 1);
+    }
+
+    private async handleError(e: Response) {
+        console.log(e);
+        window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+    }
 }

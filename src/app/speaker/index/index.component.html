@@ -17,7 +17,7 @@
         <td class="location">{{ speaker.location }}</td>
         <td>
             <button type="button" class="btn btn-default btn-xs btn-block" [routerLink]="[speaker.id, 'edit']">Edit</button>
-            <button type="button" class="btn btn-danger btn-xs btn-block">Delete</button>
+            <button type="button" class="btn btn-danger btn-xs btn-block" (click)="onDeleteSpeaker(speaker)">Delete</button>
         </td>
     </tr>
 </table>

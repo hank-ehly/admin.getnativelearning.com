@@ -34,4 +34,8 @@ export class SpeakerService {
     updateSpeaker(id: number, body: any): Observable<any> {
         return this.http.request('/speakers/' + id, {method: RequestMethod.Patch, body: body});
     }
+
+    deleteSpeaker(id: number): Observable<any> {
+        return this.http.request('/speakers/' + id, {method: RequestMethod.Delete});
+    }
 }

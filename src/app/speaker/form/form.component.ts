@@ -60,13 +60,13 @@ export class SpeakerFormComponent implements OnInit, OnDestroy {
         this.subscriptions.push(subscription);
     }
 
-    private handleCreatedSpeaker(res: any) {
+    private handleCreatedSpeaker(res: any): void {
         if (res && res.id) {
             this.router.navigate(['speakers', res.id, 'edit']);
         }
     }
 
     private async handleError(e: Response) {
-        window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+        return window.alert(_.get(_.first(await e.json()), 'message', 'error'));
     }
 }
