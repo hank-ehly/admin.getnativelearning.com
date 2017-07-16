@@ -1,19 +1,20 @@
-<form #pictureForm="ngForm">
+<form #pictureForm="ngForm" (submit)="onSubmit()">
     <fieldset>
         <legend>Thumbnail Image</legend>
         <div class="form-group col-xs-6">
             <label for="picture">Picture File</label>
-            <input type="file" id="picture" name="picture" required>
+            <input type="file" id="picture" name="picture" (change)="onPictureChange($event)" required>
             <p class="help-block">Select an image.</p>
         </div>
         <div class="form-group col-xs-6" *ngIf="speaker?.pictureUrl">
             <h4>Preview:</h4>
-            <img [src]="speaker?.pictureUrl" alt="speaker picture">
+            <img [src]="speaker?.pictureUrl" class="speaker__picture-preview" alt="speaker picture">
+            <p>* Due to remote caching, uploaded results may not be shown immediately.</p>
         </div>
     </fieldset>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary" [disabled]="pictureForm.invalid">Upload</button>
+        <button type="submit" class="btn btn-primary">Upload</button>
     </div>
 </form>
 

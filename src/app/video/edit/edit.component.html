@@ -1,1 +1,32 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Upload Video File</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="video">Video</label>
+                    <input type="file" id="video" name="file" (change)="onFileChange($event)" required>
+                    <p class="help-block">Select a video file.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h4>Video Preview</h4>
+                <video controls [src]="video?.video_url" *ngIf="video?.video_url" width="300"></video>
+                <p class="help-block" *ngIf="!video?.video_url">No preview available.</p>
+            </div>
+            <div class="col-lg-4">
+                <h4>Picture Preview</h4>
+                <img class="video-thumbnail" [src]="video?.picture_url" *ngIf="video?.picture_url" alt="video picture">
+                <p class="help-block" *ngIf="!video?.picture_url">No preview available.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <button class="btn btn-primary" [disabled]="!video.file || isRequestInProgress" (click)="onClickUpload()">Upload</button>
+                <i class="fa fa-circle-o-notch fa-spin" *ngIf="isRequestInProgress"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
 <gn-video-form [video]="video"></gn-video-form>

@@ -12,9 +12,9 @@ import { Subscription } from 'rxjs/Subscription';
     styleUrls: ['./index.component.scss']
 })
 export class IndexCollocationComponent implements OnDestroy {
-    collocations: CollocationOccurrence[];
+    collocations: CollocationOccurrence[] = [];
     videoId: number;
-    private subscriptions: Subscription[] = [];
+    subscriptions: Subscription[] = [];
 
     constructor(private collocationService: CollocationService) {
     }
@@ -28,10 +28,9 @@ export class IndexCollocationComponent implements OnDestroy {
             this.collocationService.getCollocationOccurrencesForVideoId(this.videoId).subscribe(collocations => {
                 this.collocations = collocations;
             }, async (e: Response) => {
-                this.collocations = null;
-                window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+                this.collocations = [];
+                window.alert(_.get(_.first(await e.json()), 'message', 'An unexpected error has occurred. Check console for details.'));
             })
         );
     }
-
 }

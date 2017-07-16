@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Transcribe
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="file">Video</label>
+                            <input type="file" name="file" id="file" (change)="onFileChange($event)">
+                            <p class="help-block">Select video file.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="language">Language</label>
+                            <select class="form-control language" id="language" (input)="onSelectTranscriptionLanguage($event)">
+                                <option *ngFor="let language of languages" [value]="language?.code" [selected]="language === selectedLanguage">{{ language?.englishName }}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transcription">Transcription</label>
+                            <textarea cols="30" rows="10" readonly class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <button id="transcribe-button" type="button" class="btn btn-default" [disabled]="!videoFileObject || isRequestInProgress" (click)="onClickTranscribe()">Transcribe</button>
+                            <i class="fa fa-circle-o-notch fa-spin" *ngIf="isRequestInProgress"></i>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h4>Preview</h4>
+                        <video controls [src]="videoPreviewSafeUrl" *ngIf="videoPreviewSafeUrl" width="300"></video>
+                        <p class="help-block" *ngIf="!videoPreviewSafeUrl">Select a video file to see preview.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

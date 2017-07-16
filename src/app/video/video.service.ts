@@ -28,11 +28,18 @@ export class VideoService {
         return this.http.request('/videos/transcribe', options).pluck('transcription');
     }
 
-    createVideo(file: File, metadata: CreateVideoRequestBody): Observable<any> {
-        const formData = new FormData();
-        formData.append('video', file, file.name);
-        formData.append('metadata', JSON.stringify(metadata));
-        return this.http.request('/videos', {method: RequestMethod.Post, body: formData}).pluck('id');
+    createVideo(file: File, body: any): Observable<any> {
+        return this.http.request('/videos', {method: RequestMethod.Post, body: body}).pluck('id');
+    }
+
+    updateVideo(id: number, body: any): Observable<any> {
+        return this.http.request('/videos/' + id, {method: RequestMethod.Patch, body: body});
+    }
+
+    uploadVideo(id: number, file: File): Observable<any> {
+        const body = new FormData();
+        body.append('video', file, file.name);
+        return this.http.request('/videos/' + id + '/upload', {method: RequestMethod.Post, body: body});
     }
 
     getVideo(id: number): Observable<any> {

@@ -67,6 +67,6 @@ export class SpeakerFormComponent implements OnInit, OnDestroy {
     }
 
     private async handleError(e: Response) {
-        return window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+        return window.alert(_.get(_.first(await e.json()), 'message', 'An unexpected error has occurred. Check console for details.'));
     }
 }

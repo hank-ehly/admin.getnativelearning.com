@@ -38,4 +38,10 @@ export class SpeakerService {
     deleteSpeaker(id: number): Observable<any> {
         return this.http.request('/speakers/' + id, {method: RequestMethod.Delete});
     }
+
+    uploadSpeakerPicture(id: number, file: File): Observable<any> {
+        const body = new FormData();
+        body.append('picture', file, file.name);
+        return this.http.request('/speakers/' + id + '/picture', {method: RequestMethod.Post, body: body});
+    }
 }

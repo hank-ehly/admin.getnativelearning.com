@@ -6,15 +6,15 @@
  */
 
 import { SafeUrl } from '@angular/platform-browser';
+import { Entity } from './entity';
 
-export interface Video {
+export interface Video extends Entity {
     file?: File;
     is_public?: boolean;
     subcategory_id?: number;
     speaker_id?: number;
     language_id?: number;
-    transcripts?: { language_id: number, text: string }[];
-    descriptions?: { language_id: number, description: string }[]
+    localizations?: { id?: number, language_id?: number, transcript?: string, description?: string }[]
     picture_url?: string
     video_url?: string | SafeUrl
 }

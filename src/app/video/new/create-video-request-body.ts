@@ -6,9 +6,8 @@
  */
 
 export interface CreateVideoRequestBody {
-    subcategory_id: number
-    language_id: number
-    speaker_id: number
-    transcripts: { language_id: number, text: string }[]
-    descriptions: { language_id: number, description: string }[]
+    subcategory_id?: number
+    language_id?: number
+    speaker_id?: number
+    localizations?: { id?: number, language_id?: number, transcript?: string, description?: string }[]
 }

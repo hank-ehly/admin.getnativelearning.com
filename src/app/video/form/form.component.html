@@ -1,132 +1,80 @@
-<form #form="ngForm" (submit)="onSubmit()">
-    <fieldset>
-        <legend>Upload</legend>
-        <div class="form-group col-sm-4">
-            <label for="video">Video File</label>
-            <input type="file" id="video" name="file" (change)="onFileChange($event)" required>
-            <p class="help-block">Select a video file.</p>
-        </div>
+<div class="row">
+    <div class="col-lg-12">
+        <form #form="ngForm" (submit)="onSubmit()">
+            <div class="panel panel-default">
+                <div class="panel-heading">General</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Visibility</label>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_public" id="is_public_public" [value]="true" [(ngModel)]="video.is_public">Displayed
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_public" id="is_public_private" [value]="false" [(ngModel)]="video.is_public">Hidden
+                                    </label>
+                                </div>
+                            </div>
 
-        <div class="col-sm-4">
-            <h4>Video preview:</h4>
-            <video controls [src]="video?.video_url" *ngIf="video?.video_url" width="300" height="200"></video>
-        </div>
+                            <div class="form-group" [ngClass]="{ 'has-error': language.invalid }">
+                                <label for="video-language">Language</label>
+                                <select #language="ngModel" class="form-control video__language" id="video-language" name="language" [(ngModel)]="video.language_id" required>
+                                    <option [value]="null">- Unselected -</option>
+                                    <option *ngFor="let language of languages" [value]="language.id">{{ language.name }}</option>
+                                </select>
+                            </div>
 
-        <div class="col-sm-4">
-            <h4>Picture preview:</h4>
-            <img class="video-thumbnail" [src]="video?.picture_url" *ngIf="video?.picture_url" alt="video picture">
-        </div>
-    </fieldset>
+                            <div class="form-group" [ngClass]="{ 'has-error': speaker.invalid }">
+                                <label for="video-speaker">Speaker</label>
+                                <select #speaker="ngModel" id="video-speaker" class="form-control video__speaker" name="speaker_id" [(ngModel)]="video.speaker_id" required>
+                                    <option [value]="null">- Unselected -</option>
+                                    <option *ngFor="let speaker of speakers" [value]="speaker.id">{{ speaker.name }} ({{ speaker.location }})</option>
+                                </select>
+                            </div>
 
-    <fieldset>
-        <legend>Metadata</legend>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="is_public" id="is_public" [(ngModel)]="video.is_public"> Public
-                        </label>
+                            <div class="form-group" [ngClass]="{ 'has-error': subcategory.invalid }">
+                                <label for="subcategory_id">Category - Subcategory</label>
+                                <select #subcategory="ngModel" class="form-control video__subcategory" [disabled]="!categories" id="subcategory_id" name="subcategory_id" [(ngModel)]="video.subcategory_id" required>
+                                    <option [value]="null">- Unselected -</option>
+                                    <ng-container *ngFor="let category of categories">
+                                        <option *ngFor="let subcategory of category.subcategories?.records" [value]="subcategory.id">{{ category.name}} - {{ subcategory.name}}</option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="video-language">Language</label>
-                    <select class="form-control video__language" id="video-language" name="language" [(ngModel)]="video.language_id" required>
-                        <option *ngFor="let language of languages" [value]="language.id">{{ language.name }}</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="video-speaker">Speaker</label>
-                    <select id="video-speaker" class="form-control video__speaker" name="speaker_id" [(ngModel)]="video.speaker_id" required>
-                        <option *ngFor="let speaker of speakers" [value]="speaker.id">{{ speaker.name }} ({{ speaker.location }})</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="subcategory_id">Category - Subcategory</label>
-                    <select class="form-control video__subcategory" [disabled]="!categories" id="subcategory_id" name="subcategory_id" [(ngModel)]="video.subcategory_id" required>
-                        <ng-container *ngFor="let category of categories">
-                            <option *ngFor="let subcategory of category.subcategories?.records" [value]="subcategory.id">{{ category.name }} - {{ subcategory.name }}</option>
-                        </ng-container>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </fieldset>
 
-    <fieldset>
-        <legend>Descriptions</legend>
-        <div class="row">
-            <div class="col-sm-12">
-                <p class="help-block">* Enter localized descriptions of the video content.</p>
-            </div>
-            <div class="col-sm-6 form-group" *ngFor="let description of video?.descriptions; let i = index">
-                <label for="description[{{ description.language_id }}]">{{ nameOfLanguageForId(description?.language_id) }}</label>
-                <textarea name="description[{{ description.language_id }}]"
-                          [(ngModel)]="description.description"
-                          class="form-control description"
-                          id="description[{{ description.language_id }}]"
-                          cols="30"
-                          rows="10"
-                          required></textarea>
-            </div>
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Transcription</legend>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label for="transcription-language">Auto-Transcribe Language</label>
-                    <select class="form-control video__transcription-language" id="transcription-language" (input)="onSelectTranscriptionLanguage($event)">
-                        <option *ngFor="let language of transcriptionLanguages" [value]="language?.code" [selected]="language === selectedTranscriptionLanguage">{{ language?.englishName }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <button id="transcribe-button" type="button" class="btn btn-default" [disabled]="!video?.file" (click)="onClickTranscribe()">Auto-Transcribe</button>
+            <div *ngFor="let localization of video?.localizations" class="panel panel-default">
+                <div class="panel-heading">{{ nameOfLanguageForId(localization?.language_id)}}</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group" [ngClass]="{ 'has-error': !localization.transcript }">
+                                <label for="transcript[{{ localization.language_id }}]">Transcription</label>
+                                <textarea name="transcript[{{ localization.language_id }}]" [(ngModel)]="localization.transcript"  class="form-control transcript" id="transcript[{{ localization.language_id }}]" rows="7" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group" [ngClass]="{ 'has-error': !localization.description}">
+                                <label for="description[{{ localization.language_id }}]">Description</label>
+                                <textarea name="description[{{ localization.language_id }}]" [(ngModel)]="localization.description" class="form-control description" id="description[{{ localization.language_id }}]" rows="7" required></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label for="transcription"></label>
-                    <textarea cols="30" rows="10" readonly class="form-control" id="transcription">{{ transcriptionEmitted$ | async }}</textarea>
-                </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit" [disabled]="form.invalid">{{ video.id ? "Update" : "Create" }}</button>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <p class="help-block">* For the original video language, enclose collocation occurrences in curly braces.</p>
-            </div>
-
-            <div class="col-sm-6 form-group" *ngFor="let transcript of video?.transcripts; let i = index">
-                <label for="transcript[{{ transcript.language_id }}]">{{ nameOfLanguageForId(transcript.language_id) }}</label>
-                <textarea name="transcript[{{ transcript.language_id }}]"
-                          [(ngModel)]="transcript.text"
-                          id="transcript[{{ transcript.language_id }}]"
-                          cols="30"
-                          rows="10"
-                          class="form-control transcript"
-                          required></textarea>
-            </div>
-        </div>
-    </fieldset>
-
-    <div class="form-group">
-        <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Submit</button>
+        </form>
     </div>
-</form>
+</div>
+
+<!--<pre>{{ video | json }}</pre>-->
