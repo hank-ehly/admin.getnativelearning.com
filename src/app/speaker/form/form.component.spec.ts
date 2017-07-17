@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { Router } from '@angular/router';
 
-import { MockApiResponse_LanguagesIndex } from '../../testing/mock-api-responses/languages-index';
-import { LanguagesService } from '../../core/languages.service';
+import { MockApiResponse_SpeakersLocalizedIndex } from '../../testing/mock-api-responses/speakers-localized-index';
+import { MockApiResponse_GendersIndex } from '../../testing/mock-api-responses/genders-index';
+import { MockApiResponse_SpeakersShow } from '../../testing/mock-api-responses/speakers-show';
 import { SpeakerFormComponent } from './form.component';
+import { RouterStub } from '../../testing/router-stub';
 import { AuthService } from '../../core/auth.service';
 import { HttpService } from '../../core/http.service';
+import { SpeakerService } from '../speaker.service';
 import { SpeakerModule } from '../speaker.module';
 
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
-import { By } from '@angular/platform-browser';
-import { SpeakerService } from '../speaker.service';
-import { MockApiResponse_GendersIndex } from '../../testing/mock-api-responses/genders-index';
-import { MockApiResponse_SpeakersShow } from '../../testing/mock-api-responses/speakers-show';
-import { MockApiResponse_SpeakersLocalizedIndex } from '../../testing/mock-api-responses/speakers-localized-index';
 
 let comp: SpeakerFormComponent;
 let fixture: ComponentFixture<SpeakerFormComponent>;
@@ -24,7 +24,7 @@ describe('SpeakerFormComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [SpeakerModule, HttpModule],
-            providers: [HttpService, AuthService]
+            providers: [HttpService, AuthService, {provide: Router, useClass: RouterStub}]
         }).compileComponents().then(createComponent);
     }));
 
@@ -71,10 +71,6 @@ describe('SpeakerFormComponent', () => {
             fixture.detectChanges();
             // expect model value to have changed
             return expect(comp.speaker.gender.id).toEqual(genderObj['id']);
-        });
-
-        it('should bind the speaker.picture model to the template as a file input', () => {
-            return expect(page.pictureInput).toBeTruthy();
         });
 
         it('should bind a localization.description to the template as a textarea', () => {
@@ -139,7 +135,6 @@ function createComponent() {
 
 class Page {
     genderInput: HTMLInputElement;
-    pictureInput: HTMLInputElement;
     lzDescTextAreaEls: HTMLTextAreaElement[];
     lzNameTextInputEls: HTMLInputElement[];
     lzLocTextInputEls: HTMLInputElement[];
@@ -151,7 +146,6 @@ class Page {
 
     refreshPageElements() {
         this.genderInput = fixture.debugElement.query(By.css('input[type=radio]')).nativeElement;
-        this.pictureInput = fixture.debugElement.query(By.css('input[type=file]')).nativeElement;
         this.lzDescTextAreaEls = fixture.debugElement.queryAll(By.css('textarea.description')).map(e => e.nativeElement);
         this.lzNameTextInputEls = fixture.debugElement.queryAll(By.css('input[type=text].name')).map(e => e.nativeElement);
         this.lzLocTextInputEls = fixture.debugElement.queryAll(By.css('input[type=text].location')).map(e => e.nativeElement);

@@ -1,10 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
+import { Router } from '@angular/router';
 
 import { MockApiResponse_LanguagesIndex } from '../../testing/mock-api-responses/languages-index';
 import { MockApiResponse_GendersIndex } from 'app/testing/mock-api-responses/genders-index';
 import { LanguagesService } from '../../core/languages.service';
 import { SpeakerService } from 'app/speaker/speaker.service';
+import { RouterStub } from '../../testing/router-stub';
 import { NewSpeakerComponent } from './new.component';
 import { HttpService } from '../../core/http.service';
 import { AuthService } from '../../core/auth.service';
@@ -21,7 +23,7 @@ describe('NewSpeakerComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [SpeakerModule, HttpModule],
-            providers: [LanguagesService, HttpService, AuthService]
+            providers: [LanguagesService, HttpService, AuthService, {provide: Router, useClass: RouterStub}]
         }).compileComponents().then(createComponent);
     }));
 

@@ -1,18 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
-import { EditSpeakerComponent } from './edit.component';
+import { MockApiResponse_SpeakersLocalizedIndex } from '../../testing/mock-api-responses/speakers-localized-index';
+import { MockApiResponse_LanguagesIndex } from '../../testing/mock-api-responses/languages-index';
+import { MockApiResponse_SpeakersShow } from '../../testing/mock-api-responses/speakers-show';
+import { MockApiResponse_GendersIndex } from '../../testing/mock-api-responses/genders-index';
 import { LanguagesService } from '../../core/languages.service';
-import { SpeakerModule } from '../speaker.module';
+import { EditSpeakerComponent } from './edit.component';
+import { RouterStub } from '../../testing/router-stub';
 import { AuthService } from '../../core/auth.service';
 import { HttpService } from '../../core/http.service';
-import { MockApiResponse_GendersIndex } from '../../testing/mock-api-responses/genders-index';
 import { SpeakerService } from '../speaker.service';
+import { SpeakerModule } from '../speaker.module';
 import { Observable } from 'rxjs/Observable';
-import { MockApiResponse_LanguagesIndex } from '../../testing/mock-api-responses/languages-index';
-import { MockApiResponse_SpeakersLocalizedIndex } from '../../testing/mock-api-responses/speakers-localized-index';
-import { MockApiResponse_SpeakersShow } from '../../testing/mock-api-responses/speakers-show';
 
 import * as _ from 'lodash';
 
@@ -35,7 +36,7 @@ describe('EditSpeakerComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [SpeakerModule, HttpModule],
-            providers: [LanguagesService, HttpService, AuthService, ActivatedRouteStubProvider]
+            providers: [LanguagesService, HttpService, AuthService, ActivatedRouteStubProvider, {provide: Router, useClass: RouterStub}]
         }).compileComponents().then(createComponent);
     }));
 

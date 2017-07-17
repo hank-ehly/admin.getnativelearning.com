@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CollocationComponent } from './collocation.component';
+import { RouterStub } from '../testing/router-stub';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpService } from '../core/http.service';
 
 describe('CollocationComponent', () => {
     let component: CollocationComponent;
@@ -8,6 +12,7 @@ describe('CollocationComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
             declarations: [CollocationComponent]
         }).compileComponents();
     }));

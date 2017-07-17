@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
 
-import { VideoComponent } from './video.component';
 import { RouterStub } from '../testing/router-stub';
+import { VideoComponent } from './video.component';
 import { HttpService } from '../core/http.service';
 import { AuthService } from '../core/auth.service';
 import { VideoService } from './video.service';
+import { VideoModule } from './video.module';
 
 let component: VideoComponent;
 let fixture: ComponentFixture<VideoComponent>;
@@ -16,20 +17,8 @@ let fixture: ComponentFixture<VideoComponent>;
 describe('VideoComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [
-                RouterTestingModule,
-                HttpModule,
-                FormsModule
-            ],
-            declarations: [
-                VideoComponent
-            ],
-            providers: [
-                VideoService,
-                HttpService,
-                AuthService,
-                {provide: Router, useClass: RouterStub}
-            ]
+            imports: [VideoModule, RouterTestingModule, HttpModule, FormsModule],
+            providers: [VideoService, HttpService, AuthService, {provide: Router, useClass: RouterStub}]
         }).compileComponents().then(createComponent);
     }));
 
