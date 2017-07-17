@@ -9,8 +9,8 @@ import * as _ from 'lodash';
 
 @Component({
     selector: 'gn-edit-category',
-    templateUrl: './edit-category.component.html',
-    styleUrls: ['./edit-category.component.scss']
+    templateUrl: './edit.component.html',
+    styleUrls: ['./edit.component.scss']
 })
 export class EditCategoryComponent implements OnInit, OnDestroy {
     category: any;

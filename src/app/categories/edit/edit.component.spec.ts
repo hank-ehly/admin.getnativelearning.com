@@ -6,8 +6,8 @@ import { HttpModule } from '@angular/http';
 
 import { MockApiResponse_SubcategoriesCreate } from '../../testing/mock-api-responses/subcategories-create';
 import { MockApiResponse_CategoriesShow } from '../../testing/mock-api-responses/categories-show';
-import { EditCategoryComponent } from './edit-category.component';
 import { CategoriesService } from '../categories.service';
+import { EditCategoryComponent } from './edit.component';
 import { AuthService } from '../../core/auth.service';
 import { HttpService } from '../../core/http.service';
 import { click } from '../../testing/index';

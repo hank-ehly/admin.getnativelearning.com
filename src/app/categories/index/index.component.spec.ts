@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 
 import { MockApiResponse_CategoriesIndex } from '../../testing/mock-api-responses/categories-index';
 import { RouterLinkStubDirective } from '../../testing/router-link-stub.directive';
-import { CategoriesIndexComponent } from './categories-index.component';
+import { IndexCategoryComponent } from './index.component';
 import { CategoriesService } from '../categories.service';
 import { RouterStub } from '../../testing/router-stub';
 import { HttpService } from '../../core/http.service';
@@ -16,15 +16,15 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
 
-let comp: CategoriesIndexComponent;
-let fixture: ComponentFixture<CategoriesIndexComponent>;
+let comp: IndexCategoryComponent;
+let fixture: ComponentFixture<IndexCategoryComponent>;
 let page: Page;
 
-describe('CategoriesIndexComponent', () => {
+describe('IndexCategoryComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                CategoriesIndexComponent,
+                IndexCategoryComponent,
                 RouterLinkStubDirective
             ],
             imports: [
@@ -127,7 +127,7 @@ describe('CategoriesIndexComponent', () => {
 });
 
 function createComponent() {
-    fixture = TestBed.createComponent(CategoriesIndexComponent);
+    fixture = TestBed.createComponent(IndexCategoryComponent);
     comp = fixture.componentInstance;
     page = new Page();
     fixture.detectChanges();

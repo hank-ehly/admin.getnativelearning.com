@@ -9,10 +9,10 @@ import * as _ from 'lodash';
 
 @Component({
     selector: 'gn-categories-index',
-    templateUrl: './categories-index.component.html',
-    styleUrls: ['./categories-index.component.scss']
+    templateUrl: './index.component.html',
+    styleUrls: ['./index.component.scss']
 })
-export class CategoriesIndexComponent implements OnInit, OnDestroy {
+export class IndexCategoryComponent implements OnInit, OnDestroy {
     categories: any[];
     deleteButtonTitle = 'To delete a category, first delete all subcategories';
     deleteConfirmMessage = 'Are you sure?';

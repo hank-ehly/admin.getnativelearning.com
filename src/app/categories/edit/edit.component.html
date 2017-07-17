@@ -1,0 +1,73 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Localized Names</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Language</th>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="category" *ngFor="let record of category?.categories_localized?.records; let i = index">
+                            <td>{{ record.language.name }}</td>
+                            <td>
+                                <input type="text" class="category__name" [(ngModel)]="record.name" placeholder="{{ record.language.name }}" min="1"
+                                       max="50" [readonly]="!isEditingIndex(i)">
+                            </td>
+                            <td class="category__actions">
+                                <button class="btn btn-default btn-xs btn-block category__actions--edit" (click)="editIndex(i)"
+                                        *ngIf="!isEditingIndex(i) && !isUpdatingIndex(i)">Edit
+                                </button>
+                                <i class="fa fa-check category__actions--commit" *ngIf="isEditingIndex(i)" (click)="updateNameAtIndex(i)"></i>
+                                <i class="fa fa-times category__actions--cancel" *ngIf="isEditingIndex(i)" (click)="cancelEditAtIndex(i)"></i>
+                                <i class="fa fa-circle-o-notch fa-spin" *ngIf="isUpdatingIndex(i)"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Subcategories of this Category</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="subcategory" *ngFor="let subcategory of category?.subcategories?.records">
+                            <td class="subcategory__id">{{ subcategory?.id }}</td>
+                            <td class="subcategory__name">{{ subcategory?.name }}</td>
+                            <td class="subcategory__created-at">{{ subcategory?.created_at | date }}</td>
+                            <td class="subcategory__updated-at">{{ subcategory?.updated_at | date }}</td>
+                            <td>
+                                <a class="btn btn-xs btn-default" [routerLink]="['/categories', categoryId, 'subcategories', subcategory?.id, 'edit']">Edit</a>
+                                <button class="btn btn-xs btn-danger subcategory__delete-button" [disabled]="isDeletingSubcategory(subcategory)" (click)="onClickDeleteSubcategory(subcategory)">Delete</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-default subcategory__create-button" (click)="onClickCreateNewSubcategory()">Create New Subcategory</button>
+            </div>
+        </div>
+    </div>
+</div>
