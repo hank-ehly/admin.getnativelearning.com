@@ -1,41 +1,51 @@
 <form #form="ngForm" (submit)="onSubmit()">
-    <fieldset>
-        <legend>Gender</legend>
-        <div class="form-group">
-            <div class="radio" *ngFor="let gender of genders">
-                <label>
-                    <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id" [checked]="gender?.id === speaker?.gender.id" required>
-                    {{ gender?.name | titlecase }}
-                </label>
-            </div>
-        </div>
-    </fieldset>
-
-    <fieldset *ngFor="let localization of speaker?.localizations">
-        <legend>{{ localization.language.name }}</legend>
-        <div class="row">
-            <div class="form-group col-xs-6">
-                <label for="description[{{ localization.language.id }}]">Description</label>
-                <textarea name="description[{{ localization.language.id }}]" class="description form-control"
-                          id="description[{{ localization.language.id }}]" [(ngModel)]="localization.description" cols="30"
-                          rows="5" required placeholder="Mr. A is a teacher at ..."></textarea>
-            </div>
-
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <label for="name[{{ localization.language.id }}]">Name</label>
-                    <input type="text" name="name[{{ localization.language.id }}]" class="name form-control" [(ngModel)]="localization.name"
-                           id="name[{{ localization.language.id }}]" required placeholder="John Smith">
-                </div>
-
-                <div class="form-group">
-                    <label for="location[{{ localization.language.id }}]">Location</label>
-                    <input type="text" name="location[{{ localization.language.id }}]" class="location form-control" required
-                           [(ngModel)]="localization.location" id="location[{{ localization.language.id }}]" placeholder="Kansas City, MO">
+    <div class="panel panel-default">
+        <div class="panel-heading">General</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <div class="radio" *ngFor="let gender of genders">
+                            <label>
+                                <input type="radio" name="gender" [value]="gender?.id" [(ngModel)]="speaker?.gender.id" [checked]="gender?.id === speaker?.gender.id" required>
+                                {{ gender?.name | titlecase }}
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </fieldset>
+    </div>
+
+    <div class="panel panel-default" *ngFor="let localization of speaker?.localizations">
+        <div class="panel-heading">{{ localization.language.name }}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="name[{{ localization.language.id }}]">Name</label>
+                        <input type="text" name="name[{{ localization.language.id }}]" class="name form-control"
+                               [(ngModel)]="localization.name"
+                               id="name[{{ localization.language.id }}]" placeholder="John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location[{{ localization.language.id }}]">Location</label>
+                        <input type="text" name="location[{{ localization.language.id }}]" class="location form-control"
+                               required
+                               [(ngModel)]="localization.location" id="location[{{ localization.language.id }}]"
+                               placeholder="Kansas City, MO">
+                    </div>
+                </div>
+                <div class="form-group col-lg-8">
+                    <label for="description[{{ localization.language.id }}]">Description</label>
+                    <textarea name="description[{{ localization.language.id }}]" class="description form-control"
+                              id="description[{{ localization.language.id }}]" [(ngModel)]="localization.description" cols="30"
+                              rows="5" placeholder="Mr. A is a teacher at ..." required></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Submit</button>

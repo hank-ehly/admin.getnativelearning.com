@@ -112,7 +112,6 @@ export class IndexVideoComponent implements OnInit, OnDestroy {
     }
 
     private updateMaxVideoId(records?: any[]): void {
-        console.log(records);
         if (!_.isEmpty(records)) {
             this.maxId = _.minBy(records, 'id').id;
         }

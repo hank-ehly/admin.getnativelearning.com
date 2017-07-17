@@ -49,6 +49,7 @@ export class VideoFormComponent implements OnInit, OnDestroy {
 
     onSubmit(): void {
         const body = {
+            is_public: this.video.is_public,
             subcategory_id: this.video.subcategory_id,
             language_id: this.video.language_id,
             speaker_id: this.video.speaker_id,

@@ -20,7 +20,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" [ngClass]="{ 'has-error': language.invalid }">
+                            <div class="form-group">
                                 <label for="video-language">Language</label>
                                 <select #language="ngModel" class="form-control video__language" id="video-language" name="language" [(ngModel)]="video.language_id" required>
                                     <option [value]="null">- Unselected -</option>
@@ -28,7 +28,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group" [ngClass]="{ 'has-error': speaker.invalid }">
+                            <div class="form-group">
                                 <label for="video-speaker">Speaker</label>
                                 <select #speaker="ngModel" id="video-speaker" class="form-control video__speaker" name="speaker_id" [(ngModel)]="video.speaker_id" required>
                                     <option [value]="null">- Unselected -</option>
@@ -36,7 +36,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group" [ngClass]="{ 'has-error': subcategory.invalid }">
+                            <div class="form-group">
                                 <label for="subcategory_id">Category - Subcategory</label>
                                 <select #subcategory="ngModel" class="form-control video__subcategory" [disabled]="!categories" id="subcategory_id" name="subcategory_id" [(ngModel)]="video.subcategory_id" required>
                                     <option [value]="null">- Unselected -</option>
@@ -55,13 +55,13 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="form-group" [ngClass]="{ 'has-error': !localization.transcript }">
+                            <div class="form-group">
                                 <label for="transcript[{{ localization.language_id }}]">Transcription</label>
                                 <textarea name="transcript[{{ localization.language_id }}]" [(ngModel)]="localization.transcript"  class="form-control transcript" id="transcript[{{ localization.language_id }}]" rows="7" required></textarea>
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <div class="form-group" [ngClass]="{ 'has-error': !localization.description}">
+                            <div class="form-group">
                                 <label for="description[{{ localization.language_id }}]">Description</label>
                                 <textarea name="description[{{ localization.language_id }}]" [(ngModel)]="localization.description" class="form-control description" id="description[{{ localization.language_id }}]" rows="7" required></textarea>
                             </div>

@@ -1,15 +1,24 @@
 import { RequestMethod, URLSearchParams } from '@angular/http';
 import { Injectable } from '@angular/core';
 
-import { CreateVideoRequestBody } from './new/create-video-request-body';
 import { HttpService } from '../core/http.service';
 
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/pluck';
 
 @Injectable()
 export class VideoService {
+    breadcrumbsEmitted$: Observable<string[]>;
+    private emitBreadcrumbs$: Subject<string[]>;
+
+    set breadcrumbs(value: string[]) {
+        this.emitBreadcrumbs$.next(value);
+    }
+
     constructor(private http: HttpService) {
+        this.emitBreadcrumbs$ = new Subject();
+        this.breadcrumbsEmitted$ = this.emitBreadcrumbs$.asObservable();
     }
 
     transcribe(file: File, languageCode: string): Observable<string> {
