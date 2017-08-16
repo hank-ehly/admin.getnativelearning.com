@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { LoginService } from './login.service';
 
@@ -19,7 +18,7 @@ export class LoginComponent implements OnDestroy {
 
     private subscriptions: Subscription[] = [];
 
-    constructor(private loginService: LoginService, private router: Router) {
+    constructor(private loginService: LoginService) {
     }
 
     ngOnDestroy(): void {
@@ -29,11 +28,10 @@ export class LoginComponent implements OnDestroy {
     onSubmit(): void {
         this.requestInProgress = true;
         const loginSubscription = this.loginService.login(this.credentials).subscribe(() => {
-            this.router.navigate(['']);
-            this.requestInProgress = false;
+            location.href = '';
         }, (e: any) => {
-            // on failure, display error message
             console.log('ERROR', e);
+        }, () => {
             this.requestInProgress = false;
         });
         this.subscriptions.push(loginSubscription);
