@@ -50,6 +50,8 @@
                 </div>
             </div>
 
+            <div class="alert alert-info">* Wrap collocation occurrences in curly braces for the video language transcription.</div>
+
             <div *ngFor="let localization of video?.localizations" class="panel panel-default">
                 <div class="panel-heading">{{ nameOfLanguageForId(localization?.language_id)}}</div>
                 <div class="panel-body">
@@ -76,5 +78,3 @@
         </form>
     </div>
 </div>
-
-<!--<pre>{{ video | json }}</pre>-->

@@ -41,7 +41,9 @@ export class CollocationFormComponent implements OnDestroy {
     onSubmitCollocationForm(): void {
         const body = _.pick(this.model, ['ipa_spelling']);
         const id = this.route.snapshot.params.id;
-        const subscription = this.collocationService.updateCollocationOccurrence(id, body).subscribe(null, this.errorResponse.bind(this));
+        const subscription = this.collocationService.updateCollocationOccurrence(id, body).subscribe(() => {
+            window.alert('CollocationOccurrence was updated successfully.');
+        }, this.errorResponse.bind(this));
         this.subscriptions.push(subscription);
     }
 
@@ -50,12 +52,17 @@ export class CollocationFormComponent implements OnDestroy {
         const body = {text: this.model.usage_examples.records[i].text};
         if (_.has(this.model.usage_examples.records[i], 'id')) {
             const id = _.get<number>(this.model.usage_examples.records[i], 'id');
-            subscription = this.collocationService.updateUsageExample(id, body).subscribe(null, this.errorResponse.bind(this));
+            subscription = this.collocationService.updateUsageExample(id, body).subscribe(() => {
+                window.alert('Usage example updated successfully.');
+            }, this.errorResponse.bind(this));
         } else {
             const id = this.route.snapshot.params.id;
             subscription = this.collocationService.createUsageExample(id, body).subscribe(example => {
                 if (example) {
                     this.model.usage_examples.records[i] = example;
+                    window.alert('Usage example created successfully.');
+                } else {
+                    window.alert('Usage example creation request succeeded, but no usage example record was returned from API.');
                 }
             }, this.errorResponse.bind(this));
         }

@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { CategoriesService } from '../../categories/categories.service';
 import { LanguagesService } from '../../core/languages.service';
@@ -8,7 +9,6 @@ import { Video } from '../../models/video';
 
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'gn-video-form',
@@ -58,7 +58,9 @@ export class VideoFormComponent implements OnInit, OnDestroy {
 
         let subscription;
         if (this.video.id) {
-            subscription = this.videoService.updateVideo(this.video.id, body).subscribe(null, this.handleError);
+            subscription = this.videoService.updateVideo(this.video.id, body).subscribe(() => {
+                window.alert('Video updated successfully.');
+            }, this.handleError);
         } else {
             subscription = this.videoService.createVideo(this.video.file, body)
                 .subscribe(this.handleCreateSuccess.bind(this), this.handleError);
@@ -69,7 +71,10 @@ export class VideoFormComponent implements OnInit, OnDestroy {
 
     private handleCreateSuccess(id: number) {
         if (id) {
+            window.alert('Video created successfully.');
             this.router.navigate(['videos', id, 'edit']);
+        } else {
+            window.alert('Video created successfully; however, no ID was returned from the API.');
         }
     }
 
