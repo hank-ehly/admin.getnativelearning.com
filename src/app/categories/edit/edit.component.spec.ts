@@ -186,18 +186,6 @@ describe('EditCategoryComponent', () => {
         expect(subcategoryEl.textContent).toEqual(_.first(page.showCategoryResponse.subcategories.records)['name'].toString());
     });
 
-    it('should display the subcategory creation DateTime', () => {
-        const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
-            .query(By.css('.subcategory__created-at')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(page.showCategoryResponse.subcategories.records)['created_at']);
-    });
-
-    it('should display the subcategory update DateTime', () => {
-        const subcategoryEl = _.first(fixture.debugElement.queryAll(By.css('.subcategory')))
-            .query(By.css('.subcategory__updated-at')).nativeElement;
-        expect(subcategoryEl.textContent).toEqual(_.first(page.showCategoryResponse.subcategories.records)['updated_at']);
-    });
-
     it('should call the CategoriesService createSubcategory method after pressing the Create New Subcategory button', () => {
         const createSubcategorySpy = spyOn(page.categoriesService, 'createSubcategory').and.returnValue(Observable.of({
             subcategoryId: page.createSubcategoryResponse.id,
