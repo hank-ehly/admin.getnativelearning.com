@@ -13,8 +13,8 @@ jobs:
           key: admin.getnativelearning.com-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - "node_modules"
-#      - run: xvfb-run -a npm run lint -- --type-check
+      - run: xvfb-run -a npm run lint -- --type-check
       - run: xvfb-run -a npm run test -- --single-run --no-progress --browser=ChromeNoSandbox
       - deploy:
           name: Deploy
-          command: ./bin/deploy.sh ${CIRCLE_BRANCH}
+          command: .circleci/deploy.sh ${CIRCLE_BRANCH}
