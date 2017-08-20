@@ -93,6 +93,7 @@ class Page {
     getSpeakerLocalizationsSpy: jasmine.Spy;
 
     constructor() {
+        spyOn(window, 'alert').and.returnValue(true);
         spyOn(fixture.debugElement.injector.get(SpeakerService), 'getGenders').and
             .returnValue(Observable.of(MockApiResponse_GendersIndex.records));
         spyOn(fixture.debugElement.injector.get(LanguagesService), 'getLanguages').and

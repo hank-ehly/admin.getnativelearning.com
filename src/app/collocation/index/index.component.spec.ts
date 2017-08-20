@@ -13,7 +13,7 @@ describe('IndexCollocationComponent', () => {
     let fixture: ComponentFixture<IndexCollocationComponent>;
 
     beforeEach(async(() => {
-        TestBed.configureTestingModule({
+        return TestBed.configureTestingModule({
             imports: [CollocationModule, FormsModule, HttpModule],
             declarations: [RouterLinkStubDirective],
             providers: [HttpService, AuthService]
@@ -21,12 +21,13 @@ describe('IndexCollocationComponent', () => {
     }));
 
     beforeEach(() => {
+        spyOn(window, 'alert').and.returnValue(true);
         fixture = TestBed.createComponent(IndexCollocationComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
     it('should be created', () => {
-        expect(component).toBeTruthy();
+        return expect(component).toBeTruthy();
     });
 });

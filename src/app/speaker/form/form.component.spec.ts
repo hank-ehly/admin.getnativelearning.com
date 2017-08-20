@@ -77,7 +77,7 @@ describe('SpeakerFormComponent', () => {
             // change description value
             const testValue = 'Test Description';
             const firstDesc = _.first(page.lzDescTextAreaEls);
-            firstDesc.value = testValue;
+            firstDesc['value'] = testValue;
             firstDesc.dispatchEvent(new Event('input'));
             fixture.detectChanges();
             // expect description value to equal change
@@ -88,7 +88,7 @@ describe('SpeakerFormComponent', () => {
             // change name value
             const testValue = 'Test Name';
             const firstName = _.first(page.lzNameTextInputEls);
-            firstName.value = testValue;
+            firstName['value'] = testValue;
             firstName.dispatchEvent(new Event('input'));
             fixture.detectChanges();
             // expect name value to equal change
@@ -99,7 +99,7 @@ describe('SpeakerFormComponent', () => {
             // change location value
             const testValue = 'Test Location';
             const firstLocation = _.first(page.lzLocTextInputEls);
-            firstLocation.value = testValue;
+            firstLocation['value'] = testValue;
             firstLocation.dispatchEvent(new Event('input'));
             fixture.detectChanges();
             // expect location value to equal change
@@ -140,6 +140,7 @@ class Page {
     lzLocTextInputEls: HTMLInputElement[];
 
     constructor() {
+        spyOn(window, 'alert').and.returnValue(true);
         spyOn(fixture.debugElement.injector.get(SpeakerService), 'getGenders').and
             .returnValue(Observable.of(MockApiResponse_GendersIndex.records));
     }

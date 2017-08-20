@@ -20,7 +20,7 @@ export class EditCollocationComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscriptions.push(
-            this.collocationService.getCollocationOccurrenceById(this.route.snapshot.params.id).subscribe(collocation => {
+            this.collocationService.getCollocationOccurrenceById(this.route.snapshot.params['id']).subscribe(collocation => {
                 this.collocation = collocation;
             }, async (e: Response) => {
                 window.alert(_.get(_.first(await e.json()), 'message', 'error'));

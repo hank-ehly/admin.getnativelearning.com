@@ -40,7 +40,7 @@ export class CollocationFormComponent implements OnDestroy {
 
     onSubmitCollocationForm(): void {
         const body = _.pick(this.model, ['ipa_spelling']);
-        const id = this.route.snapshot.params.id;
+        const id = this.route.snapshot.params['id'];
         const subscription = this.collocationService.updateCollocationOccurrence(id, body).subscribe(() => {
             window.alert('CollocationOccurrence was updated successfully.');
         }, this.errorResponse.bind(this));
@@ -56,7 +56,7 @@ export class CollocationFormComponent implements OnDestroy {
                 window.alert('Usage example updated successfully.');
             }, this.errorResponse.bind(this));
         } else {
-            const id = this.route.snapshot.params.id;
+            const id = this.route.snapshot.params['id'];
             subscription = this.collocationService.createUsageExample(id, body).subscribe(example => {
                 if (example) {
                     this.model.usage_examples.records[i] = example;

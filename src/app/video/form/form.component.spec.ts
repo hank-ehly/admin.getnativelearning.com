@@ -68,7 +68,7 @@ describe('VideoFormComponent', () => {
         const englishTextarea = _.find(page.descriptionTextareaEls, {id: `description[${languageId}]`});
         const english = _.findIndex(comp.video.localizations, {language_id: languageId});
         const testValue = 'New Value';
-        englishTextarea.value = testValue;
+        englishTextarea['value'] = testValue;
         englishTextarea.dispatchEvent(newEvent('input'));
         fixture.detectChanges();
         return expect(comp.video.localizations[english].description).toEqual(testValue);
@@ -110,6 +110,8 @@ function createComponent() {
     comp = fixture.componentInstance;
 
     comp.video = initMockVideo();
+
+    spyOn(window, 'alert').and.returnValue(true);
 
     spyOn(fixture.debugElement.injector.get(LanguagesService), 'getLanguages').and
         .returnValue(Observable.of(MockApiResponse_LanguagesIndex.records));

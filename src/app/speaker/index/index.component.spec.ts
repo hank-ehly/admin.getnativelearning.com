@@ -76,6 +76,7 @@ class Page {
     speakerIndexSpy: jasmine.Spy;
 
     constructor() {
+        spyOn(window, 'alert').and.returnValue(true);
         this.speakerIndexSpy = spyOn(fixture.debugElement.injector.get(SpeakerService), 'getSpeakers').and.returnValue(
             Observable.of(MockApiResponse_SpeakersIndex.records)
         );

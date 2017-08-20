@@ -36,7 +36,7 @@ describe('IndexVideoComponent', () => {
     };
 
     beforeEach(async(() => {
-        TestBed.configureTestingModule({
+        return TestBed.configureTestingModule({
             imports: [HttpModule],
             declarations: [IndexVideoComponent, RouterLinkStubDirective],
             providers: [{provide: LanguagesService, useValue: mockLanguageService}, HttpService, AuthService,
@@ -45,12 +45,13 @@ describe('IndexVideoComponent', () => {
     }));
 
     beforeEach(() => {
+        spyOn(window, 'alert').and.returnValue(true);
         fixture = TestBed.createComponent(IndexVideoComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
     it('should be created', () => {
-        expect(component).toBeTruthy();
+        return expect(component).toBeTruthy();
     });
 });

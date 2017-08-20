@@ -24,19 +24,20 @@ describe('CollocationFormComponent', () => {
     };
 
     beforeEach(async(() => {
-        TestBed.configureTestingModule({
+        return TestBed.configureTestingModule({
             imports: [CollocationModule, FormsModule, HttpModule],
             providers: [HttpService, AuthService, ActivatedRouteStubProvider]
         }).compileComponents();
     }));
 
     beforeEach(() => {
+        spyOn(window, 'alert').and.returnValue(true);
         fixture = TestBed.createComponent(CollocationFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
     it('should be created', () => {
-        expect(component).toBeTruthy();
+        return expect(component).toBeTruthy();
     });
 });

@@ -49,7 +49,7 @@ describe('EditVideoComponent', () => {
     };
 
     beforeEach(async(() => {
-        TestBed.configureTestingModule({
+        return TestBed.configureTestingModule({
             imports: [VideoModule, HttpModule],
             providers: [HttpService, AuthService, ActivatedRouteStubProvider, {provide: LanguagesService, useValue: mockLanguageService},
                 {provide: CategoriesService, useValue: mockCategoriesService}, {provide: SpeakerService, useValue: mockSpeakerService},
@@ -58,6 +58,7 @@ describe('EditVideoComponent', () => {
     }));
 
     beforeEach(() => {
+        spyOn(window, 'alert').and.returnValue(true);
         fixture = TestBed.createComponent(EditVideoComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
