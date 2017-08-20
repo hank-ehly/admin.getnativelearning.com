@@ -5,5 +5,5 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'https://api.stg.get-native.com'
+    apiUrl: 'https://api.stg.getnativelearning.com'
 };

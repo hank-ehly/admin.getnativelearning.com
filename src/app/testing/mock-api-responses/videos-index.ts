@@ -1,6 +1,6 @@
 /**
  * videos-index
- * admin.get-native.com
+ * admin.getnativelearning.com
  *
  * Created by henryehly on 2017/07/17.
  */

@@ -1,6 +1,6 @@
 /**
  * videos.e2e-spec
- * admin.get-native.com
+ * admin.getnativelearning.com
  *
  * Created by henryehly on 2017/05/19.
  */
@@ -9,7 +9,7 @@ import { browser } from 'protractor';
 
 import { VideosPage } from './videos.po';
 
-describe('admin.get-native.com/videos', () => {
+describe('admin.getnativelearning.com/videos', () => {
     let page: VideosPage;
 
     beforeEach(async () => {

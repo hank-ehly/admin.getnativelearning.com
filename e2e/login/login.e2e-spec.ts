@@ -1,6 +1,6 @@
 /**
  * login.e2e-spec
- * admin.get-native.com
+ * admin.getnativelearning.com
  *
  * Created by henryehly on 2017/05/30.
  */
@@ -9,7 +9,7 @@ import { browser } from 'protractor';
 
 import { LoginPage } from './login.po';
 
-describe('admin.get-native.com/login', () => {
+describe('admin.getnativelearning.com/login', () => {
     let page: LoginPage;
 
     beforeEach(async () => {

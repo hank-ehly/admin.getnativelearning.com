@@ -1,6 +1,6 @@
 /**
  * categories.e2e-spec
- * admin.get-native.com
+ * admin.getnativelearning.com
  *
  * Created by henryehly on 2017/06/01.
  */
@@ -9,7 +9,7 @@ import { browser } from 'protractor';
 
 import { CategoriesPage } from './categories.po';
 
-describe('admin.get-native.com/login', () => {
+describe('admin.getnativelearning.com/login', () => {
     let page: CategoriesPage;
 
     beforeEach(async () => {
