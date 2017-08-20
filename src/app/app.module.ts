@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { CategoriesModule } from './categories/categories.module';
 import { SpeakerModule } from './speaker/speaker.module';
 import { CollocationModule } from './collocation/collocation.module';
+import { TestingModule } from './testing/testing.module';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { CollocationModule } from './collocation/collocation.module';
         VideoModule,
         CategoriesModule,
         SpeakerModule,
-        CollocationModule
+        CollocationModule,
+        TestingModule
     ],
     bootstrap: [
         AppComponent
