@@ -28,11 +28,11 @@ export class LoginComponent implements OnDestroy {
     onSubmit(): void {
         this.requestInProgress = true;
         const loginSubscription = this.loginService.login(this.credentials).subscribe(() => {
+            this.requestInProgress = false;
             location.href = '';
         }, (e: any) => {
-            console.log('ERROR', e);
-        }, () => {
             this.requestInProgress = false;
+            console.log('ERROR', e);
         });
         this.subscriptions.push(loginSubscription);
     }

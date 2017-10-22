@@ -51,7 +51,7 @@ export class CollocationFormComponent implements OnDestroy {
         let subscription;
         const body = {text: this.model.usage_examples.records[i].text};
         if (_.has(this.model.usage_examples.records[i], 'id')) {
-            const id = _.get<number>(this.model.usage_examples.records[i], 'id');
+            const id = +_.get(this.model.usage_examples.records[i], 'id');
             subscription = this.collocationService.updateUsageExample(id, body).subscribe(() => {
                 window.alert('Usage example updated successfully.');
             }, this.errorResponse.bind(this));
