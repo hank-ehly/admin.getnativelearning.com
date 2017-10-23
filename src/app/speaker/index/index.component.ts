@@ -5,6 +5,7 @@ import { SpeakerService } from '../speaker.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
+import { APIError } from '../../core/api-error';
 
 @Component({
     selector: 'gn-index-speaker',
@@ -43,8 +44,7 @@ export class IndexSpeakerComponent implements OnInit, OnDestroy {
         this.speakers.splice(_.findIndex(this.speakers, {id: speaker.id}), 1);
     }
 
-    private async handleError(e: Response) {
-        console.log(e);
-        window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+    private async handleError(e: APIError[]) {
+        window.alert(_.get(_.first(e), 'message', 'error'));
     }
 }

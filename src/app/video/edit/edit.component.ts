@@ -8,6 +8,7 @@ import { Video } from '../../models/video';
 
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
+import { APIError } from '../../core/api-error';
 
 @Component({
     selector: 'gn-edit-video',
@@ -89,7 +90,7 @@ export class EditVideoComponent implements OnInit, OnDestroy {
         }
     }
 
-    private async handleUploadError(e: Response) {
-        return window.alert(_.get(_.first(await e.json()), 'message', 'An unexpected error has occurred. Check console for details.'));
+    private async handleUploadError(e: APIError[]) {
+        return window.alert(_.get(_.first(e), 'message', 'An unexpected error has occurred. Check console for details.'));
     }
 }

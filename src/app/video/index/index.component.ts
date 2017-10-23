@@ -119,7 +119,7 @@ export class IndexVideoComponent implements OnInit, OnDestroy {
 
     private async handleError(e: Response) {
         if (_.isArray(e)) {
-            return window.alert(_.get(_.first(await e.json()), 'message', 'An unexpected error has occurred. Check console for details.'));
+            return window.alert(_.get(_.first(e), 'message', 'An unexpected error has occurred. Check console for details.'));
         }
     }
 

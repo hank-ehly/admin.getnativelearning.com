@@ -5,6 +5,7 @@ import { CollocationService } from '../collocation.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
+import { APIError } from '../../core/api-error';
 
 @Component({
     selector: 'gn-collocation-index',
@@ -27,9 +28,9 @@ export class IndexCollocationComponent implements OnDestroy {
         this.subscriptions.push(
             this.collocationService.getCollocationOccurrencesForVideoId(this.videoId).subscribe(collocations => {
                 this.collocations = collocations;
-            }, async (e: Response) => {
+            }, async (e: APIError[]) => {
                 this.collocations = [];
-                window.alert(_.get(_.first(await e.json()), 'message', 'An unexpected error has occurred. Check console for details.'));
+                window.alert(_.get(_.first(e), 'message', 'An unexpected error has occurred. Check console for details.'));
             })
         );
     }

@@ -7,6 +7,7 @@ import { SpeakerService } from '../speaker.service';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/concatMap';
 import * as _ from 'lodash';
+import { APIError } from '../../core/api-error';
 
 @Component({
     selector: 'gn-edit-speaker',
@@ -56,7 +57,7 @@ export class EditSpeakerComponent implements OnInit, OnDestroy {
         }
     }
 
-    private async handleError(e: Response) {
-        return window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+    private async handleError(e: APIError[]) {
+        return window.alert(_.get(_.first(e), 'message', 'error'));
     }
 }

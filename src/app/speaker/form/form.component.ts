@@ -7,6 +7,7 @@ import { Gender } from '../../models/gender';
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
+import { APIError } from '../../core/api-error';
 
 @Component({
     selector: 'gn-speaker-form',
@@ -66,7 +67,7 @@ export class SpeakerFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    private async handleError(e: Response) {
-        return window.alert(_.get(_.first(await e.json()), 'message', 'An unexpected error has occurred. Check console for details.'));
+    private async handleError(e: APIError[]) {
+        return window.alert(_.get(_.first(e), 'message', 'An unexpected error has occurred. Check console for details.'));
     }
 }

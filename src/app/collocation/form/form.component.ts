@@ -6,6 +6,7 @@ import { CollocationService } from '../collocation.service';
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
+import { APIError } from '../../core/api-error';
 
 @Component({
     selector: 'gn-collocation-form',
@@ -88,7 +89,7 @@ export class CollocationFormComponent implements OnDestroy {
         this.model.usage_examples.count--;
     }
 
-    private async errorResponse(e: Response) {
-        window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+    private async errorResponse(e: APIError[]) {
+        window.alert(_.get(_.first(e), 'message', 'error'));
     }
 }

@@ -5,6 +5,7 @@ import { CollocationService } from '../collocation.service';
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
+import { APIError } from '../../core/api-error';
 
 @Component({
     selector: 'gn-edit-collocation',
@@ -22,8 +23,8 @@ export class EditCollocationComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this.collocationService.getCollocationOccurrenceById(this.route.snapshot.params['id']).subscribe(collocation => {
                 this.collocation = collocation;
-            }, async (e: Response) => {
-                window.alert(_.get(_.first(await e.json()), 'message', 'error'));
+            }, async (e: APIError[]) => {
+                window.alert(_.get(_.first(e), 'message', 'error'));
                 window.history.back();
             })
         )

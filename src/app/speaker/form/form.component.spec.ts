@@ -119,7 +119,7 @@ describe('SpeakerFormComponent', () => {
 function setupMockSpeaker() {
     const speaker = _.omit(_.mapKeys(MockApiResponse_SpeakersShow, (v, k) => _.camelCase(k)),
         ['description', 'isSilhouettePicture', 'gender.name', 'location']);
-    speaker['localizations'] = MockApiResponse_SpeakersLocalizedIndex.records;
+    _.set(speaker, 'localizations', MockApiResponse_SpeakersLocalizedIndex.records);
     return speaker;
 }
 
