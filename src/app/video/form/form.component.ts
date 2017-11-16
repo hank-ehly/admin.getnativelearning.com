@@ -70,6 +70,25 @@ export class VideoFormComponent implements OnInit, OnDestroy {
         this.subscriptions.push(subscription);
     }
 
+    onDeleteWritingQuestionForLanguageAtIndex(languageId: number, i: number): void {
+        const localization = _.find(this.video.localizations, {language_id: languageId});
+
+        if (!localization.writing_questions) {
+            alert('[error] !localization.writing_questions');
+            return;
+        }
+
+        localization.writing_questions.splice(i, 1);
+    }
+
+    onClickAddQuestionForLanguage(languageId: number): void {
+        const localization = _.find(this.video.localizations, {language_id: languageId});
+        if (!localization.writing_questions) {
+            localization.writing_questions = [];
+        }
+        localization.writing_questions.push({text: '', example_answer: ''});
+    }
+
     private handleCreateSuccess(id: number) {
         if (id) {
             window.alert('Video created successfully.');

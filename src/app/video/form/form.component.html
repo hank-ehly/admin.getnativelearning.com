@@ -50,10 +50,10 @@
                 </div>
             </div>
 
-            <div class="alert alert-info">* Wrap collocation occurrences in curly braces for the video language transcription.</div>
+            <div class="alert alert-info">Wrap collocation occurrences in curly braces for the video language transcription.</div>
 
             <div *ngFor="let localization of video?.localizations" class="panel panel-default">
-                <div class="panel-heading">{{ nameOfLanguageForId(localization?.language_id)}}</div>
+                <div class="panel-heading">{{ nameOfLanguageForId(localization.language_id)}}</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-6">
@@ -67,6 +67,22 @@
                                 <label for="description[{{ localization.language_id }}]">Description</label>
                                 <textarea name="description[{{ localization.language_id }}]" [(ngModel)]="localization.description" class="form-control description" id="description[{{ localization.language_id }}]" rows="7" required></textarea>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="writing-questions">
+                                <li *ngFor="let question of localization.writing_questions; let i = index">
+                                    <div class="form-group">
+                                        <label for="writing_question[{{ localization.language_id }}][{{ i }}][text]">Question {{ i + 1 }}</label>
+                                        <input type="text" class="form-control" name="writing_question[{{ localization.language_id }}][{{ i }}][text]" id="writing_question[{{ localization.language_id }}][{{ i }}][text]" [(ngModel)]="question.text" [required]="i === 0">
+                                        <label for="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]">Example Answer:</label>
+                                        <textarea name="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]" id="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]" class="form-control" [(ngModel)]="question.example_answer" [required]="i === 0"></textarea>
+                                        <button class="btn btn-danger btn-sm btn-block btn--delete-writing-question" (click)="onDeleteWritingQuestionForLanguageAtIndex(localization.language_id, i)" type="button">Delete</button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button class="btn btn-default btn-sm" type="button" (click)="onClickAddQuestionForLanguage(localization.language_id)">+ Add Question</button>
                         </div>
                     </div>
                 </div>

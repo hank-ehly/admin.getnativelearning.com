@@ -14,7 +14,7 @@ export interface Video extends Entity {
     subcategory_id?: number;
     speaker_id?: number;
     language_id?: number;
-    localizations?: { id?: number, language_id?: number, transcript?: string, description?: string }[]
+    localizations?: { id?: number, language_id?: number, transcript?: string, description?: string, writing_questions?: any }[]
     picture_url?: string
     video_url?: string | SafeUrl
 }

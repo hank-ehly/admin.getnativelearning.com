@@ -16,6 +16,7 @@ import { APIError } from '../../core/api-error';
     styleUrls: ['./edit.component.scss']
 })
 export class EditVideoComponent implements OnInit, OnDestroy {
+
     video: Video = {
         id: null,
         speaker_id: null,
