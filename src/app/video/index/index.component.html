@@ -59,7 +59,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let video of videosEmitted$ | async">
-                    <td><img [src]="video.picture_url" [alt]="video.id" class="video__picture"></td>
+                    <td><img [src]="'https://i.ytimg.com/vi/' + video.youtube_video_id + '/default.jpg'" [alt]="video.id" class="video__picture"></td>
                     <td>{{ video.id }}</td>
                     <td>{{ video.speaker.name }}</td>
                     <td>{{ video.subcategory.name }}</td>
