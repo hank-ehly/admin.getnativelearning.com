@@ -9,7 +9,6 @@ import { VideoComponent } from './video.component';
 import { NewVideoComponent } from './new/new.component';
 import { VideoFormComponent } from './form/form.component';
 import { EditVideoComponent } from './edit/edit.component';
-import { TranscribeVideoComponent } from './transcribe/transcribe.component';
 import { IndexVideoComponent } from './index/index.component';
 
 @NgModule({
@@ -24,13 +23,12 @@ import { IndexVideoComponent } from './index/index.component';
         NewVideoComponent,
         VideoFormComponent,
         EditVideoComponent,
-        TranscribeVideoComponent,
         IndexVideoComponent
     ],
     providers: [
         VideoService
     ],
-    exports: [VideoFormComponent, EditVideoComponent, NewVideoComponent, TranscribeVideoComponent, IndexVideoComponent]
+    exports: [VideoFormComponent, EditVideoComponent, NewVideoComponent, IndexVideoComponent]
 })
 export class VideoModule {
 }

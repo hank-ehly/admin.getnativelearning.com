@@ -31,12 +31,6 @@ app.post('/sessions', (req, res) => {
     return res.status(201).send({});
 });
 
-app.post('/videos/transcribe', (req, res) => {
-    return res.send({
-        transcription: 'test 123'
-    });
-});
-
 app.get('/categories', (req, res) => {
     return res.send({
         records: [

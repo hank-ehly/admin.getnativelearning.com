@@ -21,22 +21,6 @@ export class VideoService {
         this.breadcrumbsEmitted$ = this.emitBreadcrumbs$.asObservable();
     }
 
-    transcribe(file: File, languageCode: string): Observable<string> {
-        const formData = new FormData();
-        formData.append('video', file, file.name);
-
-        const search = new URLSearchParams();
-        search.set('language_code', languageCode);
-
-        const options = {
-            method: RequestMethod.Post,
-            body: formData,
-            search: search
-        };
-
-        return this.http.request('/videos/transcribe', options).pluck('transcription');
-    }
-
     getVideos(params: any): Observable<any> {
         const search = new URLSearchParams();
         search.append('interface_lang', 'en');
