@@ -11,13 +11,13 @@
             </div>
             <div class="col-lg-4">
                 <h4>Video Preview</h4>
-                <video controls [src]="video?.video_url" *ngIf="video?.video_url" width="300"></video>
-                <p class="help-block" *ngIf="!video?.video_url">No preview available.</p>
+                <!--<video controls [src]="video?.video_url" *ngIf="video?.video_url" width="300"></video>-->
+                <!--<p class="help-block" *ngIf="!video?.video_url">No preview available.</p>-->
             </div>
             <div class="col-lg-4">
                 <h4>Picture Preview</h4>
-                <img class="video-thumbnail" [src]="video?.picture_url" *ngIf="video?.picture_url" alt="video picture">
-                <p class="help-block" *ngIf="!video?.picture_url">No preview available.</p>
+                <img class="video-thumbnail" [src]="'https://i.ytimg.com/vi/' + video.youtube_video_id + '/mqdefault.jpg'" *ngIf="video?.youtube_video_id" alt="video picture">
+                <p class="help-block" *ngIf="!video?.youtube_video_id">No preview available.</p>
             </div>
         </div>
         <div class="row">

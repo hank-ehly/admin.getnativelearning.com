@@ -52,8 +52,6 @@ export class EditVideoComponent implements OnInit, OnDestroy {
                 speaker_id: video.speaker.id,
                 language_id: video.language.id,
                 subcategory_id: video.subcategory.id,
-                picture_url: video.picture_url,
-                video_url: video.video_url,
                 is_public: video.is_public,
                 localizations: localizations
             };
@@ -74,7 +72,6 @@ export class EditVideoComponent implements OnInit, OnDestroy {
     onFileChange(e: Event): void {
         const inputElement: HTMLInputElement = <HTMLInputElement>e.target;
         this.video.file = _.first(inputElement.files);
-        this.video.video_url = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(this.video.file));
     }
 
     onClickUpload(): void {

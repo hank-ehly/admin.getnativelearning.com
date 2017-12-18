@@ -16,7 +16,8 @@ export class NewVideoComponent implements OnInit {
         speaker_id: null,
         language_id: null,
         is_public: false,
-        localizations: []
+        localizations: [],
+        youtube_video_id: null
     };
 
     constructor(private lang: LanguagesService) {
@@ -26,8 +27,7 @@ export class NewVideoComponent implements OnInit {
         this.lang.getLanguages().subscribe((languages: any[]) => {
             _.each(languages, l => this.video.localizations.push({
                 language_id: l.id,
-                transcript: _.stubString(),
-                description: _.stubString()
+                transcript: _.stubString()
             }));
         })
     }

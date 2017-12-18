@@ -2,6 +2,20 @@
     <div class="col-lg-12">
         <form #form="ngForm" (submit)="onSubmit()">
             <div class="panel panel-default">
+                <div class="panel-heading">YouTube</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div gnYoutubePlayer id="gn-youtube-player" [height]="245" [width]="480" [videoId]="video?.youtube_video_id" [loop]="false" [autoplay]="false"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="youtube_video_id">YouTube Video Id</label>
+                            <input type="text" name="youtube_video_id" id="youtube_video_id" class="form-control" [(ngModel)]="video.youtube_video_id">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
                 <div class="panel-heading">General</div>
                 <div class="panel-body">
                     <div class="row">

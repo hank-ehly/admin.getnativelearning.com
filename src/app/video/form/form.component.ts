@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CategoriesService } from '../../categories/categories.service';
@@ -16,10 +16,12 @@ import { APIError } from '../../core/api-error';
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss']
 })
-export class VideoFormComponent implements OnInit, OnDestroy {
+export class VideoFormComponent implements OnInit, OnDestroy, AfterViewInit {
+
     languages: any[];
     categories: any[];
     speakers: any[];
+    youTubeVideoId: string;
 
     @Input() video: Video;
 
@@ -44,8 +46,15 @@ export class VideoFormComponent implements OnInit, OnDestroy {
         _.invokeMap(this.subscriptions, 'unsubscribe');
     }
 
+    ngAfterViewInit(): void {
+    }
+
     nameOfLanguageForId(id: number): string {
         return _.get(_.find(this.languages, {id: id}), 'name', _.stubString());
+    }
+
+    onYouTubeVideoIdChange(): void {
+        console.log('*****');
     }
 
     onSubmit(): void {
@@ -54,7 +63,8 @@ export class VideoFormComponent implements OnInit, OnDestroy {
             subcategory_id: this.video.subcategory_id,
             language_id: this.video.language_id,
             speaker_id: this.video.speaker_id,
-            localizations: this.video.localizations
+            localizations: this.video.localizations,
+            youtube_video_id: this.video.youtube_video_id
         };
 
         let subscription;

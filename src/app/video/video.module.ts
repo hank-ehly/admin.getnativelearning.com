@@ -10,13 +10,15 @@ import { NewVideoComponent } from './new/new.component';
 import { VideoFormComponent } from './form/form.component';
 import { EditVideoComponent } from './edit/edit.component';
 import { IndexVideoComponent } from './index/index.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
         CommonModule,
         RouterModule,
         FormsModule,
-        HttpModule // todo: this errors if I don't import it here -- why is it really necessary?
+        HttpModule, // todo: this errors if I don't import it here -- why is it really necessary?
+        SharedModule
     ],
     declarations: [
         VideoComponent,

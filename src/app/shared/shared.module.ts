@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { NavigationComponent } from './navigation/navigation.component';
+import { YoutubePlayerDirective } from './youtube-player.directive';
 
 @NgModule({
     imports: [
@@ -10,10 +11,12 @@ import { NavigationComponent } from './navigation/navigation.component';
         RouterModule
     ],
     declarations: [
-        NavigationComponent
+        NavigationComponent,
+        YoutubePlayerDirective
     ],
     exports: [
-        NavigationComponent
+        NavigationComponent,
+        YoutubePlayerDirective
     ]
 })
 export class SharedModule {
