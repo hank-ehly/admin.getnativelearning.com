@@ -1,14 +1,13 @@
-import { DomSanitizer } from '@angular/platform-browser';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { LanguagesService } from '../../core/languages.service';
+import { APIError } from '../../core/api-error';
 import { VideoService } from '../video.service';
 import { Video } from '../../models/video';
 
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
-import { APIError } from '../../core/api-error';
 
 @Component({
     selector: 'gn-edit-video',
@@ -30,8 +29,7 @@ export class EditVideoComponent implements OnInit, OnDestroy {
 
     constructor(private videoService: VideoService,
                 private route: ActivatedRoute,
-                private lang: LanguagesService,
-                private sanitizer: DomSanitizer) {
+                private lang: LanguagesService) {
     }
 
     ngOnInit() {
@@ -39,7 +37,7 @@ export class EditVideoComponent implements OnInit, OnDestroy {
         this.lang.getLanguages().concatMap(languages => {
             _.set(cache, 'languages', languages);
             return this.videoService.getVideo(this.route.snapshot.params['id']);
-        }).concatMap(video => {
+        }).subscribe(video => {
             const localizations = [];
             for (const transcript of video.transcripts.records) {
                 localizations.push({
@@ -53,15 +51,9 @@ export class EditVideoComponent implements OnInit, OnDestroy {
                 language_id: video.language.id,
                 subcategory_id: video.subcategory.id,
                 is_public: video.is_public,
-                localizations: localizations
+                localizations: localizations,
+                youtube_video_id: video.youtube_video_id
             };
-            return this.videoService.getVideoLocalizations(this.route.snapshot.params['id']);
-        }).subscribe(videosLocalized => {
-            for (const localization of videosLocalized) {
-                const editVideoObject = _.find(this.video.localizations, {language_id: localization.language_id});
-                editVideoObject['id'] = localization.id;
-                editVideoObject['description'] = localization.description;
-            }
         });
     }
 

@@ -1,4 +1,7 @@
-import { AfterViewInit, Directive, ElementRef, Inject, Input, LOCALE_ID, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import {
+    AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Input, LOCALE_ID, OnChanges, OnDestroy, OnInit, Output,
+    SimpleChanges
+} from '@angular/core';
 
 import * as _ from 'lodash';
 
@@ -14,6 +17,8 @@ export class YoutubePlayerDirective implements OnInit, AfterViewInit, OnDestroy,
     @Input() loop = true;
     @Input() autoplay = true;
     @Input() videoId: string;
+    @Output() onError = new EventEmitter<number>();
+    @Output() onPlayerStateChange = new EventEmitter<number>();
 
     get playerState(): number {
         if (_.has(this, 'api.getPlayerState')) {
@@ -131,13 +136,13 @@ export class YoutubePlayerDirective implements OnInit, AfterViewInit, OnDestroy,
                 enablejsapi: 1,
                 rel: 0,
                 loop: this.loop ? 1 : 0,
-                autoplay: this.autoplay ? 1 : 0,
+                autoplay: 1,
                 hl: 'en'
             },
             events: {
                 'onReady': this.onPlayerReady.bind(this),
-                'onStateChange': this.onPlayerStateChange.bind(this),
-                'onError': this.onError.bind(this)
+                'onStateChange': this.onYouTubePlayerStateChange.bind(this),
+                'onError': this.onYouTubeError.bind(this)
             }
         });
     }
@@ -154,15 +159,21 @@ export class YoutubePlayerDirective implements OnInit, AfterViewInit, OnDestroy,
     * 101 – The owner of the requested video does not allow it to be played in embedded players.
     * 150 – This error is the same as 101. It's just a 101 error in disguise!
     * */
-    private onError(e: any): void {
-        console.log('Error', e);
+    private onYouTubeError(e: any) {
+        console.log('Error', e.data);
+        this.onError.emit(e.data);
     }
 
     private onPlayerReady(e: any): void {
         console.log('PlayerReady', e);
+        if (this.videoId) {
+            this.api.loadVideoById(this.videoId);
+        }
     }
 
-    private onPlayerStateChange(e: any): void {
+    private onYouTubePlayerStateChange(e: any): void {
+        console.log('PlayerStateChange', e.data);
+        this.onPlayerStateChange.emit(e.data);
     }
 
 }

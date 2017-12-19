@@ -1,27 +1,28 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CategoriesService } from '../../categories/categories.service';
 import { LanguagesService } from '../../core/languages.service';
 import { SpeakerService } from '../../speaker/speaker.service';
+import { APIError } from '../../core/api-error';
 import { VideoService } from '../video.service';
 import { Video } from '../../models/video';
 
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
-import { APIError } from '../../core/api-error';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Default,
     selector: 'gn-video-form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss']
 })
-export class VideoFormComponent implements OnInit, OnDestroy, AfterViewInit {
+export class VideoFormComponent implements OnInit, OnDestroy {
 
     languages: any[];
     categories: any[];
     speakers: any[];
-    youTubeVideoId: string;
+    youtubeError = null;
 
     @Input() video: Video;
 
@@ -31,7 +32,7 @@ export class VideoFormComponent implements OnInit, OnDestroy, AfterViewInit {
                 private langService: LanguagesService,
                 private categoryService: CategoriesService,
                 private speakerService: SpeakerService,
-                private router: Router) {
+                private router: Router, private changeDetectorRef: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
@@ -46,15 +47,8 @@ export class VideoFormComponent implements OnInit, OnDestroy, AfterViewInit {
         _.invokeMap(this.subscriptions, 'unsubscribe');
     }
 
-    ngAfterViewInit(): void {
-    }
-
     nameOfLanguageForId(id: number): string {
         return _.get(_.find(this.languages, {id: id}), 'name', _.stubString());
-    }
-
-    onYouTubeVideoIdChange(): void {
-        console.log('*****');
     }
 
     onSubmit(): void {
@@ -97,6 +91,18 @@ export class VideoFormComponent implements OnInit, OnDestroy, AfterViewInit {
             localization.writing_questions = [];
         }
         localization.writing_questions.push({text: '', example_answer: ''});
+    }
+
+    onYouTubeError(code: number): void {
+        this.youtubeError = code;
+        this.changeDetectorRef.detectChanges();
+    }
+
+    onYouTubePlayerStateChange(state: number): void {
+        if (state === 3) {
+            this.youtubeError = null;
+            this.changeDetectorRef.detectChanges();
+        }
     }
 
     private handleCreateSuccess(id: number) {

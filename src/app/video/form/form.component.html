@@ -1,109 +1,110 @@
 <div class="row">
     <div class="col-lg-12">
         <form #form="ngForm" (submit)="onSubmit()">
-            <div class="panel panel-default">
-                <div class="panel-heading">YouTube</div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div gnYoutubePlayer id="gn-youtube-player" [height]="245" [width]="480" [videoId]="video?.youtube_video_id" [loop]="false" [autoplay]="false"></div>
-                        </div>
-                        <div class="col-lg-6">
-                            <label for="youtube_video_id">YouTube Video Id</label>
-                            <input type="text" name="youtube_video_id" id="youtube_video_id" class="form-control" [(ngModel)]="video.youtube_video_id">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">General</div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label>Visibility</label>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="is_public" id="is_public_public" [value]="true" [(ngModel)]="video.is_public">Displayed
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="is_public" id="is_public_private" [value]="false" [(ngModel)]="video.is_public">Hidden
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="video-language">Language</label>
-                                <select #language="ngModel" class="form-control video__language" id="video-language" name="language" [(ngModel)]="video.language_id" required>
-                                    <option [value]="null">- Unselected -</option>
-                                    <option *ngFor="let language of languages" [value]="language.id">{{ language.name }}</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="video-speaker">Speaker</label>
-                                <select #speaker="ngModel" id="video-speaker" class="form-control video__speaker" name="speaker_id" [(ngModel)]="video.speaker_id" required>
-                                    <option [value]="null">- Unselected -</option>
-                                    <option *ngFor="let speaker of speakers" [value]="speaker.id">{{ speaker.name }} ({{ speaker.location }})</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="subcategory_id">Category - Subcategory</label>
-                                <select #subcategory="ngModel" class="form-control video__subcategory" [disabled]="!categories" id="subcategory_id" name="subcategory_id" [(ngModel)]="video.subcategory_id" required>
-                                    <option [value]="null">- Unselected -</option>
-                                    <ng-container *ngFor="let category of categories">
-                                        <option *ngFor="let subcategory of category.subcategories?.records" [value]="subcategory.id">{{ category.name}} - {{ subcategory.name}}</option>
-                                    </ng-container>
-                                </select>
-                            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">YouTube</div>
+                    <div class="panel-body">
+                        <label for="youtube_video_id">YouTube Video Id</label>
+                        <input type="text" name="youtube_video_id" id="youtube_video_id" class="form-control" [(ngModel)]="video.youtube_video_id">
+                        <br>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <div gnYoutubePlayer id="gn-youtube-player" [height]="245" [width]="480" [videoId]="video?.youtube_video_id" [loop]="false" (onError)="onYouTubeError($event)" (onPlayerStateChange)="onYouTubePlayerStateChange($event)"></div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="alert alert-info">Wrap collocation occurrences in curly braces for the video language transcription.</div>
-
-            <div *ngFor="let localization of video?.localizations" class="panel panel-default">
-                <div class="panel-heading">{{ nameOfLanguageForId(localization.language_id)}}</div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="transcript[{{ localization.language_id }}]">Transcription</label>
-                                <textarea name="transcript[{{ localization.language_id }}]" [(ngModel)]="localization.transcript"  class="form-control transcript" id="transcript[{{ localization.language_id }}]" rows="7" required></textarea>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="description[{{ localization.language_id }}]">Description</label>
-                                <textarea name="description[{{ localization.language_id }}]" [(ngModel)]="localization.description" class="form-control description" id="description[{{ localization.language_id }}]" rows="7" required></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <ul class="writing-questions">
-                                <li *ngFor="let question of localization.writing_questions; let i = index">
+                </div>
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">General</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label for="writing_question[{{ localization.language_id }}][{{ i }}][text]">Question {{ i + 1 }}</label>
-                                        <input type="text" class="form-control" name="writing_question[{{ localization.language_id }}][{{ i }}][text]" id="writing_question[{{ localization.language_id }}][{{ i }}][text]" [(ngModel)]="question.text" [required]="i === 0">
-                                        <label for="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]">Example Answer:</label>
-                                        <textarea name="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]" id="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]" class="form-control" [(ngModel)]="question.example_answer" [required]="i === 0"></textarea>
-                                        <button class="btn btn-danger btn-sm btn-block btn--delete-writing-question" (click)="onDeleteWritingQuestionForLanguageAtIndex(localization.language_id, i)" type="button">Delete</button>
+                                        <label>Visibility</label>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="is_public" id="is_public_public" [value]="true" [(ngModel)]="video.is_public">Displayed
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="is_public" id="is_public_private" [value]="false" [(ngModel)]="video.is_public">Hidden
+                                            </label>
+                                        </div>
                                     </div>
-                                </li>
-                            </ul>
-                            <button class="btn btn-default btn-sm" type="button" (click)="onClickAddQuestionForLanguage(localization.language_id)">+ Add Question</button>
+
+                                    <div class="form-group">
+                                        <label for="video-language">Language</label>
+                                        <select #language="ngModel" class="form-control video__language" id="video-language" name="language" [(ngModel)]="video.language_id" required>
+                                            <option [value]="null">- Unselected -</option>
+                                            <option *ngFor="let language of languages" [value]="language.id">{{ language.name }}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="video-speaker">Speaker</label>
+                                        <select #speaker="ngModel" id="video-speaker" class="form-control video__speaker" name="speaker_id" [(ngModel)]="video.speaker_id" required>
+                                            <option [value]="null">- Unselected -</option>
+                                            <option *ngFor="let speaker of speakers" [value]="speaker.id">{{ speaker.name }} ({{ speaker.location }})</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="subcategory_id">Category - Subcategory</label>
+                                        <select #subcategory="ngModel" class="form-control video__subcategory" [disabled]="!categories" id="subcategory_id" name="subcategory_id" [(ngModel)]="video.subcategory_id" required>
+                                            <option [value]="null">- Unselected -</option>
+                                            <ng-container *ngFor="let category of categories">
+                                                <option *ngFor="let subcategory of category.subcategories?.records" [value]="subcategory.id">{{ category.name}} - {{ subcategory.name}}</option>
+                                            </ng-container>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="row">
+                <ng-container *ngFor="let localization of video?.localizations">
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading transcription-panel-heading">{{ nameOfLanguageForId(localization.language_id)}} <small class="text-info" *ngIf="localization.language_id == video.language_id">(Wrap collocation occurrences in curly braces)</small></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="transcript[{{ localization.language_id }}]">Transcription Markup</label>
+                                            <textarea name="transcript[{{ localization.language_id }}]" [(ngModel)]="localization.transcript"  class="form-control transcript" id="transcript[{{ localization.language_id }}]" rows="7" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <ul class="writing-questions">
+                                            <li *ngFor="let question of localization.writing_questions; let i = index">
+                                                <div class="form-group">
+                                                    <label for="writing_question[{{ localization.language_id }}][{{ i }}][text]">Question {{ i + 1 }}</label>
+                                                    <input type="text" class="form-control" name="writing_question[{{ localization.language_id }}][{{ i }}][text]" id="writing_question[{{ localization.language_id }}][{{ i }}][text]" [(ngModel)]="question.text" [required]="i === 0">
+                                                    <label for="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]">Example Answer:</label>
+                                                    <textarea name="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]" id="writing_question[{{ localization.language_id }}][{{ i }}][example_answer]" class="form-control" [(ngModel)]="question.example_answer" [required]="i === 0"></textarea>
+                                                    <button class="btn btn-danger btn-sm btn-block btn--delete-writing-question" (click)="onDeleteWritingQuestionForLanguageAtIndex(localization.language_id, i)" type="button">Delete</button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <button class="btn btn-default btn-sm" type="button" (click)="onClickAddQuestionForLanguage(localization.language_id)">+ Add Question</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
             </div>
 
             <div class="form-group">
-                <button class="btn btn-primary" type="submit" [disabled]="form.invalid">{{ video.id ? "Update" : "Create" }}</button>
+                <button class="btn btn-primary" type="submit" [disabled]="form.invalid || youtubeError">{{ video.id ? "Update" : "Create" }}</button>
             </div>
         </form>
     </div>
